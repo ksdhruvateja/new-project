@@ -1,7 +1,15 @@
 import { motion } from 'motion/react';
 import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { useSEO } from '../lib/useSEO';
 
 export default function Contact() {
+  useSEO({
+    title: 'Contact Us — Get in Touch with Forez Corp',
+    description: 'Contact Forez Corp for industrial sourcing inquiries, quote requests, or procurement support. Reach us by phone, email, or our contact form. Based in Ronkonkoma, NY.',
+    path: '/contact',
+    keywords: 'contact Forez Corp, industrial supplier contact, procurement inquiry, Ronkonkoma NY supplier',
+    breadcrumbs: [{ name: 'Contact', path: '/contact' }],
+  });
   return (
     <div className="bg-white min-h-screen">
       <section className="bg-steel text-white py-10 px-6 border-b-8 border-black">

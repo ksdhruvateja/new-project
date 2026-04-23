@@ -139,7 +139,16 @@ function AccordionItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+import { useSEO } from '../lib/useSEO';
+
 export default function FAQs() {
+  useSEO({
+    title: 'FAQs — Ordering, Sourcing & Fulfillment Questions',
+    description: 'Answers to common questions about how to order from Forez Corp, custom sourcing, shipping, public-sector procurement, MBE compliance, and more.',
+    path: '/faqs',
+    keywords: 'industrial supply FAQ, how to order bearings, MBE procurement questions, bulk sourcing FAQ, industrial distributor FAQ',
+    breadcrumbs: [{ name: 'FAQs', path: '/faqs' }],
+  });
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}

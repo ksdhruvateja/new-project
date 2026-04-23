@@ -1,8 +1,16 @@
 import { motion } from 'motion/react';
 import { Verified, Ship, Landmark, ArrowRight, ShieldCheck, Globe, Zap, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSEO } from '../lib/useSEO';
 
 export default function About() {
+  useSEO({
+    title: 'About Forez Corp — NYC Certified MBE Industrial Distributor',
+    description: 'Learn about Forez Corp — a NYC Certified Minority Business Enterprise specializing in industrial distribution of bearings, power transmission, and MRO products for public and private sector clients.',
+    path: '/about',
+    keywords: 'about Forez Corp, MBE certification, minority business enterprise New York, industrial distributor history',
+    breadcrumbs: [{ name: 'About', path: '/about' }],
+  });
   return (
     <div className="bg-white">
       {/* Hero Section */}

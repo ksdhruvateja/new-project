@@ -21,7 +21,16 @@ import { useBulkQuote } from '../context/BulkQuoteContext';
 const QUOTE_EMAIL = 'INFO@FOREZCORP.COM';
 const makeManualId = () => `manual-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
+import { useSEO } from '../lib/useSEO';
+
 export default function Sourcing() {
+  useSEO({
+    title: 'Request a Bulk Quote — Custom Industrial Sourcing',
+    description: 'Submit a bulk quote request for industrial products. Forez Corp handles multi-line custom sourcing for bearings, drives, MRO, and more. 24–48 hour quote turnaround.',
+    path: '/sourcing',
+    keywords: 'bulk quote industrial products, custom sourcing bearings, multi-line procurement, industrial RFQ, request a quote MRO',
+    breadcrumbs: [{ name: 'Request a Quote', path: '/sourcing' }],
+  });
   const { lines, setQty, setType, setDimensions, removeLine, clearLines } = useBulkQuote();
   const [submitted, setSubmitted] = React.useState(false);
   const [fullName, setFullName] = React.useState('');

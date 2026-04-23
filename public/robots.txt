@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Disallow admin
+Disallow: /admin
+
+# Crawl-delay (polite crawling)
+Crawl-delay: 10
+
+# Sitemap
+Sitemap: https://www.forezcorp.com/sitemap.xml

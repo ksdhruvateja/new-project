@@ -1,4 +1,13 @@
+import { useSEO } from '../lib/useSEO';
+
 export default function TermsOfUse() {
+  useSEO({
+    title: 'Terms of Use — Forez Corp Website Terms',
+    description: 'Review the terms of use for the Forez Corp website. Covers acceptable use, pricing disclaimers, trademarks, and legal contact information.',
+    path: '/terms-of-use',
+    keywords: 'terms of use, website terms, legal disclaimer industrial supplier',
+    breadcrumbs: [{ name: 'Terms of Use', path: '/terms-of-use' }],
+  });
   return (
     <div className="min-h-screen bg-concrete px-4 py-10 sm:px-6 md:px-8">
       <div className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">

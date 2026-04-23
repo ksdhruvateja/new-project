@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Hash, Truck, Bell, Phone, CheckCircle2, ArrowRight, PackageSearch } from 'lucide-react';
+import { useSEO } from '../lib/useSEO';
 
 const STEPS = [
   {
@@ -48,6 +49,13 @@ const NOTES = [
 ];
 
 export default function HowToTrack() {
+  useSEO({
+    title: 'How to Track Your Order — Order & Tracking Numbers',
+    description: 'Find out how to track your Forez Corp order. Every order receives a unique Order Number and carrier Tracking Number for real-time shipment monitoring.',
+    path: '/how-to-track',
+    keywords: 'track industrial order, order tracking number, shipment tracking industrial supply',
+    breadcrumbs: [{ name: 'Help & Support', path: '/shipping' }, { name: 'How to Track', path: '/how-to-track' }],
+  });
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Search, ShoppingCart, FileText, Mail, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useSEO } from '../lib/useSEO';
 
 const STEPS = [
   {
@@ -53,6 +54,13 @@ const NOTES = [
 ];
 
 export default function HowToOrder() {
+  useSEO({
+    title: 'How to Order — Step-by-Step Ordering Guide',
+    description: 'Learn how to place an order with Forez Corp. Browse our catalog, build a bulk quote, submit your request, and receive a formal quote within 24–48 hours.',
+    path: '/how-to-order',
+    keywords: 'how to order industrial parts, place industrial order, bulk order guide, submit procurement request',
+    breadcrumbs: [{ name: 'Help & Support', path: '/shipping' }, { name: 'How to Order', path: '/how-to-order' }],
+  });
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}

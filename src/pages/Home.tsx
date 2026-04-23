@@ -74,7 +74,16 @@ const GLANCE_ITEMS = [
 
 const FEATURED_CATEGORIES = PRODUCT_CATEGORIES.slice(0, 6);
 
+import { useSEO } from '../lib/useSEO';
+
 export default function Home() {
+  useSEO({
+    title: 'Industrial Sourcing & Bulk Procurement — Ronkonkoma, NY',
+    description: 'Forez Corp is a NYC Certified MBE industrial distributor. We specialize in bulk procurement, custom sourcing, and rapid fulfillment of bearings, power transmission, drives, couplings, and MRO products nationwide.',
+    path: '/',
+    keywords: 'industrial distributor Long Island, bearing supplier New York, MRO procurement NY, bulk industrial supply, certified MBE supplier',
+    breadcrumbs: [],
+  });
   const totalProducts = PRODUCT_CATEGORIES.reduce((count, cat) => count + cat.products.length, 0);
 
   return (

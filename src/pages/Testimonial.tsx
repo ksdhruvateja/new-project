@@ -42,8 +42,16 @@ const testimonials = [
 const ROLES = ['All', ...Array.from(new Set(testimonials.map((t) => t.role)))];
 
 import { useState } from 'react';
+import { useSEO } from '../lib/useSEO';
 
 export default function Testimonial() {
+  useSEO({
+    title: 'Testimonials — Customer Feedback & Reviews',
+    description: 'Read testimonials from transit agencies, power generation facilities, utilities, manufacturers, and government contractors who rely on Forez Corp for industrial procurement.',
+    path: '/testimonial',
+    keywords: 'Forez Corp reviews, industrial supplier testimonials, MBE supplier feedback, customer reviews industrial distribution',
+    breadcrumbs: [{ name: 'Testimonials', path: '/testimonial' }],
+  });
   const [active, setActive] = useState('All');
   const filtered = active === 'All' ? testimonials : testimonials.filter((t) => t.role === active);
 

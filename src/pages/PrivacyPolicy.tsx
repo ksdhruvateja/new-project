@@ -1,4 +1,13 @@
+import { useSEO } from '../lib/useSEO';
+
 export default function PrivacyPolicy() {
+  useSEO({
+    title: 'Privacy Policy — How Forez Corp Handles Your Data',
+    description: 'Read Forez Corp\'s privacy policy. Covers what data we collect through contact and quote forms, how it is used, and how it is protected.',
+    path: '/privacy-policy',
+    keywords: 'privacy policy, data protection, industrial supplier privacy',
+    breadcrumbs: [{ name: 'Privacy Policy', path: '/privacy-policy' }],
+  });
   return (
     <div className="min-h-screen bg-white px-4 py-10 sm:px-6 md:px-8">
       <div className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-concrete p-6 shadow-sm sm:p-8">

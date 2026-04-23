@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { Truck, RefreshCw } from 'lucide-react';
+import { useSEO } from '../lib/useSEO';
 
 export default function Shipping() {
+  useSEO({
+    title: 'Shipping & Returns — Forez Corp Fulfillment Policies',
+    description: 'Learn about Forez Corp shipping timelines, carrier options, and returns policy for industrial product orders.',
+    path: '/shipping',
+    keywords: 'industrial supply shipping, order fulfillment policy, returns policy industrial parts',
+    breadcrumbs: [{ name: 'Shipping & Returns', path: '/shipping' }],
+  });
   const [policyTab, setPolicyTab] = useState<'shipping' | 'returns'>('shipping');
 
   return (
