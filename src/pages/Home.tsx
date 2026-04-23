@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -7,16 +8,11 @@ import {
   LayoutGrid,
   Truck,
   Search,
-  Plane,
-  Zap,
-  Droplets,
-  Wind,
-  Factory,
-  Building2,
   ShieldCheck,
   CheckCircle2,
 } from 'lucide-react';
 import { FALLBACK_PRODUCT_IMAGE, PRODUCT_CATEGORIES, getCategoryPreviewImage } from '../constants';
+import { useBulkQuote } from '../context/BulkQuoteContext';
 
 const SERVICES = [
   {
@@ -48,13 +44,14 @@ const SERVICES = [
   },
 ];
 
+const BASE = 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets';
 const INDUSTRIES = [
-  { Icon: Plane, label: 'Airports & Baggage Handling' },
-  { Icon: Zap, label: 'Power Generation' },
-  { Icon: Droplets, label: 'Wastewater Treatment' },
-  { Icon: Wind, label: 'HVAC & Refrigeration' },
-  { Icon: Factory, label: 'Manufacturing & MRO' },
-  { Icon: Building2, label: 'Mass Transit & Infrastructure' },
+  { icon: `${BASE}/Airplane/3D/airplane_3d.png`,               label: 'Airports & Baggage Handling' },
+  { icon: `${BASE}/High%20voltage/3D/high_voltage_3d.png`,    label: 'Power Generation' },
+  { icon: `${BASE}/Droplet/3D/droplet_3d.png`,                label: 'Wastewater Treatment' },
+  { icon: `${BASE}/Snowflake/3D/snowflake_3d.png`,            label: 'HVAC & Refrigeration' },
+  { icon: `${BASE}/Factory/3D/factory_3d.png`,                label: 'Manufacturing & MRO' },
+  { icon: `${BASE}/Metro/3D/metro_3d.png`,                    label: 'Mass Transit & Infrastructure' },
 ];
 
 const FEATURED_BRANDS = [
@@ -77,6 +74,32 @@ const FEATURED_CATEGORIES = PRODUCT_CATEGORIES.slice(0, 6);
 import { useSEO } from '../lib/useSEO';
 
 export default function Home() {
+  const { toggleProduct, isSelected } = useBulkQuote();
+  const [toast, setToast] = useState<{ msg: string; type: 'add' | 'remove' } | null>(null);
+
+  const handleBrandClick = (brandLabel: string) => {
+    const normalized = brandLabel.toUpperCase();
+    for (const cat of PRODUCT_CATEGORIES) {
+      for (const product of cat.products) {
+        const match = product.brands.some(
+          (b) => b.toUpperCase().includes(normalized) || normalized.includes(b.toUpperCase())
+        );
+        if (match) {
+          const wasSelected = isSelected(cat.id, product.id);
+          toggleProduct(cat.id, product.id);
+          setToast({
+            msg: wasSelected
+              ? `${brandLabel} removed from quote`
+              : `${brandLabel} — ${cat.name} added to quote`,
+            type: wasSelected ? 'remove' : 'add',
+          });
+          setTimeout(() => setToast(null), 2800);
+          return;
+        }
+      }
+    }
+  };
+
   useSEO({
     title: 'Industrial Sourcing & Bulk Procurement — Ronkonkoma, NY',
     description: 'Forez Corp is a NYC Certified MBE industrial distributor. We specialize in bulk procurement, custom sourcing, and rapid fulfillment of bearings, power transmission, drives, couplings, and MRO products nationwide.',
@@ -229,14 +252,14 @@ export default function Home() {
               <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 md:gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-6 sm:gap-2.5 md:gap-3">
             {FEATURED_CATEGORIES.map((cat) => (
               <Link
                 key={cat.id}
                 to={`/catalog/${cat.id}`}
                 className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <div className="aspect-[16/10] overflow-hidden bg-slate-100">
+                <div className="aspect-square overflow-hidden bg-slate-100">
                   <img
                     src={getCategoryPreviewImage(cat)}
                     alt={cat.name}
@@ -278,15 +301,18 @@ export default function Home() {
             From NYC infrastructure to national operations — our product lines and sourcing capabilities are built for the industries that can't afford downtime.
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-6">
-            {INDUSTRIES.map(({ Icon, label }) => (
+            {INDUSTRIES.map(({ icon, label }) => (
               <div
                 key={label}
-                className="group flex flex-col items-center gap-2 rounded-xl border border-white/8 bg-white/5 px-3 py-4 text-center transition hover:border-industrial-orange/30 hover:bg-white/8"
+                className="group flex flex-col items-center gap-3 rounded-xl border border-white/8 bg-white/5 px-3 py-5 text-center transition hover:border-industrial-orange/30 hover:bg-white/8"
                 data-reveal
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-industrial-orange ring-1 ring-white/10 transition group-hover:bg-industrial-orange group-hover:text-white group-hover:ring-industrial-orange">
-                  <Icon className="h-5 w-5" strokeWidth={1.75} />
-                </div>
+                <img
+                  src={icon}
+                  alt={label}
+                  className="h-12 w-12 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:scale-110"
+                  loading="lazy"
+                />
                 <p className="text-[9px] font-bold uppercase leading-snug tracking-wide text-slate-300 sm:text-[11px]">{label}</p>
               </div>
             ))}
@@ -308,15 +334,17 @@ export default function Home() {
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent" />
-            <div className="flex overflow-hidden">
-              <div className="animate-marquee-slow flex shrink-0 gap-3">
+            <div className="group flex overflow-hidden">
+              <div className="animate-marquee-slow flex shrink-0 gap-3 group-hover:[animation-play-state:paused]">
                 {[...FEATURED_BRANDS, ...FEATURED_BRANDS].map((brand, i) => (
-                  <span
+                  <button
                     key={`${brand}-${i}`}
-                    className="inline-flex shrink-0 items-center rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 text-xs font-black uppercase tracking-widest text-slate-700 shadow-sm"
+                    type="button"
+                    onClick={() => handleBrandClick(brand)}
+                    className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 text-xs font-black uppercase tracking-widest text-slate-700 shadow-sm transition duration-200 hover:border-industrial-orange/50 hover:bg-industrial-orange/8 hover:text-industrial-orange active:scale-95"
                   >
                     {brand}
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>

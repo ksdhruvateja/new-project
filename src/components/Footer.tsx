@@ -1,5 +1,7 @@
-import { Factory, Phone, Mail, MapPin, Linkedin } from 'lucide-react';
+import { Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const FE = 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets';
 
 export default function Footer() {
   return (
@@ -20,7 +22,7 @@ export default function Footer() {
             </p>
             <div className="mt-3 flex gap-2 sm:mt-4">
               <div className="rounded-md border border-white/15 bg-white/10 p-1.5">
-                <Factory className="h-4 w-4 text-industrial-orange sm:h-5 sm:w-5" aria-hidden />
+                <img src={`${FE}/Factory/3D/factory_3d.png`} alt="" className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
               </div>
               <a
                 href="https://www.linkedin.com/company/forez-corporation-b88163323/"
@@ -36,7 +38,7 @@ export default function Footer() {
                 className="rounded-md border border-white/15 bg-white/10 p-1.5 transition hover:bg-white/15"
                 aria-label="Email"
               >
-                <Mail className="h-4 w-4 text-industrial-orange sm:h-5 sm:w-5" aria-hidden />
+                <img src={`${FE}/Envelope/3D/envelope_3d.png`} alt="" className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
               </a>
             </div>
           </div>
@@ -63,7 +65,7 @@ export default function Footer() {
             <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-industrial-orange sm:text-xs">Headquarters</h5>
             <div className="mt-2 space-y-2.5 text-xs font-semibold leading-snug text-slate-300 sm:text-sm">
               <div className="flex gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-industrial-orange" aria-hidden />
+                <img src={`${FE}/Round%20pushpin/3D/round_pushpin_3d.png`} alt="" className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
                 <span>
                   2402 Ocean Ave
                   <br />
@@ -71,11 +73,11 @@ export default function Footer() {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 shrink-0 text-industrial-orange" aria-hidden />
+                <img src={`${FE}/Telephone%20receiver/3D/telephone_receiver_3d.png`} alt="" className="h-4 w-4 shrink-0" aria-hidden />
                 <span>+1 (516) 860-2513</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0 text-industrial-orange" aria-hidden />
+                <img src={`${FE}/Envelope/3D/envelope_3d.png`} alt="" className="h-4 w-4 shrink-0" aria-hidden />
                 <span className="break-all uppercase">info@forezcorp.com</span>
               </div>
             </div>
