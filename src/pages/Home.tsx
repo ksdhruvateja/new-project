@@ -152,7 +152,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl grid-cols-3 divide-x divide-slate-700/60 px-5 sm:px-8 md:px-10">
           {[
             { Icon: Boxes, value: `${totalProducts}+`, label: 'Quote-Ready SKUs' },
-            { Icon: Truck, value: `${PRODUCT_CATEGORIES.length}+`, label: 'Supply Categories' },
+            { Icon: Truck, value: '20+', label: 'Top Brands Sourced' },
             { Icon: Clock, value: '24–48 HR', label: 'Quote Turnaround' },
           ].map(({ Icon, value, label }) => (
             <div key={label} className="flex flex-col items-center gap-1 py-5 text-center sm:flex-row sm:gap-4 sm:px-6 sm:py-6 sm:text-left md:px-10">
