@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#f8fafc"/>
+  <circle cx="400" cy="390" r="245" fill="#e5e7eb" stroke="#475569" stroke-width="24"/>
+  <circle cx="400" cy="390" r="150" fill="#cbd5e1" stroke="#334155" stroke-width="14"/>
+  <rect x="510" y="250" width="120" height="260" rx="24" fill="#f97316" stroke="#111827" stroke-width="10"/>
+  <circle cx="400" cy="390" r="16" fill="#334155"/>
+  <circle cx="480" cy="390" r="12" fill="#64748b"/>
+  <circle cx="320" cy="390" r="12" fill="#64748b"/>
+  <text x="400" y="740" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#1e293b">DISC BRAKE</text>
+</svg>

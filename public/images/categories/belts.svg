@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#fefce8"/>
+  <!-- Two pulleys -->
+  <circle cx="220" cy="340" r="100" fill="#e5e7eb" stroke="#1e293b" stroke-width="14"/>
+  <circle cx="220" cy="340" r="30" fill="#334155"/>
+  <circle cx="580" cy="340" r="140" fill="#e5e7eb" stroke="#1e293b" stroke-width="14"/>
+  <circle cx="580" cy="340" r="30" fill="#334155"/>
+  <!-- V-Belt wrapping around pulleys -->
+  <path d="M220 240 L580 200" stroke="#f59e0b" stroke-width="22" fill="none"/>
+  <path d="M220 440 L580 480" stroke="#f59e0b" stroke-width="22" fill="none"/>
+  <!-- Belt texture lines -->
+  <line x1="300" y1="228" x2="500" y2="208" stroke="#d97706" stroke-width="4"/>
+  <line x1="300" y1="452" x2="500" y2="472" stroke="#d97706" stroke-width="4"/>
+  <text x="400" y="740" text-anchor="middle" font-family="Arial,sans-serif" font-size="44" font-weight="800" fill="#78350f">BELTS &amp; ACCESSORIES</text>
+</svg>

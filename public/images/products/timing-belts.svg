@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#fefce8"/>
+  <!-- Belt body -->
+  <rect x="160" y="280" width="480" height="120" rx="10" fill="#fde68a" stroke="#854d0e" stroke-width="10"/>
+  <!-- Teeth -->
+  <rect x="200" y="400" width="40" height="50" rx="4" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+  <rect x="280" y="400" width="40" height="50" rx="4" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+  <rect x="360" y="400" width="40" height="50" rx="4" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+  <rect x="440" y="400" width="40" height="50" rx="4" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+  <rect x="520" y="400" width="40" height="50" rx="4" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+  <!-- Cord lines -->
+  <line x1="180" y1="310" x2="620" y2="310" stroke="#92400e" stroke-width="4"/>
+  <line x1="180" y1="340" x2="620" y2="340" stroke="#92400e" stroke-width="4"/>
+  <line x1="180" y1="370" x2="620" y2="370" stroke="#92400e" stroke-width="4"/>
+  <text x="400" y="740" text-anchor="middle" font-family="Arial,sans-serif" font-size="44" font-weight="700" fill="#78350f">TIMING BELTS</text>
+</svg>

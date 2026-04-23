@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#faf5ff"/>
+  <!-- Sleeve outer -->
+  <rect x="230" y="200" width="340" height="380" rx="170" fill="#d8b4fe" stroke="#581c87" stroke-width="14"/>
+  <!-- Inner bore -->
+  <rect x="330" y="200" width="140" height="380" rx="70" fill="#f3e8ff" stroke="#7e22ce" stroke-width="8"/>
+  <!-- Oil grooves -->
+  <path d="M330 300 Q400 330 470 300" fill="none" stroke="#a855f7" stroke-width="6"/>
+  <path d="M330 390 Q400 420 470 390" fill="none" stroke="#a855f7" stroke-width="6"/>
+  <path d="M330 480 Q400 510 470 480" fill="none" stroke="#a855f7" stroke-width="6"/>
+  <!-- Shaft (dotted) -->
+  <rect x="360" y="160" width="80" height="460" rx="40" fill="none" stroke="#6b21a8" stroke-width="6" stroke-dasharray="14 10"/>
+  <text x="400" y="740" text-anchor="middle" font-family="Arial,sans-serif" font-size="44" font-weight="700" fill="#3b0764">SLEEVE BEARINGS</text>
+</svg>

@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-steel: #0f172a;
+  --color-industrial-orange: #3b82f6;
+  --color-concrete: #f5f7fa;
+  --color-engineering-blue: #1d4ed8;
+}
+
+@layer utilities {
+  .industrial-hatch {
+    background-image: repeating-linear-gradient(45deg, #dde3ea, #dde3ea 8px, #f4f7fa 8px, #f4f7fa 16px);
+  }
+  .brutalist-border {
+    border: 1px solid rgba(15, 23, 42, 0.16);
+    border-radius: 0.75rem;
+  }
+  .brutalist-shadow {
+    box-shadow: 0 16px 32px -20px rgba(15, 23, 42, 0.48);
+  }
+  .brutalist-button-hover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 20px 36px -20px rgba(15, 23, 42, 0.6);
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-slow {
+  animation: marquee 20s linear infinite;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  background: radial-gradient(1200px 520px at 15% -15%, #dfe9fb 0%, #f4f8ff 56%, #e8effb 100%);
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  overflow-x: clip;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: 5.5rem;
+  }
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px) scale(0.985);
+  transition:
+    opacity 720ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 720ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

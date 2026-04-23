@@ -1,0 +1,380 @@
+/* Scoped sourcing model — all selectors under .sourcing-model-root */
+
+.sourcing-model-root {
+  font-family: 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+  background: transparent;
+  position: relative;
+  overflow: visible;
+}
+
+.sourcing-model-root .scene {
+  width: 900px;
+  height: 600px;
+  position: relative;
+}
+
+.sourcing-model-root .logo-area {
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  opacity: 0;
+  animation: sourcingModelFadeUp 0.8s ease forwards 0.35s;
+}
+
+.sourcing-model-root .logo-text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.sourcing-model-root .forez-name {
+  font-size: 42px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 4px;
+  line-height: 1;
+}
+
+.sourcing-model-root .certified-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sourcing-model-root .certified-text {
+  font-size: 13px;
+  color: #aaa;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.sourcing-model-root .nyc-badge {
+  background: #3ab54a;
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.sourcing-model-root .mbe-text {
+  font-size: 12px;
+  color: #888;
+  letter-spacing: 0.5px;
+}
+
+.sourcing-model-root .hub {
+  position: absolute;
+  top: calc(50% + 38px);
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1565c0, #1e88e5);
+  border: 3px solid #42a5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  animation:
+    sourcingModelPopIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 1s,
+    sourcingModelHubPulse 3s ease-in-out infinite 2s;
+  box-shadow: 0 0 40px rgba(30, 136, 229, 0.4);
+}
+
+.sourcing-model-root .hub-name {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 3px;
+}
+
+.sourcing-model-root .hub-sub {
+  font-size: 9px;
+  color: #90caf9;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin-top: 3px;
+  line-height: 1.35;
+}
+
+.sourcing-model-root .node {
+  position: absolute;
+  width: 160px;
+  border-radius: 12px;
+  padding: 14px 16px;
+  opacity: 0;
+  text-align: center;
+  border: 1.5px solid;
+  backdrop-filter: blur(6px);
+}
+
+.sourcing-model-root .node-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.sourcing-model-root .node-sub {
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.sourcing-model-root .node-contractor {
+  top: 168px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(21, 101, 192, 0.22);
+  border-color: #1565c0;
+  animation: sourcingModelFadeUp 0.6s ease forwards 1.6s;
+}
+
+.sourcing-model-root .node-contractor .node-sub {
+  color: #90caf9;
+}
+
+.sourcing-model-root .node-own {
+  top: calc(50% + 38px);
+  left: 40px;
+  transform: translateY(-50%);
+  background: rgba(0, 105, 92, 0.22);
+  border-color: #00695c;
+  animation: sourcingModelFadeRight 0.6s ease forwards 1.9s;
+}
+
+.sourcing-model-root .node-own .node-sub {
+  color: #80cbc4;
+}
+
+.sourcing-model-root .node-partner {
+  top: calc(50% + 38px);
+  right: 40px;
+  transform: translateY(-50%);
+  background: rgba(81, 45, 168, 0.22);
+  border-color: #512da8;
+  animation: sourcingModelFadeLeft 0.6s ease forwards 2.2s;
+}
+
+.sourcing-model-root .node-partner .node-sub {
+  color: #ce93d8;
+}
+
+.sourcing-model-root .node-custom {
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(230, 81, 0, 0.22);
+  border-color: #e65100;
+  animation: sourcingModelFadeUp2 0.6s ease forwards 2.5s;
+}
+
+.sourcing-model-root .node-custom .node-sub {
+  color: #ffcc80;
+}
+
+.sourcing-model-root .delivery {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #e65100, #f57c00);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 9px 28px;
+  border-radius: 30px;
+  opacity: 0;
+  white-space: nowrap;
+  animation: sourcingModelFadeUp 0.7s ease forwards 3.8s;
+  box-shadow: 0 0 20px rgba(230, 81, 0, 0.45);
+}
+
+.sourcing-model-root .arrows-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.sourcing-model-root .arrow-line {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.sourcing-model-root .arrow-line.a1 {
+  stroke: #42a5f5;
+  animation: sourcingModelDrawLine 0.5s ease forwards 2s;
+}
+
+.sourcing-model-root .arrow-line.a2 {
+  stroke: #4db6ac;
+  animation: sourcingModelDrawLine 0.5s ease forwards 2.3s;
+}
+
+.sourcing-model-root .arrow-line.a3 {
+  stroke: #ab47bc;
+  animation: sourcingModelDrawLine 0.5s ease forwards 2.6s;
+}
+
+.sourcing-model-root .arrow-line.a4 {
+  stroke: #ffa726;
+  animation: sourcingModelDrawLine 0.5s ease forwards 2.9s;
+}
+
+.sourcing-model-root .pulse-dot {
+  opacity: 0;
+}
+
+.sourcing-model-root .pulse-dot.p1 {
+  fill: #42a5f5;
+  animation: sourcingModelPulseDot 2s ease-in-out infinite 3.2s;
+}
+
+.sourcing-model-root .pulse-dot.p2 {
+  fill: #4db6ac;
+  animation: sourcingModelPulseDot 2s ease-in-out infinite 3.5s;
+}
+
+.sourcing-model-root .pulse-dot.p3 {
+  fill: #ab47bc;
+  animation: sourcingModelPulseDot 2s ease-in-out infinite 3.8s;
+}
+
+.sourcing-model-root .pulse-dot.p4 {
+  fill: #ffa726;
+  animation: sourcingModelPulseDot 2s ease-in-out infinite 4.1s;
+}
+
+.sourcing-model-root .tagline {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(780px, 92%);
+  padding-bottom: 12px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba(226, 232, 240, 0.92);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: normal;
+  z-index: 2;
+  opacity: 0;
+  animation: sourcingModelFadeUp 0.6s ease forwards 0.15s;
+  text-shadow: 0 1px 12px rgba(2, 8, 23, 0.65);
+}
+
+@keyframes sourcingModelFadeUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes sourcingModelFadeUp2 {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes sourcingModelFadeRight {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+@keyframes sourcingModelFadeLeft {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+@keyframes sourcingModelPopIn {
+  from {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes sourcingModelDrawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sourcingModelPulseDot {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sourcingModelHubPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 40px rgba(30, 136, 229, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 70px rgba(30, 136, 229, 0.72);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sourcing-model-root *,
+  .sourcing-model-root *::before,
+  .sourcing-model-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

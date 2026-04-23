@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#f0f9ff"/>
+  <!-- Cylinder body -->
+  <rect x="200" y="180" width="120" height="420" rx="16" fill="#bae6fd" stroke="#0c4a6e" stroke-width="12"/>
+  <!-- Piston rod -->
+  <rect x="240" y="80" width="40" height="140" rx="6" fill="#94a3b8" stroke="#334155" stroke-width="6"/>
+  <!-- End cap top -->
+  <rect x="190" y="160" width="140" height="40" rx="8" fill="#0284c7" stroke="#0c4a6e" stroke-width="6"/>
+  <!-- End cap bottom -->
+  <rect x="190" y="580" width="140" height="40" rx="8" fill="#0284c7" stroke="#0c4a6e" stroke-width="6"/>
+  <!-- Ports -->
+  <circle cx="190" cy="260" r="16" fill="#f97316" stroke="#9a3412" stroke-width="4"/>
+  <circle cx="190" cy="500" r="16" fill="#f97316" stroke="#9a3412" stroke-width="4"/>
+  <!-- Valve body -->
+  <rect x="440" y="280" width="240" height="140" rx="14" fill="#e0f2fe" stroke="#075985" stroke-width="10"/>
+  <!-- Valve ports -->
+  <circle cx="490" cy="420" r="18" fill="#0ea5e9" stroke="#0c4a6e" stroke-width="5"/>
+  <circle cx="560" cy="420" r="18" fill="#0ea5e9" stroke="#0c4a6e" stroke-width="5"/>
+  <circle cx="630" cy="420" r="18" fill="#0ea5e9" stroke="#0c4a6e" stroke-width="5"/>
+  <!-- Valve spool indicator -->
+  <rect x="470" y="320" width="180" height="40" rx="8" fill="#38bdf8"/>
+  <rect x="510" y="310" width="30" height="60" rx="6" fill="#0c4a6e"/>
+  <!-- Air lines -->
+  <path d="M330 260 Q380 260 440 320" fill="none" stroke="#0284c7" stroke-width="6" stroke-dasharray="10 6"/>
+  <path d="M330 500 Q380 500 440 400" fill="none" stroke="#0284c7" stroke-width="6" stroke-dasharray="10 6"/>
+  <text x="400" y="740" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="800" fill="#0c4a6e">PNEUMATICS</text>
+</svg>

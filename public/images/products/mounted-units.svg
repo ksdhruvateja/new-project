@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#f1f5f9"/>
+  <!-- Mounting base -->
+  <rect x="140" y="440" width="520" height="80" rx="10" fill="#64748b" stroke="#1e293b" stroke-width="8"/>
+  <!-- Bolt holes -->
+  <circle cx="200" cy="480" r="18" fill="#334155" stroke="#0f172a" stroke-width="4"/>
+  <circle cx="600" cy="480" r="18" fill="#334155" stroke="#0f172a" stroke-width="4"/>
+  <!-- Pillow block housing -->
+  <path d="M240 440 Q400 200 560 440" fill="#94a3b8" stroke="#334155" stroke-width="10"/>
+  <!-- Bearing inside -->
+  <circle cx="400" cy="360" r="70" fill="#cbd5e1" stroke="#1e293b" stroke-width="10"/>
+  <circle cx="400" cy="360" r="36" fill="#475569"/>
+  <!-- Shaft -->
+  <rect x="100" y="344" width="600" height="32" rx="6" fill="#e2e8f0" stroke="#64748b" stroke-width="4"/>
+  <text x="400" y="740" text-anchor="middle" font-family="Arial,sans-serif" font-size="44" font-weight="700" fill="#0f172a">MOUNTED UNITS</text>
+</svg>

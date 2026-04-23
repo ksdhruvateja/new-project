@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#fef2f2"/>
+  <!-- Clutch disc outer -->
+  <circle cx="400" cy="360" r="220" fill="#fecaca" stroke="#991b1b" stroke-width="16"/>
+  <!-- Friction surface segments -->
+  <circle cx="400" cy="360" r="170" fill="none" stroke="#dc2626" stroke-width="24" stroke-dasharray="40 20"/>
+  <!-- Pressure plate -->
+  <circle cx="400" cy="360" r="110" fill="#e5e7eb" stroke="#7f1d1d" stroke-width="10"/>
+  <!-- Springs -->
+  <circle cx="350" cy="310" r="14" fill="#fbbf24" stroke="#92400e" stroke-width="4"/>
+  <circle cx="450" cy="310" r="14" fill="#fbbf24" stroke="#92400e" stroke-width="4"/>
+  <circle cx="350" cy="410" r="14" fill="#fbbf24" stroke="#92400e" stroke-width="4"/>
+  <circle cx="450" cy="410" r="14" fill="#fbbf24" stroke="#92400e" stroke-width="4"/>
+  <!-- Hub -->
+  <circle cx="400" cy="360" r="44" fill="#7f1d1d"/>
+  <!-- Splines -->
+  <rect x="392" y="316" width="16" height="88" rx="3" fill="#fecaca"/>
+  <rect x="356" y="352" width="88" height="16" rx="3" fill="#fecaca"/>
+  <text x="400" y="740" text-anchor="middle" font-family="Arial,sans-serif" font-size="44" font-weight="800" fill="#7f1d1d">CLUTCHES &amp; BRAKES</text>
+</svg>
