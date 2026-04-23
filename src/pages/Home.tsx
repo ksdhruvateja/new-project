@@ -1,243 +1,405 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Boxes, ClipboardPlus, Clock, LayoutGrid, Truck } from 'lucide-react';
-import { FALLBACK_PRODUCT_IMAGE, PRODUCT_CATEGORIES, getProductImage } from '../constants';
+import {
+  ArrowRight,
+  Boxes,
+  ClipboardPlus,
+  Clock,
+  LayoutGrid,
+  Truck,
+  Search,
+  Plane,
+  Zap,
+  Droplets,
+  Wind,
+  Factory,
+  Building2,
+  ShieldCheck,
+  CheckCircle2,
+} from 'lucide-react';
+import { FALLBACK_PRODUCT_IMAGE, PRODUCT_CATEGORIES, getCategoryPreviewImage } from '../constants';
+
+const SERVICES = [
+  {
+    Icon: ClipboardPlus,
+    title: 'Bulk Procurement',
+    desc: 'Submit a single quote request across multiple product lines. We source, consolidate, and fulfill — reducing vendor overhead and saving procurement time.',
+    cta: 'Request a Quote',
+    href: '/sourcing',
+    iconBg: 'bg-industrial-orange',
+    border: 'hover:border-industrial-orange/40',
+  },
+  {
+    Icon: Search,
+    title: 'Custom Sourcing',
+    desc: "Can't find it in the catalog? Our team tracks down hard-to-find and specialty parts through our certified manufacturer network — no matter the spec.",
+    cta: 'Start Sourcing',
+    href: '/sourcing',
+    iconBg: 'bg-engineering-blue',
+    border: 'hover:border-engineering-blue/40',
+  },
+  {
+    Icon: Truck,
+    title: 'Rapid Fulfillment',
+    desc: 'Quotes turned around in 24–48 hours. MRO-ready inventory with documentation that meets public-sector and enterprise procurement standards.',
+    cta: 'Shipping Info',
+    href: '/shipping',
+    iconBg: 'bg-slate-800',
+    border: 'hover:border-slate-400/50',
+  },
+];
+
+const INDUSTRIES = [
+  { Icon: Plane, label: 'Airports & Baggage Handling' },
+  { Icon: Zap, label: 'Power Generation' },
+  { Icon: Droplets, label: 'Wastewater Treatment' },
+  { Icon: Wind, label: 'HVAC & Refrigeration' },
+  { Icon: Factory, label: 'Manufacturing & MRO' },
+  { Icon: Building2, label: 'Mass Transit & Infrastructure' },
+];
+
+const FEATURED_BRANDS = [
+  'SKF', 'Timken', 'NSK', 'NTN', 'Dodge', 'Browning',
+  'Baldor', 'Gates', 'Rexnord', 'Lovejoy', 'Martin', 'Falk',
+  'TB Woods', 'Link-Belt', 'Morse', 'Bando', 'Renold', 'Diamond',
+];
+
+const GLANCE_ITEMS = [
+  'NYC Certified Minority Business Enterprise (MBE)',
+  'Bulk quotes & multi-line custom sourcing',
+  'NYS / NYC & national procurement programs',
+  '24–48 hour quote turnaround standard',
+  'Compliant documentation for public-sector orders',
+  '20+ product lines — bearings, drives, couplings & more',
+];
+
+const FEATURED_CATEGORIES = PRODUCT_CATEGORIES.slice(0, 6);
 
 export default function Home() {
-  const totalProducts = PRODUCT_CATEGORIES.reduce((count, category) => count + category.products.length, 0);
-  const featuredProducts = PRODUCT_CATEGORIES.flatMap((category) =>
-    category.products.map((product) => ({ category, product }))
-  ).slice(0, 3);
+  const totalProducts = PRODUCT_CATEGORIES.reduce((count, cat) => count + cat.products.length, 0);
 
   return (
-    <div className="min-h-screen w-full min-w-0 max-w-full bg-white">
-      <section
-        className="relative w-full min-w-0 max-w-full overflow-hidden border-b border-slate-200 bg-slate-950 pt-12 sm:pt-14 md:pt-[4.5rem]"
-        data-reveal
-      >
+    <div className="min-h-screen w-full overflow-x-hidden bg-white font-sans">
+
+      {/* ── HERO ─────────────────────────────────────────────────── */}
+      <section className="relative flex min-h-[52vh] w-full items-center overflow-hidden bg-slate-950 md:min-h-[58vh]">
+        {/* bg image */}
         <div
-          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-25"
+          className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('https://t3.ftcdn.net/jpg/02/25/14/68/360_F_225146875_pHG2NHqEtgRUNcvTOAWKmIn8DrW2wHVb.jpg')" }}
           aria-hidden
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#031a43]/28 via-[#0b2f6f]/22 to-[#102f57]/26"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(59,130,246,0.1),transparent_38%)]"></div>
-        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-slate-950/12 to-transparent"></div>
+        {/* overlays */}
+        <div className="absolute inset-0 bg-slate-950/55" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/40 to-transparent" aria-hidden />
 
-        <div className="relative z-10 w-full max-w-full min-w-0 px-3 sm:px-5 md:px-8 py-2 sm:py-4 md:py-6">
-          <div className="mx-auto flex w-full min-w-0 max-w-4xl flex-col items-center gap-3 text-center sm:gap-4 md:max-w-5xl md:gap-5">
-            <div className="w-full max-w-[min(100%,260px)] shrink-0 sm:max-w-[280px]">
-              <div className="rounded-2xl border border-white/30 bg-white/95 p-2 shadow-[0_20px_50px_-24px_rgba(2,8,23,0.75)]">
+        {/* bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-slate-950 to-transparent" aria-hidden />
+
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-14">
+          <div className="flex max-w-2xl flex-col gap-6 lg:max-w-3xl">
+
+            {/* eyebrow + MBE badge row */}
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="rounded-full border border-industrial-orange/50 bg-industrial-orange/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-industrial-orange">
+                Industrial Supply · Ronkonkoma, NY
+              </span>
+              <div className="rounded-lg border border-white/15 bg-white/8 p-1 backdrop-blur-sm">
                 <img
                   src="/nyc-certified-mbe.png"
-                  alt="Certified NYC Minority Business Enterprise"
-                  className="w-full rounded-xl object-contain"
+                  alt="NYC Certified MBE"
+                  className="h-7 w-auto rounded object-contain sm:h-8"
                   loading="eager"
-                  decoding="async"
                 />
               </div>
             </div>
-            <h1 className="w-full max-w-3xl text-balance text-base font-bold leading-snug tracking-tight text-white [text-shadow:0_2px_24px_rgba(2,8,23,0.65)] sm:text-lg md:text-[1.15rem] lg:text-[1.3rem]">
-              Bulk Procurement Experts for Critical Operations
-            </h1>
-            <div className="flex w-full max-w-lg flex-col items-center gap-2 sm:max-w-2xl sm:flex-row sm:justify-center sm:gap-3">
+
+            {/* headline */}
+            <div>
+              <h1 className="font-display text-[2.6rem] font-black uppercase leading-[1.0] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+                Quality.{' '}
+                <span className="text-industrial-orange">Speed.</span>
+                <br />
+                Reliability.
+              </h1>
+              <p className="mt-5 max-w-lg text-base font-medium leading-relaxed text-slate-300 sm:text-lg">
+                Forez Corp is a certified MBE industrial distributor specializing in bulk procurement, custom sourcing, and rapid fulfillment of power transmission and MRO products.
+              </p>
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-3 pt-1">
               <Link
                 to="/sourcing"
-                className="group relative flex min-h-[2.85rem] w-full min-w-0 max-w-md items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-sky-500 via-blue-600 to-blue-800 px-2 py-2 font-display shadow-[0_8px_28px_-8px_rgba(37,99,235,0.5)] ring-1 ring-sky-200/35 transition duration-200 [text-shadow:0_1px_10px_rgba(0,0,0,0.22)] hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300 sm:min-h-[3.25rem] sm:flex-1 sm:rounded-xl sm:px-4 sm:py-3.5 sm:shadow-[0_14px_44px_-10px_rgba(37,99,235,0.55)] sm:ring-sky-200/40 sm:hover:shadow-[0_18px_52px_-10px_rgba(37,99,235,0.62)] md:max-w-xs"
+                className="group inline-flex items-center gap-2.5 rounded-xl bg-industrial-orange px-6 py-3.5 text-sm font-black uppercase tracking-wide text-white shadow-[0_8px_28px_-6px_rgba(59,130,246,0.55)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_36px_-8px_rgba(59,130,246,0.65)]"
               >
-                <span
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-black/25 text-white sm:h-11 sm:rounded-lg sm:w-11"
-                  aria-hidden
-                >
-                  <ClipboardPlus className="h-[15px] w-[15px] sm:h-5 sm:w-5" strokeWidth={2.25} />
-                </span>
-                <span className="min-w-0 flex-1 text-center">
-                  <span className="block text-[9px] font-bold uppercase leading-tight tracking-wide text-white sm:text-sm">
-                    Start new request
-                  </span>
-                  <span className="mt-px block text-[7px] font-semibold uppercase leading-snug tracking-wide text-white/90 sm:mt-0.5 sm:text-[10px]">
-                    Quote &amp; custom sourcing
-                  </span>
-                </span>
-                <ArrowRight
-                  className="h-3 w-3 shrink-0 text-white/90 transition duration-200 group-hover:translate-x-0.5 sm:h-4 sm:w-4 sm:group-hover:translate-x-1"
-                  aria-hidden
-                />
+                Request a Bulk Quote
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
               </Link>
               <Link
                 to="/catalog"
-                className="group flex min-h-[2.85rem] w-full min-w-0 max-w-md items-center justify-center gap-2 rounded-lg border border-white/45 bg-slate-950/40 px-2 py-2 font-display shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur-sm transition duration-200 hover:border-sky-200/55 hover:bg-slate-900/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200 sm:min-h-[3.25rem] sm:flex-1 sm:rounded-xl sm:border-2 sm:px-4 sm:py-3.5 md:max-w-xs"
+                className="group inline-flex items-center gap-2.5 rounded-xl border-2 border-white/25 px-6 py-3.5 text-sm font-black uppercase tracking-wide text-white backdrop-blur-sm transition hover:border-white/45 hover:bg-white/8"
               >
-                <span
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-sky-300/35 bg-sky-500/15 text-sky-200 sm:h-11 sm:rounded-lg sm:w-11"
-                  aria-hidden
-                >
-                  <LayoutGrid className="h-[15px] w-[15px] sm:h-5 sm:w-5" strokeWidth={2.25} />
-                </span>
-                <span className="min-w-0 flex-1 text-center">
-                  <span className="block text-[9px] font-bold uppercase leading-tight tracking-wide text-white [text-shadow:0_1px_14px_rgba(2,8,23,0.5)] sm:text-sm">
-                    Browse catalog
-                  </span>
-                  <span className="mt-px block text-[7px] font-semibold uppercase leading-snug tracking-wider text-sky-100/95 sm:mt-0.5 sm:text-[10px]">
-                    Categories &amp; quote-ready SKUs
-                  </span>
-                </span>
-                <ArrowRight
-                  className="h-3 w-3 shrink-0 text-sky-200 transition duration-200 group-hover:translate-x-0.5 sm:h-4 sm:w-4 sm:group-hover:translate-x-1"
-                  aria-hidden
-                />
+                <LayoutGrid className="h-4 w-4" />
+                Browse Catalog
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="w-full min-w-0 max-w-full border-b border-slate-200 bg-concrete px-3 sm:px-5 md:px-8 py-5 sm:py-6 md:py-7" data-reveal>
-        <div className="mx-auto grid w-full min-w-0 max-w-6xl grid-cols-3 gap-1.5 sm:gap-2 md:gap-3">
-          <div className="bg-white border border-slate-200 rounded-md sm:rounded-lg md:rounded-xl p-1.5 sm:p-3 md:p-3.5 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 md:gap-3 shadow-sm text-center sm:text-left" data-reveal data-reveal-delay="40ms">
-            <Boxes className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 text-industrial-orange" />
-            <div>
-              <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-black leading-none">{totalProducts}+</p>
-              <p className="text-[7px] sm:text-[10px] md:text-xs uppercase font-bold tracking-wide text-gray-500">Quote-Ready SKUs</p>
+      {/* ── STATS BAR ─────────────────────────────────────────────── */}
+      <section className="w-full border-y border-slate-800 bg-slate-900">
+        <div className="mx-auto grid max-w-6xl grid-cols-3 divide-x divide-slate-700/60 px-5 sm:px-8 md:px-10">
+          {[
+            { Icon: Boxes, value: `${totalProducts}+`, label: 'Quote-Ready SKUs' },
+            { Icon: Truck, value: `${PRODUCT_CATEGORIES.length}+`, label: 'Supply Categories' },
+            { Icon: Clock, value: '24–48 HR', label: 'Quote Turnaround' },
+          ].map(({ Icon, value, label }) => (
+            <div key={label} className="flex flex-col items-center gap-1 py-5 text-center sm:flex-row sm:gap-4 sm:px-6 sm:py-6 sm:text-left md:px-10">
+              <Icon className="h-5 w-5 shrink-0 text-industrial-orange sm:h-6 sm:w-6" />
+              <div>
+                <p className="text-xl font-black leading-none text-white sm:text-3xl">{value}</p>
+                <p className="mt-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-400 sm:text-[10px]">{label}</p>
+              </div>
             </div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-md sm:rounded-lg md:rounded-xl p-1.5 sm:p-3 md:p-3.5 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 md:gap-3 shadow-sm text-center sm:text-left" data-reveal data-reveal-delay="110ms">
-            <Truck className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 text-industrial-orange" />
-            <div>
-              <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-black leading-none">{PRODUCT_CATEGORIES.length}+</p>
-              <p className="text-[7px] sm:text-[10px] md:text-xs uppercase font-bold tracking-wide text-gray-500">Supply Categories</p>
-            </div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-md sm:rounded-lg md:rounded-xl p-1.5 sm:p-3 md:p-3.5 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 md:gap-3 shadow-sm text-center sm:text-left" data-reveal data-reveal-delay="180ms">
-            <Clock className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 text-industrial-orange" />
-            <div>
-              <p className="text-sm sm:text-lg md:text-xl lg:text-2xl font-black leading-none">24–48 HR</p>
-              <p className="text-[7px] sm:text-[10px] md:text-xs uppercase font-bold tracking-wide text-gray-500">Typical quote turnaround</p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      <section className="w-full min-w-0 max-w-full border-b border-slate-200 px-2.5 py-4 sm:px-5 sm:py-7 md:px-8 md:py-8" data-reveal>
-        <div className="mx-auto w-full min-w-0 max-w-6xl">
-          <h2 className="text-base font-black uppercase tracking-tight text-slate-900 sm:text-xl md:text-2xl">
-            Quick Access
+      {/* ── WHAT WE DO ────────────────────────────────────────────── */}
+      <section className="w-full bg-white px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-16" data-reveal>
+        <div className="mx-auto max-w-6xl">
+          <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">What We Do</p>
+          <h2 className="mb-8 font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
+            Three Ways We Deliver
           </h2>
-          <p className="mt-0.5 max-w-xl text-[10px] font-medium leading-snug text-slate-600 sm:mt-1.5 sm:text-sm">
-            Featured SKUs; the fourth tile opens the full product catalog.
-          </p>
-          <div className="mt-2 sm:mt-4 md:mt-5" data-reveal data-reveal-delay="80ms">
-            <div className="grid grid-cols-2 gap-1 sm:grid-cols-4 sm:gap-2 md:gap-2.5">
-              {featuredProducts.map(({ category, product }) => (
-                <article
-                  key={`${category.id}-${product.id}`}
-                  className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm sm:rounded-lg md:rounded-lg"
-                >
-                  <div className="h-14 shrink-0 bg-slate-100 sm:aspect-[5/3] sm:h-auto sm:min-h-0">
-                    <img
-                      src={getProductImage(product, category)}
-                      alt={`${product.name} in ${category.name}`}
-                      className="h-full w-full object-contain p-0.5 sm:object-cover sm:p-0"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
-                      }}
-                    />
-                  </div>
-                  <div className="flex min-h-0 flex-1 flex-col px-1 py-1 sm:p-2">
-                    <p className="text-[7px] font-bold uppercase tracking-wide text-slate-500 sm:text-[9px] sm:tracking-wider">
-                      {category.name}
-                    </p>
-                    <h3 className="mt-px line-clamp-2 text-[8px] font-black uppercase leading-tight text-slate-900 sm:mt-0.5 sm:text-[11px] sm:leading-snug">
-                      {product.name}
-                    </h3>
-                  </div>
-                </article>
-              ))}
-              <Link
-                to="/catalog"
-                className="group flex min-h-0 min-w-0 flex-col overflow-hidden rounded-md border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100/90 shadow-sm ring-1 ring-inset ring-slate-200/80 transition hover:border-industrial-orange/40 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-industrial-orange sm:rounded-lg md:rounded-lg"
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {SERVICES.map(({ Icon, title, desc, cta, href, iconBg, border }) => (
+              <div
+                key={title}
+                className={`group flex flex-col rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg ${border}`}
+                data-reveal
               >
-                <div className="flex h-11 shrink-0 items-center justify-center bg-slate-200/60 sm:aspect-[5/3] sm:h-auto sm:min-h-0">
-                  <LayoutGrid
-                    className="h-5 w-5 text-industrial-orange transition-transform group-hover:scale-105 sm:h-8 sm:w-8"
-                    strokeWidth={2}
-                    aria-hidden
+                <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl ${iconBg} text-white shadow`}>
+                  <Icon className="h-5 w-5" strokeWidth={2} />
+                </div>
+                <h3 className="mb-3 font-display text-base font-black uppercase tracking-tight text-slate-900">{title}</h3>
+                <p className="flex-1 text-sm font-medium leading-relaxed text-slate-500">{desc}</p>
+                <Link
+                  to={href}
+                  className="mt-6 inline-flex items-center gap-1.5 text-xs font-black uppercase text-industrial-orange transition-colors hover:text-engineering-blue"
+                >
+                  {cta}
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── INDUSTRIES SERVED ─────────────────────────────────────── */}
+      <section className="w-full bg-slate-950 px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-16" data-reveal>
+        <div className="mx-auto max-w-6xl">
+          <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Markets</p>
+          <h2 className="mb-3 font-display text-3xl font-black uppercase tracking-tight text-white sm:text-4xl">
+            Industries We Serve
+          </h2>
+          <p className="mb-8 max-w-2xl text-sm font-medium leading-relaxed text-slate-400">
+            From NYC infrastructure to national operations — our product lines and sourcing capabilities are built for the industries that can't afford downtime.
+          </p>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-6">
+            {INDUSTRIES.map(({ Icon, label }) => (
+              <div
+                key={label}
+                className="group flex flex-col items-center gap-3 rounded-2xl border border-white/8 bg-white/5 px-4 py-6 text-center transition hover:border-industrial-orange/30 hover:bg-white/8"
+                data-reveal
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-industrial-orange ring-1 ring-white/10 transition group-hover:bg-industrial-orange group-hover:text-white group-hover:ring-industrial-orange">
+                  <Icon className="h-6 w-6" strokeWidth={1.75} />
+                </div>
+                <p className="text-[10px] font-bold uppercase leading-snug tracking-wide text-slate-300 sm:text-xs">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FEATURED PRODUCT CATEGORIES ───────────────────────────── */}
+      <section className="w-full bg-slate-50 px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-16" data-reveal>
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Product Lines</p>
+              <h2 className="font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
+                Featured Categories
+              </h2>
+              <p className="mt-2 max-w-xl text-sm font-medium leading-relaxed text-slate-500">
+                Browse our most-requested product lines — all available for bulk quote.
+              </p>
+            </div>
+            <Link
+              to="/catalog"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-xl border-2 border-slate-900 px-5 py-2.5 text-xs font-black uppercase tracking-wide text-slate-900 transition hover:bg-slate-900 hover:text-white"
+            >
+              <LayoutGrid className="h-4 w-4" />
+              View All
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5">
+            {FEATURED_CATEGORIES.map((cat) => (
+              <Link
+                key={cat.id}
+                to={`/catalog/${cat.id}`}
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
+                <div className="aspect-video overflow-hidden bg-slate-100">
+                  <img
+                    src={getCategoryPreviewImage(cat)}
+                    alt={cat.name}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
+                    }}
                   />
                 </div>
-                <div className="flex min-h-0 flex-1 flex-col justify-center px-1 py-1 sm:p-2">
-                  <p className="text-[7px] font-bold uppercase tracking-wide text-slate-500 sm:text-[9px] sm:tracking-wider">
-                    Full catalog
-                  </p>
-                  <p className="mt-px line-clamp-3 text-[8px] font-black uppercase leading-tight text-slate-900 sm:mt-0.5 sm:line-clamp-none sm:text-[11px] sm:leading-snug">
-                    Click here to view all our products
-                  </p>
-                  <span className="mt-px inline-flex items-center gap-0.5 text-[7px] font-black uppercase text-industrial-orange sm:mt-1 sm:text-[10px]">
-                    Open
-                    <ArrowRight className="h-2.5 w-2.5 transition-transform group-hover:translate-x-0.5 sm:h-3 sm:w-3" aria-hidden />
-                  </span>
+                {/* overlay on hover */}
+                <div className="absolute inset-0 bg-industrial-orange/0 transition-colors duration-300 group-hover:bg-industrial-orange/8" aria-hidden />
+                <div className="flex items-center justify-between p-4">
+                  <div>
+                    <p className="text-xs font-black uppercase leading-tight tracking-wide text-slate-900 sm:text-sm">{cat.name}</p>
+                    <span className="mt-1 inline-flex items-center gap-1 text-[10px] font-bold uppercase text-industrial-orange sm:text-xs">
+                      View line <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                    </span>
+                  </div>
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 transition group-hover:border-industrial-orange/30 group-hover:bg-industrial-orange/8">
+                    <ArrowRight className="h-3.5 w-3.5 text-slate-400 transition group-hover:text-industrial-orange" aria-hidden />
+                  </div>
                 </div>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BRANDS WE SOURCE ──────────────────────────────────────── */}
+      <section className="w-full overflow-hidden border-y border-slate-100 bg-white px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-14" data-reveal>
+        <div className="mx-auto max-w-6xl">
+          <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Our Network</p>
+          <h2 className="mb-3 font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
+            Brands We Source
+          </h2>
+          <p className="mb-10 max-w-2xl text-sm font-medium leading-relaxed text-slate-500">
+            We represent and source from the world-class manufacturers that define industrial reliability — ensuring product authenticity, availability, and compliance.
+          </p>
+          {/* scrolling ticker */}
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent" />
+            <div className="flex overflow-hidden">
+              <div className="animate-marquee-slow flex shrink-0 gap-3">
+                {[...FEATURED_BRANDS, ...FEATURED_BRANDS].map((brand, i) => (
+                  <span
+                    key={`${brand}-${i}`}
+                    className="inline-flex shrink-0 items-center rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 text-xs font-black uppercase tracking-widest text-slate-700 shadow-sm"
+                  >
+                    {brand}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section
-        className="w-full min-w-0 max-w-full border-b border-slate-200 bg-concrete px-3 py-5 sm:px-5 sm:py-6 md:px-8 md:py-8"
-        data-reveal
-      >
-        <div className="mx-auto w-full min-w-0 max-w-6xl">
-          <h2 className="text-base font-black uppercase tracking-tight text-slate-900 sm:text-lg md:text-xl">
-            About Forez Corp
-          </h2>
-          <p className="mt-1 max-w-2xl text-[11px] font-medium leading-relaxed text-slate-600 sm:mt-1.5 sm:text-xs md:text-sm">
-            Certified industrial supply partner for bulk orders, complex sourcing, and time-sensitive operations.
-          </p>
-          <div className="mt-4 grid grid-cols-1 gap-4 md:mt-5 md:grid-cols-2 md:gap-6 lg:gap-7">
-            <div className="min-w-0 space-y-2.5 text-xs font-medium leading-relaxed text-slate-700 sm:text-sm">
-              <p>
-                Forez Corp focuses on bulk procurement and mission-critical supply with quote-ready SKUs, custom sourcing,
-                and documentation that meets public and enterprise procurement standards.
-              </p>
-              <p>
-                From NYC MBE certification to nationwide fulfillment support, we align inventory, logistics, and compliance
-                so your operations stay supplied without friction.
-              </p>
-            </div>
-            <aside className="min-w-0 rounded-xl border border-slate-200 bg-white p-3.5 shadow-sm sm:p-4 md:self-start md:p-5">
-              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-500 sm:text-[10px]">At a glance</p>
-              <ul className="mt-2.5 space-y-2 text-[10px] font-bold uppercase tracking-wide text-slate-700 sm:mt-3 sm:space-y-2.5 sm:text-xs">
-                <li className="flex gap-2">
-                  <span className="text-industrial-orange" aria-hidden>
-                    —
-                  </span>
-                  <span>NYC certified MBE</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-industrial-orange" aria-hidden>
-                    —
-                  </span>
-                  <span>Bulk quotes &amp; custom sourcing</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-industrial-orange" aria-hidden>
-                    —
-                  </span>
-                  <span>NYS / NYC &amp; national programs</span>
-                </li>
-              </ul>
+      {/* ── ABOUT FOREZ ───────────────────────────────────────────── */}
+      <section className="w-full bg-slate-50 px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-16" data-reveal>
+        <div className="mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+            {/* left: copy */}
+            <div className="flex flex-col justify-center">
+              <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Our Company</p>
+              <h2 className="mb-6 font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
+                About Forez Corp
+              </h2>
+              <div className="space-y-4 text-sm font-medium leading-relaxed text-slate-600 sm:text-base">
+                <p>
+                  Forez Corp is a leading distributor of bearings and industrial power transmission products serving New York and nationwide MRO markets. Our focus is on infrastructure-critical applications — including power generation, airport baggage handling, wastewater treatment, mass transit, and HVAC/R.
+                </p>
+                <p>
+                  As a certified NYC Minority Business Enterprise, we bring compliance-ready documentation and procurement support to public agencies, utilities, and private enterprises operating under strict sourcing requirements.
+                </p>
+                <p className="font-semibold text-slate-800">
+                  Our objective is simple: exceed your expectations — every order, every time.
+                </p>
+              </div>
               <Link
                 to="/about"
-                className="group mt-3 inline-flex items-center gap-1.5 text-xs font-black uppercase text-industrial-orange transition-colors hover:text-blue-700 sm:mt-4"
+                className="group mt-8 inline-flex w-fit items-center gap-2 rounded-xl border-2 border-slate-900 px-5 py-3 text-xs font-black uppercase tracking-wide text-slate-900 transition hover:bg-slate-900 hover:text-white"
               >
                 Full credentials &amp; story
-                <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
               </Link>
+            </div>
+            {/* right: checklist card */}
+            <aside className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm md:self-start">
+              <p className="mb-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">At a Glance</p>
+              <ul className="space-y-4">
+                {GLANCE_ITEMS.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-industrial-orange/10">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-industrial-orange" />
+                    </div>
+                    <span className="text-sm font-semibold leading-snug text-slate-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </aside>
           </div>
         </div>
       </section>
+
+      {/* ── QUOTE CTA BANNER ──────────────────────────────────────── */}
+      <section className="relative w-full overflow-hidden bg-slate-950 px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-14" data-reveal>
+        {/* subtle bg texture */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(59,130,246,0.12),transparent_65%)]" aria-hidden />
+        <div className="relative z-10 mx-auto max-w-6xl">
+          <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
+            <div className="max-w-xl">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-industrial-orange/30 bg-industrial-orange/10 px-3 py-1">
+                <ShieldCheck className="h-3.5 w-3.5 text-industrial-orange" />
+                <span className="text-[10px] font-black uppercase tracking-[0.18em] text-industrial-orange">Certified MBE · Nationwide Fulfillment</span>
+              </div>
+              <h2 className="font-display text-3xl font-black uppercase tracking-tight text-white sm:text-4xl md:text-5xl">
+                Ready to Get<br className="hidden sm:block" /> Supplied?
+              </h2>
+              <p className="mt-4 text-sm font-medium leading-relaxed text-slate-400 sm:text-base">
+                Submit a bulk quote request or browse the catalog — our team responds within 24 hours.
+              </p>
+            </div>
+            <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row">
+              <Link
+                to="/sourcing"
+                className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-industrial-orange px-7 py-4 text-sm font-black uppercase tracking-wide text-white shadow-[0_8px_28px_-6px_rgba(59,130,246,0.5)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_36px_-8px_rgba(59,130,246,0.65)]"
+              >
+                Request a Quote
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+              </Link>
+              <Link
+                to="/catalog"
+                className="inline-flex items-center justify-center gap-2.5 rounded-xl border-2 border-white/20 px-7 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:border-white/40 hover:bg-white/8"
+              >
+                <LayoutGrid className="h-4 w-4" />
+                Browse Catalog
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
