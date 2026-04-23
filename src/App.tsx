@@ -9,6 +9,12 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Shipping from './pages/Shipping';
 import AdminPortal from './pages/AdminPortal';
+import Testimonial from './pages/Testimonial';
+import FAQs from './pages/FAQs';
+import TermsOfUse from './pages/TermsOfUse';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import HowToOrder from './pages/HowToOrder';
+import HowToTrack from './pages/HowToTrack';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -61,6 +67,12 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/shipping" element={<Shipping />} />
           <Route path="/admin" element={<AdminPortal />} />
+          <Route path="/testimonial" element={<Testimonial />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/terms-of-use" element={<TermsOfUse />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/how-to-order" element={<HowToOrder />} />
+          <Route path="/how-to-track" element={<HowToTrack />} />
         </Routes>
       </main>
       {!isSourcingPage && <Footer />}

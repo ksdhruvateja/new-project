@@ -1,4 +1,4 @@
-import { Factory, Settings, Phone, Mail, MapPin, Lock } from 'lucide-react';
+import { Factory, Phone, Mail, MapPin, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
@@ -22,30 +22,40 @@ export default function Footer() {
               <div className="rounded-md border border-white/15 bg-white/10 p-1.5">
                 <Factory className="h-4 w-4 text-industrial-orange sm:h-5 sm:w-5" aria-hidden />
               </div>
-              <div className="rounded-md border border-white/15 bg-white/10 p-1.5">
-                <Settings className="h-4 w-4 text-industrial-orange sm:h-5 sm:w-5" aria-hidden />
-              </div>
+              <a
+                href="https://www.linkedin.com/company/forez-corporation-b88163323/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-md border border-white/15 bg-white/10 p-1.5 transition hover:bg-white/15"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-4 w-4 text-industrial-orange sm:h-5 sm:w-5" aria-hidden />
+              </a>
+              <a
+                href="mailto:info@forezcorp.com"
+                className="rounded-md border border-white/15 bg-white/10 p-1.5 transition hover:bg-white/15"
+                aria-label="Email"
+              >
+                <Mail className="h-4 w-4 text-industrial-orange sm:h-5 sm:w-5" aria-hidden />
+              </a>
             </div>
           </div>
 
-          <nav className="col-span-1 min-w-0 flex flex-col gap-2 sm:gap-2.5" aria-label="Footer">
+          <nav className="col-span-1 min-w-0 flex flex-col gap-2 sm:gap-2.5" aria-label="Help and support">
             <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-industrial-orange sm:text-xs">
-              Quick links
+              Help &amp; Support
             </h5>
-            <Link to="/catalog" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
-              Catalog
-            </Link>
-            <Link to="/sourcing" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
-              Bulk sourcing
+            <Link to="/shipping" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              Shipping Info
             </Link>
             <Link to="/shipping" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
-              Shipping &amp; returns
+              Returns
             </Link>
-            <Link to="/about" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
-              About &amp; credentials
+            <Link to="/how-to-order" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              How To Order
             </Link>
-            <Link to="/contact" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
-              Contact
+            <Link to="/how-to-track" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              How To Track
             </Link>
           </nav>
 
@@ -71,21 +81,26 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="col-span-2 min-w-0 lg:col-span-1">
-            <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-industrial-orange sm:text-xs">Admin portal</h5>
-            <p className="mt-2 max-w-sm text-[10px] font-bold uppercase leading-snug text-slate-400 sm:text-xs">
-              Secure login opens in a new tab.
-            </p>
-            <a
-              href="/admin"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-2 rounded-lg bg-industrial-orange px-3 py-2 text-[10px] font-black uppercase tracking-wide text-white shadow-sm transition hover:brightness-95 sm:mt-3.5 sm:px-4 sm:text-xs"
-            >
-              <Lock className="h-3 w-3 shrink-0" aria-hidden />
-              Open admin portal
-            </a>
-          </div>
+          <nav className="col-span-2 min-w-0 flex flex-col gap-2 sm:gap-2.5 lg:col-span-1" aria-label="Company information">
+            <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-industrial-orange sm:text-xs">
+              Company Info
+            </h5>
+            <Link to="/about" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              About Us
+            </Link>
+            <Link to="/testimonial" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              Testimonial
+            </Link>
+            <Link to="/faqs" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              FAQs
+            </Link>
+            <Link to="/terms-of-use" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              Terms of Use
+            </Link>
+            <Link to="/privacy-policy" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              Privacy Policy
+            </Link>
+          </nav>
         </div>
       </div>
 
@@ -95,18 +110,18 @@ export default function Footer() {
             © 2026 Forez Corp. NYS/NYC certified MBE.
           </div>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[9px] font-black uppercase tracking-widest text-slate-400 sm:justify-end sm:text-[10px]">
-            <a href="#" className="hover:text-white">
+            <Link to="/privacy-policy" className="hover:text-white">
               Privacy
-            </a>
+            </Link>
             <Link to="/shipping" className="hover:text-white">
               Shipping
             </Link>
-            <a href="#" className="hover:text-white">
+            <Link to="/terms-of-use" className="hover:text-white">
               Compliance
-            </a>
-            <a href="#" className="hover:text-white">
+            </Link>
+            <Link to="/terms-of-use" className="hover:text-white">
               Legal
-            </a>
+            </Link>
           </div>
         </div>
       </div>

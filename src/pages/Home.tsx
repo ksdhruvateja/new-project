@@ -78,7 +78,7 @@ export default function Home() {
   const totalProducts = PRODUCT_CATEGORIES.reduce((count, cat) => count + cat.products.length, 0);
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-white font-sans">
+    <div className="w-full bg-white font-sans">
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section className="relative flex min-h-[52vh] w-full items-center overflow-hidden bg-slate-950 md:min-h-[58vh]">
@@ -107,7 +107,7 @@ export default function Home() {
                 <img
                   src="/nyc-certified-mbe.png"
                   alt="NYC Certified MBE"
-                  className="h-7 w-auto rounded object-contain sm:h-8"
+                  className="h-10 w-auto rounded object-contain sm:h-12"
                   loading="eager"
                 />
               </div>
@@ -198,63 +198,36 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── INDUSTRIES SERVED ─────────────────────────────────────── */}
-      <section className="w-full bg-slate-950 px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-16" data-reveal>
-        <div className="mx-auto max-w-6xl">
-          <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Markets</p>
-          <h2 className="mb-3 font-display text-3xl font-black uppercase tracking-tight text-white sm:text-4xl">
-            Industries We Serve
-          </h2>
-          <p className="mb-8 max-w-2xl text-sm font-medium leading-relaxed text-slate-400">
-            From NYC infrastructure to national operations — our product lines and sourcing capabilities are built for the industries that can't afford downtime.
-          </p>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-6">
-            {INDUSTRIES.map(({ Icon, label }) => (
-              <div
-                key={label}
-                className="group flex flex-col items-center gap-3 rounded-2xl border border-white/8 bg-white/5 px-4 py-6 text-center transition hover:border-industrial-orange/30 hover:bg-white/8"
-                data-reveal
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-industrial-orange ring-1 ring-white/10 transition group-hover:bg-industrial-orange group-hover:text-white group-hover:ring-industrial-orange">
-                  <Icon className="h-6 w-6" strokeWidth={1.75} />
-                </div>
-                <p className="text-[10px] font-bold uppercase leading-snug tracking-wide text-slate-300 sm:text-xs">{label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── FEATURED PRODUCT CATEGORIES ───────────────────────────── */}
-      <section className="w-full bg-slate-50 px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-16" data-reveal>
+      <section className="w-full bg-slate-50 px-5 py-7 sm:px-8 sm:py-9 md:px-10 md:py-10" data-reveal>
         <div className="mx-auto max-w-6xl">
-          <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Product Lines</p>
-              <h2 className="font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
+              <h2 className="font-display text-xl font-black uppercase tracking-tight text-slate-900 sm:text-2xl">
                 Featured Categories
               </h2>
-              <p className="mt-2 max-w-xl text-sm font-medium leading-relaxed text-slate-500">
+              <p className="mt-1 max-w-xl text-[11px] font-medium leading-relaxed text-slate-500 sm:text-xs">
                 Browse our most-requested product lines — all available for bulk quote.
               </p>
             </div>
             <Link
               to="/catalog"
-              className="group inline-flex shrink-0 items-center gap-2 rounded-xl border-2 border-slate-900 px-5 py-2.5 text-xs font-black uppercase tracking-wide text-slate-900 transition hover:bg-slate-900 hover:text-white"
+              className="group inline-flex shrink-0 items-center gap-1.5 rounded-lg border-2 border-slate-900 px-4 py-2 text-[11px] font-black uppercase tracking-wide text-slate-900 transition hover:bg-slate-900 hover:text-white"
             >
-              <LayoutGrid className="h-4 w-4" />
+              <LayoutGrid className="h-3.5 w-3.5" />
               View All
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
+              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 md:gap-3">
             {FEATURED_CATEGORIES.map((cat) => (
               <Link
                 key={cat.id}
                 to={`/catalog/${cat.id}`}
-                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <div className="aspect-video overflow-hidden bg-slate-100">
+                <div className="aspect-[16/10] overflow-hidden bg-slate-100">
                   <img
                     src={getCategoryPreviewImage(cat)}
                     alt={cat.name}
@@ -268,18 +241,45 @@ export default function Home() {
                 </div>
                 {/* overlay on hover */}
                 <div className="absolute inset-0 bg-industrial-orange/0 transition-colors duration-300 group-hover:bg-industrial-orange/8" aria-hidden />
-                <div className="flex items-center justify-between p-4">
+                <div className="flex items-center justify-between p-2 sm:p-2.5">
                   <div>
-                    <p className="text-xs font-black uppercase leading-tight tracking-wide text-slate-900 sm:text-sm">{cat.name}</p>
-                    <span className="mt-1 inline-flex items-center gap-1 text-[10px] font-bold uppercase text-industrial-orange sm:text-xs">
+                    <p className="text-[9px] font-black uppercase leading-tight tracking-wide text-slate-900 sm:text-[11px]">{cat.name}</p>
+                    <span className="mt-0.5 inline-flex items-center gap-1 text-[8px] font-bold uppercase text-industrial-orange sm:text-[9px]">
                       View line <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
                     </span>
                   </div>
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 transition group-hover:border-industrial-orange/30 group-hover:bg-industrial-orange/8">
-                    <ArrowRight className="h-3.5 w-3.5 text-slate-400 transition group-hover:text-industrial-orange" aria-hidden />
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 transition group-hover:border-industrial-orange/30 group-hover:bg-industrial-orange/8">
+                    <ArrowRight className="h-2.5 w-2.5 text-slate-400 transition group-hover:text-industrial-orange" aria-hidden />
                   </div>
                 </div>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── INDUSTRIES SERVED ─────────────────────────────────────── */}
+      <section className="w-full bg-slate-950 px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-12" data-reveal>
+        <div className="mx-auto max-w-6xl">
+          <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Markets</p>
+          <h2 className="mb-2 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-3xl">
+            Industries We Serve
+          </h2>
+          <p className="mb-6 max-w-2xl text-xs font-medium leading-relaxed text-slate-400 sm:text-sm">
+            From NYC infrastructure to national operations — our product lines and sourcing capabilities are built for the industries that can't afford downtime.
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-6">
+            {INDUSTRIES.map(({ Icon, label }) => (
+              <div
+                key={label}
+                className="group flex flex-col items-center gap-2 rounded-xl border border-white/8 bg-white/5 px-3 py-4 text-center transition hover:border-industrial-orange/30 hover:bg-white/8"
+                data-reveal
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-industrial-orange ring-1 ring-white/10 transition group-hover:bg-industrial-orange group-hover:text-white group-hover:ring-industrial-orange">
+                  <Icon className="h-5 w-5" strokeWidth={1.75} />
+                </div>
+                <p className="text-[9px] font-bold uppercase leading-snug tracking-wide text-slate-300 sm:text-[11px]">{label}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -344,8 +344,17 @@ export default function Home() {
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
               </Link>
             </div>
-            {/* right: checklist card */}
-            <aside className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm md:self-start">
+            {/* right: image + checklist card */}
+            <aside className="flex flex-col gap-5 md:self-start">
+              {/* MBE logo */}
+              <div className="flex items-center justify-center rounded-2xl border border-slate-200 bg-white py-6 shadow-sm">
+                <img
+                  src="/nyc-certified-mbe.png"
+                  alt="NYC Certified Minority Business Enterprise"
+                  className="h-20 w-auto max-w-[160px] object-contain sm:h-24 md:h-28"
+                />
+              </div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
               <p className="mb-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">At a Glance</p>
               <ul className="space-y-4">
                 {GLANCE_ITEMS.map((item) => (
@@ -357,6 +366,7 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+            </div>
             </aside>
           </div>
         </div>
