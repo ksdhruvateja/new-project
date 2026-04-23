@@ -26,7 +26,7 @@ import { useSEO } from '../lib/useSEO';
 export default function Sourcing() {
   useSEO({
     title: 'Request a Bulk Quote — Custom Industrial Sourcing',
-    description: 'Submit a bulk quote request for industrial products. Forez Corp handles multi-line custom sourcing for bearings, drives, MRO, and more. 24–48 hour quote turnaround.',
+    description: 'Submit a bulk quote request for industrial products. Forez handles multi-line custom sourcing for bearings, drives, MRO, and more. 24–48 hour quote turnaround.',
     path: '/sourcing',
     keywords: 'bulk quote industrial products, custom sourcing bearings, multi-line procurement, industrial RFQ, request a quote MRO',
     breadcrumbs: [{ name: 'Request a Quote', path: '/sourcing' }],
@@ -136,7 +136,7 @@ export default function Sourcing() {
     ].join('\n');
 
     const mailto = `mailto:${QUOTE_EMAIL}?subject=${encodeURIComponent(
-      'Bulk Quote Request — Forez Corp'
+      'Bulk Quote Request — Forez'
     )}&body=${encodeURIComponent(body)}`;
 
     setLastMailto(mailto);

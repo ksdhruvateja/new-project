@@ -15,7 +15,7 @@ describe('Home page', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /start new request/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /browse catalog/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /about forez corp/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /about Forez/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /full credentials & story/i })).toHaveAttribute('href', '/about');
   });
 

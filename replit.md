@@ -1,7 +1,7 @@
-# Forez Corp - Industrial Catalog Platform
+# Forez - Industrial Catalog Platform
 
 ## Overview
-Forez Corp is a React-based industrial catalog and procurement platform showcasing 42,000+ industrial SKUs across categories like bearings, belts, chains, motors, and pneumatics. Targets diversity procurement as a certified MBE partner in the NY/NJ area.
+Forez is a React-based industrial catalog and procurement platform showcasing 42,000+ industrial SKUs across categories like bearings, belts, chains, motors, and pneumatics. Targets diversity procurement as a certified MBE partner in the NY/NJ area.
 
 ## Tech Stack
 - **Frontend**: React 19 + TypeScript

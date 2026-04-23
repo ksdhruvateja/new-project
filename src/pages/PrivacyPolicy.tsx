@@ -2,8 +2,8 @@ import { useSEO } from '../lib/useSEO';
 
 export default function PrivacyPolicy() {
   useSEO({
-    title: 'Privacy Policy — How Forez Corp Handles Your Data',
-    description: 'Read Forez Corp\'s privacy policy. Covers what data we collect through contact and quote forms, how it is used, and how it is protected.',
+    title: 'Privacy Policy — How Forez Handles Your Data',
+    description: 'Read Forez\'s privacy policy. Covers what data we collect through contact and quote forms, how it is used, and how it is protected.',
     path: '/privacy-policy',
     keywords: 'privacy policy, data protection, industrial supplier privacy',
     breadcrumbs: [{ name: 'Privacy Policy', path: '/privacy-policy' }],
@@ -18,7 +18,7 @@ export default function PrivacyPolicy() {
 
         <div className="mt-6 space-y-4 text-sm font-medium leading-relaxed text-slate-600">
           <p>
-            Forez Corp may collect contact details you submit through quote or contact forms, including name, company, email, phone number, and request details.
+            Forez may collect contact details you submit through quote or contact forms, including name, company, email, phone number, and request details.
           </p>
           <p>
             This information is used to respond to inquiries, provide quotes, and support customer communication. We do not sell your personal information.

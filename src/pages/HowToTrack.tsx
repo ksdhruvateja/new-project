@@ -51,7 +51,7 @@ const NOTES = [
 export default function HowToTrack() {
   useSEO({
     title: 'How to Track Your Order — Order & Tracking Numbers',
-    description: 'Find out how to track your Forez Corp order. Every order receives a unique Order Number and carrier Tracking Number for real-time shipment monitoring.',
+    description: 'Find out how to track your Forez order. Every order receives a unique Order Number and carrier Tracking Number for real-time shipment monitoring.',
     path: '/how-to-track',
     keywords: 'track industrial order, order tracking number, shipment tracking industrial supply',
     breadcrumbs: [{ name: 'Help & Support', path: '/shipping' }, { name: 'How to Track', path: '/how-to-track' }],
@@ -68,7 +68,7 @@ export default function HowToTrack() {
             How to Track Your Order
           </h1>
           <p className="mt-4 max-w-2xl text-sm font-medium leading-relaxed text-slate-300 sm:text-base">
-            Every order placed with Forez Corp is assigned a unique Order Number and a carrier Tracking Number so you always know where your shipment stands.
+            Every order placed with Forez is assigned a unique Order Number and a carrier Tracking Number so you always know where your shipment stands.
           </p>
         </div>
       </section>
@@ -85,7 +85,7 @@ export default function HowToTrack() {
                 Order Number
               </h2>
               <p className="mt-2 text-sm font-medium leading-relaxed text-slate-600">
-                A unique internal reference (e.g. <span className="font-black text-slate-800">FZ-2026-00142</span>) issued by Forez Corp at order confirmation. Use this number when contacting our team about your order status, changes, or documentation.
+                A unique internal reference (e.g. <span className="font-black text-slate-800">FZ-2026-00142</span>) issued by Forez at order confirmation. Use this number when contacting our team about your order status, changes, or documentation.
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">

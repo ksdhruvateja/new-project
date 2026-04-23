@@ -82,7 +82,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: 'Are you MBE certified?',
-        a: 'Yes. Forez Corp is a certified NYC Minority Business Enterprise (MBE). This certification supports agency diversity spend goals and allows us to participate in set-aside and preference programs across New York City and State procurement.',
+        a: 'Yes. Forez is a certified NYC Minority Business Enterprise (MBE). This certification supports agency diversity spend goals and allows us to participate in set-aside and preference programs across New York City and State procurement.',
       },
       {
         q: 'Can you provide documentation for government orders?',
@@ -144,7 +144,7 @@ import { useSEO } from '../lib/useSEO';
 export default function FAQs() {
   useSEO({
     title: 'FAQs — Ordering, Sourcing & Fulfillment Questions',
-    description: 'Answers to common questions about how to order from Forez Corp, custom sourcing, shipping, public-sector procurement, MBE compliance, and more.',
+    description: 'Answers to common questions about how to order from Forez, custom sourcing, shipping, public-sector procurement, MBE compliance, and more.',
     path: '/faqs',
     keywords: 'industrial supply FAQ, how to order bearings, MBE procurement questions, bulk sourcing FAQ, industrial distributor FAQ',
     breadcrumbs: [{ name: 'FAQs', path: '/faqs' }],
@@ -159,7 +159,7 @@ export default function FAQs() {
             Frequently Asked Questions
           </h1>
           <p className="mt-3 max-w-2xl text-sm font-medium leading-relaxed text-slate-300 sm:text-base">
-            Everything you need to know about ordering, sourcing, shipping, and working with Forez Corp.
+            Everything you need to know about ordering, sourcing, shipping, and working with Forez.
           </p>
         </div>
       </section>

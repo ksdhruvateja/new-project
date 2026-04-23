@@ -2,8 +2,8 @@ import { useSEO } from '../lib/useSEO';
 
 export default function TermsOfUse() {
   useSEO({
-    title: 'Terms of Use — Forez Corp Website Terms',
-    description: 'Review the terms of use for the Forez Corp website. Covers acceptable use, pricing disclaimers, trademarks, and legal contact information.',
+    title: 'Terms of Use — Forez Website Terms',
+    description: 'Review the terms of use for the Forez website. Covers acceptable use, pricing disclaimers, trademarks, and legal contact information.',
     path: '/terms-of-use',
     keywords: 'terms of use, website terms, legal disclaimer industrial supplier',
     breadcrumbs: [{ name: 'Terms of Use', path: '/terms-of-use' }],
@@ -27,7 +27,7 @@ export default function TermsOfUse() {
             All trademarks, logos, and content shown on this site remain the property of their respective owners. Unauthorized reproduction is prohibited.
           </p>
           <p>
-            For questions regarding these terms, contact Forez Corp via the Contact page.
+            For questions regarding these terms, contact Forez via the Contact page.
           </p>
         </div>
       </div>

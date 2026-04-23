@@ -32,6 +32,7 @@ export default function Navbar() {
     { name: 'Catalog', href: '/catalog' },
     { name: 'Sourcing', href: '/sourcing' },
     { name: 'Shipping', href: '/shipping' },
+    { name: 'About Us', href: '/about' },
     { name: 'Contact', href: '/contact' },
   ];
 
@@ -57,8 +58,8 @@ export default function Navbar() {
           to="/"
           className="text-base sm:text-xl md:text-2xl font-extrabold tracking-tight text-white font-display flex min-w-0 max-w-full items-center uppercase"
         >
-          <img src="/images/logo.png" alt="Forez Corp" className="mr-2 h-7 w-7 shrink-0 rounded-md sm:mr-2.5 sm:h-8 sm:w-8 md:h-9 md:w-9" />
-          <span className="min-w-0 truncate">FOREZ CORP</span>
+          <img src="/images/logo.png" alt="Forez" className="mr-2 h-7 w-7 shrink-0 rounded-md sm:mr-2.5 sm:h-8 sm:w-8 md:h-9 md:w-9" />
+          <span className="min-w-0 truncate">Forez</span>
         </Link>
         <div className="hidden md:flex gap-5 font-display uppercase tracking-wide font-bold text-xs lg:text-sm">
           {navLinks.map((link) => (
@@ -78,7 +79,12 @@ export default function Navbar() {
 
       <div className="flex shrink-0 items-center gap-2 sm:gap-3 md:gap-4">
         <div className="hidden lg:block text-right">
-          <div className="text-[10px] font-semibold tracking-[0.16em] text-industrial-orange uppercase">Certified MBE</div>
+          <Link
+            to="/about"
+            className="text-[10px] font-semibold tracking-[0.16em] text-industrial-orange uppercase transition-colors hover:text-white"
+          >
+            Certified MBE
+          </Link>
         </div>
         <Link 
           to="/sourcing"

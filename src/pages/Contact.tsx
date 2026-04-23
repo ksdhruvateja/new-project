@@ -4,10 +4,10 @@ import { useSEO } from '../lib/useSEO';
 
 export default function Contact() {
   useSEO({
-    title: 'Contact Us — Get in Touch with Forez Corp',
-    description: 'Contact Forez Corp for industrial sourcing inquiries, quote requests, or procurement support. Reach us by phone, email, or our contact form. Based in Ronkonkoma, NY.',
+    title: 'Contact Us — Get in Touch with Forez',
+    description: 'Contact Forez for industrial sourcing inquiries, quote requests, or procurement support. Reach us by phone, email, or our contact form. Based in Ronkonkoma, NY.',
     path: '/contact',
-    keywords: 'contact Forez Corp, industrial supplier contact, procurement inquiry, Ronkonkoma NY supplier',
+    keywords: 'contact Forez, industrial supplier contact, procurement inquiry, Ronkonkoma NY supplier',
     breadcrumbs: [{ name: 'Contact', path: '/contact' }],
   });
   return (

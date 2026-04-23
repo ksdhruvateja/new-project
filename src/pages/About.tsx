@@ -5,27 +5,63 @@ import { useSEO } from '../lib/useSEO';
 
 export default function About() {
   useSEO({
-    title: 'About Forez Corp — NYC Certified MBE Industrial Distributor',
-    description: 'Learn about Forez Corp — a NYC Certified Minority Business Enterprise specializing in industrial distribution of bearings, power transmission, and MRO products for public and private sector clients.',
+    title: 'About Forez — NYC Certified MBE Industrial Distributor',
+    description: 'Learn about Forez — a NYC Certified Minority Business Enterprise specializing in industrial distribution of bearings, power transmission, and MRO products for public and private sector clients.',
     path: '/about',
-    keywords: 'about Forez Corp, MBE certification, minority business enterprise New York, industrial distributor history',
+    keywords: 'about Forez, MBE certification, minority business enterprise New York, industrial distributor history',
     breadcrumbs: [{ name: 'About', path: '/about' }],
   });
   return (
     <div className="bg-white">
       {/* Hero Section */}
       <section className="bg-steel text-white py-9 md:py-12 px-4 sm:px-6 border-b border-white/15">
-        <div className="max-w-5xl mx-auto flex flex-col items-start gap-4">
+        <div className="max-w-5xl mx-auto flex flex-col items-center gap-4">
           <motion.h1 
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="text-2xl sm:text-3xl md:text-4xl font-black uppercase leading-[1] tracking-tight max-w-3xl"
+            className="max-w-3xl text-center text-2xl font-black uppercase leading-[1] tracking-tight sm:text-3xl md:text-4xl"
           >
-            HIGH-PERFORMING SUPPLIER. RAPID GROWTH.
+            ABOUT US
           </motion.h1>
-          <p className="text-gray-300 text-xs sm:text-sm md:text-base font-semibold max-w-2xl uppercase leading-relaxed">
-            Committed to excellence in bulk industrial supply. FOREZ is recognized and certified by leading authorities to meet strict procurement standards.
-          </p>
+          <div className="mt-3 w-full max-w-4xl rounded-2xl border border-blue-300/35 bg-blue-600/90 p-5 sm:p-6 shadow-[0_16px_34px_-20px_rgba(30,64,175,0.9)]">
+            <h2 className="text-sm sm:text-base font-black uppercase tracking-[0.18em] text-blue-100">Why Forez</h2>
+            <p className="mt-3 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
+              We built Forez around eliminating risk. Our team knows bearings and power transmission — not just part numbers, but applications. We verify fitment before anything ships, respond fast, and turn orders around on tight timelines.
+            </p>
+            <p className="mt-2 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
+              As a certified MBE, we simplify diverse spend compliance without adding procurement friction.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* At Forez Section */}
+      <section className="py-12 md:py-16 px-5 sm:px-8 md:px-10 bg-white">
+        <div className="max-w-5xl mx-auto space-y-8">
+          <div>
+            <p className="text-base md:text-lg font-semibold leading-relaxed text-slate-700">
+              At Forez, we keep things simple: deliver quality products, offer dependable service, and build long-term relationships.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {/* Our Mission Card */}
+            <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-7 shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-lg md:text-xl font-black uppercase tracking-tight text-slate-900 mb-3">Our Mission</h3>
+              <p className="text-sm leading-relaxed text-slate-600">
+                Deliver dependable industrial solutions that keep critical operations running smoothly. We are committed to providing high-quality products, responsive service, and practical support — so our customers can focus on uptime, not supply chains.
+              </p>
+            </div>
+
+            {/* Our Vision Card */}
+            <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-7 shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-lg md:text-xl font-black uppercase tracking-tight text-slate-900 mb-3">Our Vision</h3>
+              <p className="text-sm leading-relaxed text-slate-600">
+                Be a trusted, long-term partner for businesses across industries — known for reliability, integrity, and consistent performance. We aim to grow alongside our customers and set the standard for service excellence in the MRO supply space.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -37,7 +73,7 @@ export default function About() {
             <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">Certifications</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
             {[
               {
                 title: "Minority-Owned Business",

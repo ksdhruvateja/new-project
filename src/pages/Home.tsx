@@ -102,7 +102,7 @@ export default function Home() {
 
   useSEO({
     title: 'Industrial Sourcing & Bulk Procurement — Ronkonkoma, NY',
-    description: 'Forez Corp is a NYC Certified MBE industrial distributor. We specialize in bulk procurement, custom sourcing, and rapid fulfillment of bearings, power transmission, drives, couplings, and MRO products nationwide.',
+    description: 'Forez is a NYC Certified MBE industrial distributor. We specialize in bulk procurement, custom sourcing, and rapid fulfillment of bearings, power transmission, drives, couplings, and MRO products nationwide.',
     path: '/',
     keywords: 'industrial distributor Long Island, bearing supplier New York, MRO procurement NY, bulk industrial supply, certified MBE supplier',
     breadcrumbs: [],
@@ -130,21 +130,6 @@ export default function Home() {
         <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-14">
           <div className="flex max-w-2xl flex-col gap-6 lg:max-w-3xl">
 
-            {/* eyebrow + MBE badge row */}
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-industrial-orange/50 bg-industrial-orange/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-industrial-orange">
-                Industrial Supply · Ronkonkoma, NY
-              </span>
-              <div className="rounded-lg border border-white/15 bg-white/8 p-1 backdrop-blur-sm">
-                <img
-                  src="/nyc-certified-mbe.png"
-                  alt="NYC Certified MBE"
-                  className="h-10 w-auto rounded object-contain sm:h-12"
-                  loading="eager"
-                />
-              </div>
-            </div>
-
             {/* headline */}
             <div>
               <h1 className="font-display text-[2.6rem] font-black uppercase leading-[1.0] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
@@ -154,7 +139,7 @@ export default function Home() {
                 Reliability.
               </h1>
               <p className="mt-5 max-w-lg text-base font-medium leading-relaxed text-slate-300 sm:text-lg">
-                Forez Corp is a certified MBE industrial distributor specializing in bulk procurement, custom sourcing, and rapid fulfillment of power transmission and MRO products.
+                Forez is a certified MBE industrial distributor specializing in bulk procurement, custom sourcing, and rapid fulfillment of power transmission and MRO products.
               </p>
             </div>
 
@@ -360,11 +345,11 @@ export default function Home() {
             <div className="flex flex-col justify-center">
               <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Our Company</p>
               <h2 className="mb-6 font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
-                About Forez Corp
+                Why Forez 
               </h2>
               <div className="space-y-4 text-sm font-medium leading-relaxed text-slate-600 sm:text-base">
                 <p>
-                  Forez Corp is a leading distributor of bearings and industrial power transmission products serving New York and nationwide MRO markets. Our focus is on infrastructure-critical applications — including power generation, airport baggage handling, wastewater treatment, mass transit, and HVAC/R.
+                  Forez is a leading distributor of bearings and industrial power transmission products serving New York and nationwide MRO markets. Our focus is on infrastructure-critical applications — including power generation, airport baggage handling, wastewater treatment, mass transit, and HVAC/R.
                 </p>
                 <p>
                   As a certified NYC Minority Business Enterprise, we bring compliance-ready documentation and procurement support to public agencies, utilities, and private enterprises operating under strict sourcing requirements.

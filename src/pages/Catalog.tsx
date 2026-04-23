@@ -54,7 +54,7 @@ import { useSEO } from '../lib/useSEO';
 export default function Catalog() {
   useSEO({
     title: 'Product Catalog — Bearings, Drives, Couplings & MRO',
-    description: 'Browse Forez Corp\'s full industrial product catalog. Request bulk quotes on bearings, power transmission, belts, couplings, HVAC components, and more from top brands like SKF, Timken, NSK, and Gates.',
+    description: 'Browse Forez\'s full industrial product catalog. Request bulk quotes on bearings, power transmission, belts, couplings, HVAC components, and more from top brands like SKF, Timken, NSK, and Gates.',
     path: '/catalog',
     keywords: 'industrial product catalog, buy bearings online, SKF Timken NSK bearings, power transmission products, buy couplings belts drives, MRO catalog New York',
     breadcrumbs: [{ name: 'Catalog', path: '/catalog' }],

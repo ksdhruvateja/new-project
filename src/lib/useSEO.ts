@@ -68,7 +68,7 @@ export function useSEO({
   breadcrumbs = [],
 }: SEOOptions) {
   useEffect(() => {
-    const fullTitle = `${title} | Forez Corp`;
+    const fullTitle = `${title} | Forez`;
     const canonical = `${BASE_URL}${path ?? window.location.pathname}`;
     const allKeywords = keywords
       ? `${keywords}, ${GLOBAL_KEYWORDS}`
@@ -85,11 +85,11 @@ export function useSEO({
     setOG('og:description', description);
     setOG('og:url', canonical);
     setOG('og:image', DEFAULT_IMAGE);
-    setOG('og:image:alt', 'Forez Corp — Industrial Sourcing & Bulk Procurement');
+    setOG('og:image:alt', 'Forez — Industrial Sourcing & Bulk Procurement');
     setOG('og:image:width', '1200');
     setOG('og:image:height', '630');
     setOG('og:type', ogType);
-    setOG('og:site_name', 'Forez Corp');
+    setOG('og:site_name', 'Forez');
     setOG('og:locale', 'en_US');
 
     // Twitter
@@ -97,7 +97,7 @@ export function useSEO({
     setMeta('twitter:title', fullTitle);
     setMeta('twitter:description', description);
     setMeta('twitter:image', DEFAULT_IMAGE);
-    setMeta('twitter:image:alt', 'Forez Corp industrial supply');
+    setMeta('twitter:image:alt', 'Forez industrial supply');
     setMeta('twitter:site', '@forezcorp');
 
     // Breadcrumb JSON-LD

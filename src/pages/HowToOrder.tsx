@@ -56,7 +56,7 @@ const NOTES = [
 export default function HowToOrder() {
   useSEO({
     title: 'How to Order — Step-by-Step Ordering Guide',
-    description: 'Learn how to place an order with Forez Corp. Browse our catalog, build a bulk quote, submit your request, and receive a formal quote within 24–48 hours.',
+    description: 'Learn how to place an order with Forez. Browse our catalog, build a bulk quote, submit your request, and receive a formal quote within 24–48 hours.',
     path: '/how-to-order',
     keywords: 'how to order industrial parts, place industrial order, bulk order guide, submit procurement request',
     breadcrumbs: [{ name: 'Help & Support', path: '/shipping' }, { name: 'How to Order', path: '/how-to-order' }],
@@ -73,7 +73,7 @@ export default function HowToOrder() {
             How to Order
           </h1>
           <p className="mt-4 max-w-2xl text-sm font-medium leading-relaxed text-slate-300 sm:text-base">
-            Ordering from Forez Corp is straightforward. Browse our catalog, build your quote, and our team handles the rest — from sourcing to delivery.
+            Ordering from Forez is straightforward. Browse our catalog, build your quote, and our team handles the rest — from sourcing to delivery.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
