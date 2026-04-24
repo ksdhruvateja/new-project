@@ -59,6 +59,9 @@ export default function Footer() {
             <Link to="/how-to-track" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
               How To Track
             </Link>
+            <Link to="/faqs" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
+              FAQs
+            </Link>
           </nav>
 
           <div className="col-span-1 min-w-0">
@@ -92,9 +95,6 @@ export default function Footer() {
             </Link>
             <Link to="/testimonial" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
               Testimonial
-            </Link>
-            <Link to="/faqs" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
-              FAQs
             </Link>
             <Link to="/terms-of-use" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
               Terms of Use
