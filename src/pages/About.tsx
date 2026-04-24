@@ -26,7 +26,9 @@ export default function About() {
           <div className="mt-3 w-full max-w-4xl rounded-2xl border border-blue-300/35 bg-blue-600/90 p-5 sm:p-6 shadow-[0_16px_34px_-20px_rgba(30,64,175,0.9)]">
             <h2 className="text-sm sm:text-base font-black uppercase tracking-[0.18em] text-blue-100">Why Forez</h2>
             <p className="mt-3 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
-              We built Forez around eliminating risk. Our team knows bearings and power transmission — not just part numbers, but applications. We verify fitment before anything ships, respond fast, and turn orders around on tight timelines.
+              We do the legwork so you don't have to. You don't need the exact part number — just tell us what you need. We'll identify the right fit, source it, and get it to you fast. We know bearings and power transmission at the application level, not just the catalog level. Right part, first time, no back and forth.
+
+As a certified MBE, we make diverse spend compliance simple — no extra paperwork, no procurement friction, no compromises.
             </p>
             <p className="mt-2 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
               As a certified MBE, we simplify diverse spend compliance without adding procurement friction.

@@ -350,13 +350,10 @@ export default function Home() {
                 </h2>
                 <div className="space-y-4 text-sm font-medium leading-relaxed text-slate-700 sm:text-base">
                   <p>
-                    Forez is a leading distributor of bearings and industrial power transmission products serving New York and nationwide MRO markets. Our focus is on infrastructure-critical applications — including power generation, airport baggage handling, wastewater treatment, mass transit, and HVAC/R.
+                    We do the legwork so you don't have to. You don't need the exact part number — just tell us what you need. We'll identify the right fit, source it, and get it to you fast. We know bearings and power transmission at the application level, not just the catalog level. Right part, first time, no back and forth.
                   </p>
                   <p>
-                    As a certified NYC Minority Business Enterprise, we bring compliance-ready documentation and procurement support to public agencies, utilities, and private enterprises operating under strict sourcing requirements.
-                  </p>
-                  <p className="font-semibold text-slate-800">
-                    Our objective is simple: exceed your expectations — every order, every time.
+                    As a certified MBE, we make diverse spend compliance simple — no extra paperwork, no procurement friction, no compromises.
                   </p>
                 </div>
                 <Link
