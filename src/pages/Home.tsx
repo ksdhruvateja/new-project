@@ -343,28 +343,30 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
             {/* left: copy */}
             <div className="flex flex-col justify-center">
-              <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Our Company</p>
-              <h2 className="mb-6 font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
-                Why Forez 
-              </h2>
-              <div className="space-y-4 text-sm font-medium leading-relaxed text-slate-600 sm:text-base">
-                <p>
-                  Forez is a leading distributor of bearings and industrial power transmission products serving New York and nationwide MRO markets. Our focus is on infrastructure-critical applications — including power generation, airport baggage handling, wastewater treatment, mass transit, and HVAC/R.
-                </p>
-                <p>
-                  As a certified NYC Minority Business Enterprise, we bring compliance-ready documentation and procurement support to public agencies, utilities, and private enterprises operating under strict sourcing requirements.
-                </p>
-                <p className="font-semibold text-slate-800">
-                  Our objective is simple: exceed your expectations — every order, every time.
-                </p>
+              <div className="rounded-2xl border border-sky-200 bg-sky-50 p-6 shadow-sm sm:p-7 md:p-8">
+                <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-sky-700 sm:text-xs">Our Company</p>
+                <h2 className="mb-6 font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
+                  Why Forez
+                </h2>
+                <div className="space-y-4 text-sm font-medium leading-relaxed text-slate-700 sm:text-base">
+                  <p>
+                    Forez is a leading distributor of bearings and industrial power transmission products serving New York and nationwide MRO markets. Our focus is on infrastructure-critical applications — including power generation, airport baggage handling, wastewater treatment, mass transit, and HVAC/R.
+                  </p>
+                  <p>
+                    As a certified NYC Minority Business Enterprise, we bring compliance-ready documentation and procurement support to public agencies, utilities, and private enterprises operating under strict sourcing requirements.
+                  </p>
+                  <p className="font-semibold text-slate-800">
+                    Our objective is simple: exceed your expectations — every order, every time.
+                  </p>
+                </div>
+                <Link
+                  to="/about"
+                  className="group mt-8 inline-flex w-fit items-center gap-2 rounded-xl border-2 border-sky-700 px-5 py-3 text-xs font-black uppercase tracking-wide text-sky-800 transition hover:bg-sky-700 hover:text-white"
+                >
+                  Full credentials &amp; story
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </Link>
               </div>
-              <Link
-                to="/about"
-                className="group mt-8 inline-flex w-fit items-center gap-2 rounded-xl border-2 border-slate-900 px-5 py-3 text-xs font-black uppercase tracking-wide text-slate-900 transition hover:bg-slate-900 hover:text-white"
-              >
-                Full credentials &amp; story
-                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
-              </Link>
             </div>
             {/* right: image + checklist card */}
             <aside className="flex flex-col gap-5 md:self-start">
@@ -373,7 +375,7 @@ export default function Home() {
                 <img
                   src="/nyc-certified-mbe.png"
                   alt="NYC Certified Minority Business Enterprise"
-                  className="h-20 w-auto max-w-[160px] object-contain sm:h-24 md:h-28"
+                  className="h-20 w-auto max-w-[160px] scale-110 object-contain sm:h-24 md:h-28"
                 />
               </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">

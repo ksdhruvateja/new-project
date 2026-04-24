@@ -38,8 +38,18 @@ export default function About() {
       {/* At Forez Section */}
       <section className="py-12 md:py-16 px-5 sm:px-8 md:px-10 bg-white">
         <div className="max-w-5xl mx-auto space-y-8">
-          <div>
-            <p className="text-base md:text-lg font-semibold leading-relaxed text-slate-700">
+          <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 sm:p-7 shadow-sm">
+            <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-slate-900">Who We Are</h3>
+            <p className="mt-4 text-sm md:text-base leading-relaxed text-slate-600">
+              Forez is a trusted distributor of bearings and industrial power transmission products, serving customers across the country. We support maintenance, repair, and operations (MRO) needs with reliable products and responsive service.
+            </p>
+            <p className="mt-3 text-sm md:text-base leading-relaxed text-slate-600">
+              Our work focuses on essential infrastructure and industries — including power generation, airport baggage systems, wastewater treatment, mass transit, OEM manufacturing, and HVAC/R. We understand how critical these operations are, which is why we prioritize consistency, speed, and accuracy in every order.
+            </p>
+            <p className="mt-3 text-sm md:text-base leading-relaxed text-slate-600">
+              As a certified Minority Business Enterprise, we provide compliance-ready documentation and procurement support for public agencies, utilities, and private companies with strict sourcing requirements.
+            </p>
+            <p className="mt-3 text-base md:text-lg font-semibold leading-relaxed text-slate-700">
               At Forez, we keep things simple: deliver quality products, offer dependable service, and build long-term relationships.
             </p>
           </div>
@@ -80,7 +90,8 @@ export default function About() {
                 desc: "Certified Minority-Owned Business Enterprise (MBE) demonstrating commitment to diverse supply chains.",
                 icon: <Award className="w-16 h-16 text-gray-400" />,
                 color: "bg-gray-50",
-                image: "https://static1.squarespace.com/static/62fe71b24783ac627463dbeb/638791279a1cf272f8885d1d/6388cb3ea0392739e9fde45a/1671768750513/website_MWBE.jpg?format=1500w"
+                image: "https://static1.squarespace.com/static/62fe71b24783ac627463dbeb/638791279a1cf272f8885d1d/6388cb3ea0392739e9fde45a/1671768750513/website_MWBE.jpg?format=1500w",
+                pdf: "/NYS Certification.pdf"
               },
               {
                 title: "Port Authority Certified",
@@ -94,7 +105,8 @@ export default function About() {
                 desc: "Approved vendor for New York State and New York City municipal and enterprise sourcing.",
                 icon: <Landmark className="w-16 h-16 text-industrial-orange" />,
                 color: "bg-blue-50",
-                image: "https://stratcomllc.com/wp-content/uploads/2018/09/NYS-WBE-Certified-Business.gif"
+                image: "https://stratcomllc.com/wp-content/uploads/2018/09/NYS-WBE-Certified-Business.gif",
+                pdf: "/NYC Certification.pdf"
               }
             ].map((cert, idx) => (
               <motion.div 
@@ -103,7 +115,10 @@ export default function About() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.2 }}
-                className="bg-white border border-slate-200 rounded-xl p-3 sm:p-3.5 flex flex-col min-h-[220px] sm:min-h-[240px] shadow-[0_12px_24px_-18px_rgba(15,23,42,0.3)] hover:border-industrial-orange/50 group transition-all"
+                onClick={() => {
+                  if (cert.pdf) window.open(cert.pdf, '_blank', 'noopener,noreferrer');
+                }}
+                className={`bg-white border border-slate-200 rounded-xl p-3 sm:p-3.5 flex flex-col min-h-[220px] sm:min-h-[240px] shadow-[0_12px_24px_-18px_rgba(15,23,42,0.3)] hover:border-industrial-orange/50 group transition-all ${cert.pdf ? 'cursor-pointer' : ''}`}
               >
                 <div className={`flex h-28 sm:h-32 items-center justify-center mb-2.5 rounded-lg border border-slate-200 ${cert.color} relative overflow-hidden`}>
                   <div className="absolute inset-0 industrial-hatch opacity-10"></div>
