@@ -17,7 +17,7 @@ import { useBulkQuote } from '../context/BulkQuoteContext';
 const SERVICES = [
   {
     Icon: ClipboardPlus,
-    title: 'Bulk Procurement',
+    title: 'Procurement',
     desc: 'Submit a single quote request across multiple product lines. We source, consolidate, and fulfill — reducing vendor overhead and saving procurement time.',
     cta: 'Request a Quote',
     href: '/sourcing',
