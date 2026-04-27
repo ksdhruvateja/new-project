@@ -34,6 +34,7 @@ export default function Navbar() {
     { name: 'Shipping', href: '/shipping' },
     { name: 'About Us', href: '/about' },
     { name: 'Contact', href: '/contact' },
+    { name: 'Line Card', href: '/line-card' },
   ];
 
   const isActive = (href: string) => {
@@ -47,7 +48,7 @@ export default function Navbar() {
     <>
       <nav
         className={cn(
-          'fixed top-0 left-0 right-0 z-[100] flex w-full min-w-0 max-w-full items-center justify-between gap-2 border-b border-slate-500/35 bg-slate-800/88 px-3 py-2 text-white shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-slate-800/80 sm:px-4 md:px-6 md:py-2.5 relative',
+          'relative z-[100] flex w-full min-w-0 max-w-full items-center justify-between gap-2 border-b border-slate-500/35 bg-slate-800/88 px-3 py-2 text-white shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-slate-800/80 sm:px-4 md:px-6 md:py-2.5',
           isOpen && 'shadow-lg'
         )}
         role="navigation"

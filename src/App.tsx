@@ -15,6 +15,7 @@ import TermsOfUse from './pages/TermsOfUse';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import HowToOrder from './pages/HowToOrder';
 import HowToTrack from './pages/HowToTrack';
+import LineCard from './pages/LineCard';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -73,6 +74,7 @@ export default function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/how-to-order" element={<HowToOrder />} />
           <Route path="/how-to-track" element={<HowToTrack />} />
+          <Route path="/line-card" element={<LineCard />} />
         </Routes>
       </main>
       {!isSourcingPage && <Footer />}

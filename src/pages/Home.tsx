@@ -472,7 +472,7 @@ export default function Home() {
                 Reliability.
               </h1>
               <p className="mt-5 max-w-lg text-base font-medium leading-relaxed text-slate-300 sm:text-lg">
-                Forez is a certified MBE industrial distributor specializing in bulk procurement, custom sourcing, and rapid fulfillment of power transmission and MRO products.
+                Forez is a certified MBE industrial distributor specializing in procurement, custom sourcing, and rapid fulfillment of power transmission and MRO products.
               </p>
             </div>
 
@@ -708,7 +708,7 @@ export default function Home() {
                     We do the legwork so you don't have to. You don't need the exact part number — just tell us what you need. We'll identify the right fit, source it, and get it to you fast. We know bearings and power transmission at the application level, not just the catalog level. Right part, first time, no back and forth.
                   </p>
                   <p>
-                    As a certified MBE, we make diverse spend compliance simple — no extra paperwork, no procurement friction, no compromises.
+                    As a certified MBE, we simplify diverse spend compliance without adding procurement friction.
                   </p>
                 </div>
                 <Link

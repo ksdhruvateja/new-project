@@ -18,7 +18,7 @@ export default function Footer() {
               <span className="min-w-0 leading-none">Forez</span>
             </div>
             <p className="mx-auto mt-2 max-w-md text-[11px] font-semibold uppercase leading-snug text-slate-300/90 sm:mt-2.5 sm:text-xs">
-              Industrial bulk procurement—reliable, certified, fast.
+              Industrial procurement—reliable, certified, fast.
             </p>
             <div className="mt-3 flex justify-center gap-2 sm:mt-4">
               <div className="rounded-md border border-white/15 bg-white/10 p-1.5">
@@ -130,3 +130,4 @@ export default function Footer() {
     </footer>
   );
 }
+

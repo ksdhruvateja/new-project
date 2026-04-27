@@ -27,8 +27,6 @@ export default function About() {
             <h2 className="text-sm sm:text-base font-black uppercase tracking-[0.18em] text-blue-100">Why Forez</h2>
             <p className="mt-3 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
               We do the legwork so you don't have to. You don't need the exact part number — just tell us what you need. We'll identify the right fit, source it, and get it to you fast. We know bearings and power transmission at the application level, not just the catalog level. Right part, first time, no back and forth.
-
-As a certified MBE, we make diverse spend compliance simple — no extra paperwork, no procurement friction, no compromises.
             </p>
             <p className="mt-2 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
               As a certified MBE, we simplify diverse spend compliance without adding procurement friction.
