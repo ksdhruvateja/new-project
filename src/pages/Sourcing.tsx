@@ -15,11 +15,12 @@ import {
   Package,
   Plus,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useBulkQuote } from '../context/BulkQuoteContext';
 
 const QUOTE_EMAIL = 'INFO@FOREZCORP.COM';
 const makeManualId = () => `manual-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+const MANUAL_QUOTE_REQUESTS_KEY = 'forez-manual-quote-requests';
 
 import { useSEO } from '../lib/useSEO';
 
@@ -31,7 +32,8 @@ export default function Sourcing() {
     keywords: 'bulk quote industrial products, custom sourcing bearings, multi-line procurement, industrial RFQ, request a quote MRO',
     breadcrumbs: [{ name: 'Request a Quote', path: '/sourcing' }],
   });
-  const { lines, setQty, setType, setDimensions, removeLine, clearLines } = useBulkQuote();
+  const { lines, setQty, setDimensions, removeLine, clearLines } = useBulkQuote();
+  const [searchParams] = useSearchParams();
   const [submitted, setSubmitted] = React.useState(false);
   const [fullName, setFullName] = React.useState('');
   const [company, setCompany] = React.useState('');
@@ -40,9 +42,72 @@ export default function Sourcing() {
   const [notes, setNotes] = React.useState('');
   const [formError, setFormError] = React.useState('');
   const [lastMailto, setLastMailto] = React.useState('');
+  const [customQuoteNotice, setCustomQuoteNotice] = React.useState('');
   const [manualItems, setManualItems] = React.useState([
     { id: makeManualId(), name: '', type: '', dimensions: '', qty: 1 },
   ]);
+
+  React.useEffect(() => {
+    const manualBrand = searchParams.get('manualBrand')?.trim();
+    const manualItem = searchParams.get('manualItem')?.trim();
+    const fromRequestAction = searchParams.get('customAdded') === '1';
+    let queued: { name: string; type: string; dimensions: string; qty: number }[] = [];
+    try {
+      const raw = sessionStorage.getItem(MANUAL_QUOTE_REQUESTS_KEY);
+      const parsed = raw ? (JSON.parse(raw) as { name: string; type: string; dimensions: string; qty: number }[]) : [];
+      queued = Array.isArray(parsed) ? parsed : [];
+      if (queued.length > 0) {
+        sessionStorage.removeItem(MANUAL_QUOTE_REQUESTS_KEY);
+      }
+    } catch {
+      queued = [];
+    }
+    if (!manualBrand && !manualItem && queued.length === 0) {
+      if (fromRequestAction) {
+        setCustomQuoteNotice('Requested quantity has been added to custom quote.');
+      }
+      return;
+    }
+    let addedCount = 0;
+    setManualItems((prev) => {
+      const next = [...prev];
+      const pushIfMissing = (entry: { name: string; type: string; dimensions: string; qty: number }) => {
+        const name = entry.name.trim();
+        const type = entry.type.trim();
+        if (!name && !type) return;
+        const exists = next.some(
+          (item) =>
+            item.name.trim().toLowerCase() === name.toLowerCase() &&
+            item.type.trim().toLowerCase() === type.toLowerCase()
+        );
+        if (exists) return;
+        next.push({
+          id: makeManualId(),
+          name,
+          type,
+          dimensions: entry.dimensions?.trim() || '',
+          qty: Math.max(1, Number(entry.qty) || 1),
+        });
+        addedCount += 1;
+      };
+
+      pushIfMissing({
+        name: manualItem || manualBrand || '',
+        type: manualBrand || '',
+        dimensions: '',
+        qty: 1,
+      });
+      queued.forEach((entry) => pushIfMissing(entry));
+      return next;
+    });
+    if (fromRequestAction || addedCount > 0) {
+      setCustomQuoteNotice(
+        addedCount > 1
+          ? `${addedCount} requested brand quantities were added to custom quote.`
+          : 'Requested quantity has been added to custom quote.'
+      );
+    }
+  }, [searchParams]);
 
   const addManualItem = () => {
     setManualItems((prev) => [
@@ -103,7 +168,13 @@ export default function Sourcing() {
       ? lines
           .map(
             (l) =>
-              `- ${l.productName} (${l.categoryName}) | Type: ${l.type.trim() || '—'} | Dimensions: ${l.dimensions.trim() || '—'} | Qty: ${l.qty}`
+              `- ${l.productName} (${l.categoryName}) | Dimensions: ${l.dimensions.trim() || '—'} | Qty: ${l.qty}${
+                l.requestedBrands.length > 0
+                  ? ` | Interested Brands: ${l.requestedBrands
+                      .map((b) => `${b.brand}${b.partNumber ? ` [Part: ${b.partNumber}]` : ''} (Qty: ${b.qty})`)
+                      .join(', ')}`
+                  : ''
+              }`
           )
           .join('\n')
       : '(No catalog items selected)';
@@ -112,7 +183,7 @@ export default function Sourcing() {
       ? validManualItems
           .map(
             (item) =>
-              `- ${item.name.trim()} | Type: ${item.type.trim() || '—'} | Dimensions: ${item.dimensions.trim() || '—'} | Qty: ${item.qty}`
+              `- ${item.name.trim()} | Brand/Company: ${item.type.trim() || '—'} | Dimensions: ${item.dimensions.trim() || '—'} | Qty: ${item.qty}`
           )
           .join('\n')
       : '(No manual items)';
@@ -228,6 +299,11 @@ export default function Sourcing() {
               Name required — include item name/type/dimensions/qty
             </p>
           </div>
+          {customQuoteNotice && (
+            <div className="mb-6 rounded-md border-2 border-emerald-700 bg-emerald-50 px-4 py-3 text-xs font-black uppercase tracking-wide text-emerald-900">
+              {customQuoteNotice}
+            </div>
+          )}
 
           <div className="mb-6 flex justify-end">
             <button
@@ -251,16 +327,23 @@ export default function Sourcing() {
                     <div className="flex-1 min-w-0 space-y-2">
                       <p className="font-black uppercase text-sm truncate">{line.productName}</p>
                       <p className="text-xs font-bold text-gray-500 uppercase">{line.categoryName}</p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <input
-                          type="text"
-                          value={line.type}
-                          onChange={(e) =>
-                            setType(line.categoryId, line.productId, e.target.value)
-                          }
-                          placeholder="TYPE / VARIANT (e.g., 6204-2RS)"
-                          className="h-10 px-3 border-2 border-black font-bold uppercase bg-white text-xs"
-                        />
+                      {line.requestedBrands.length > 0 && (
+                        <div className="rounded-md border border-black/10 bg-white px-2 py-2">
+                          <p className="text-[10px] font-black uppercase tracking-wider text-gray-500">
+                            Requested brands
+                          </p>
+                          <ul className="mt-1 space-y-1">
+                            {line.requestedBrands.map((entry) => (
+                              <li key={`${line.productId}-${entry.brand}`} className="text-[10px] font-bold uppercase text-gray-700">
+                                {entry.brand}
+                                {entry.partNumber ? ` - Part ${entry.partNumber}` : ''}
+                                {` - Qty ${entry.qty}`}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      <div className="grid grid-cols-1 gap-2">
                         <input
                           type="text"
                           value={line.dimensions}
@@ -328,7 +411,7 @@ export default function Sourcing() {
                     type="text"
                     value={item.type}
                     onChange={(e) => updateManualItem(item.id, 'type', e.target.value)}
-                    placeholder="TYPE"
+                    placeholder="BRAND / COMPANY NAME"
                     className="md:col-span-3 h-10 px-3 border-2 border-black font-bold uppercase bg-concrete text-xs"
                   />
                   <input

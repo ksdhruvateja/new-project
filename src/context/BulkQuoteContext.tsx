@@ -9,6 +9,7 @@ export type BulkQuoteLine = {
   qty: number;
   type: string;
   dimensions: string;
+  requestedBrands: { brand: string; qty: number; partNumber?: string }[];
 };
 
 const STORAGE_KEY = 'forez-bulk-quote-lines';
@@ -22,7 +23,22 @@ function loadFromStorage(): BulkQuoteLine[] {
     const raw = sessionStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as BulkQuoteLine[];
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map((line) => ({
+      ...line,
+      requestedBrands: Array.isArray((line as BulkQuoteLine).requestedBrands)
+        ? (line as BulkQuoteLine).requestedBrands
+            .filter((b) => typeof b?.brand === 'string' && Number.isFinite(Number(b?.qty)))
+            .map((b) => ({
+              brand: b.brand,
+              qty: Math.max(0, Math.floor(Number(b.qty)) || 0),
+              partNumber: typeof (b as { partNumber?: unknown }).partNumber === 'string'
+                ? (b as { partNumber?: string }).partNumber?.trim() || ''
+                : '',
+            }))
+            .filter((b) => b.qty > 0)
+        : [],
+    }));
   } catch {
     return [];
   }
@@ -66,6 +82,11 @@ type BulkQuoteContextValue = {
   setQty: (categoryId: string, productId: string, qty: number) => void;
   setType: (categoryId: string, productId: string, type: string) => void;
   setDimensions: (categoryId: string, productId: string, dimensions: string) => void;
+  setRequestedBrands: (
+    categoryId: string,
+    productId: string,
+    requestedBrands: { brand: string; qty: number; partNumber?: string }[]
+  ) => void;
   removeLine: (categoryId: string, productId: string) => void;
   clearLines: () => void;
 };
@@ -109,6 +130,7 @@ export function BulkQuoteProvider({ children }: { children: React.ReactNode }) {
               qty: 1,
               type: '',
               dimensions: '',
+              requestedBrands: [],
             },
           ]);
         }
@@ -133,6 +155,23 @@ export function BulkQuoteProvider({ children }: { children: React.ReactNode }) {
           store.map((l) =>
             l.categoryId === categoryId && l.productId === productId
               ? { ...l, dimensions }
+              : l
+          )
+        );
+      },
+      setRequestedBrands: (categoryId, productId, requestedBrands) => {
+        const cleaned = requestedBrands
+          .filter((item) => item.brand.trim().length > 0)
+          .map((item) => ({
+            brand: item.brand.trim(),
+            qty: Math.max(0, Math.floor(Number(item.qty)) || 0),
+            partNumber: item.partNumber?.trim() || '',
+          }))
+          .filter((item) => item.qty > 0);
+        setStore(
+          store.map((l) =>
+            l.categoryId === categoryId && l.productId === productId
+              ? { ...l, requestedBrands: cleaned }
               : l
           )
         );

@@ -60,6 +60,339 @@ const FEATURED_BRANDS = [
   'TB Woods', 'Link-Belt', 'Morse', 'Bando', 'Renold', 'Diamond',
 ];
 
+const BRAND_LOGO_ORIGINALS: Record<string, string> = {
+  'ALLEN BRADLEY': '/brand-logos/allen-bradley.png',
+  'ALLIGATOR LACING': '/brand-logos/alligator-lacing.png',
+  'CHICAGO RAWHIDE': '/brand-logos/chicago-rawhide.png',
+  'CLIPPER LACING': '/brand-logos/clipper-lacing.png',
+  COILHOSE: '/brand-logos/coilhose.png',
+  'AMERICAN CYLINDER': '/brand-logos/american-cylinder.png',
+  'AMERICAN PULLEY': '/brand-logos/american-pulley.png',
+  AMERIDRIVES: '/brand-logos/ameridrives.png',
+  AMI: '/brand-logos/ametric.png',
+  AMETRIC: '/brand-logos/ametric.png',
+  BANDO: '/brand-logos/bando.png',
+  BOSTON: '/brand-logos/boston.png',
+  'BAGEL BELTING': '/brand-logos/bagel-belting.png',
+  'BISHOP WISECARVER': '/brand-logos/bishop-wisecarver.png',
+  'BIMBA CYLINDERS': '/brand-logos/bimba-cylinders.png',
+  'COTTON BELTING': '/brand-logos/cotton-belting.png',
+  'FOOD BELTING': '/brand-logos/food-belting.svg',
+  ABC: '/brand-logos/abc.png',
+  BALDOR: '/brand-logos/baldor.png',
+  BRECOFLEX: '/brand-logos/brecoflex.png',
+  BRYANT: '/brand-logos/bryant.png',
+  CRAFT: '/brand-logos/craft.png',
+  DAYCO: '/brand-logos/dayco.png',
+  DIAMOND: '/brand-logos/diamond.png',
+  DUNLOP: '/brand-logos/dunlop.png',
+  DYNACORE: '/brand-logos/dynacore.png',
+  DYNACORP: '/brand-logos/dyncorp.png',
+  ELECTROID: '/brand-logos/electroid.png',
+  FALK: '/brand-logos/falk.png',
+  FENNAR: '/brand-logos/fenner.png',
+  'FITTINGS UNLIMITED': '/brand-logos/fittings-unlimited.png',
+  FORBO: '/brand-logos/forbo.png',
+  FORMSPRAG: '/brand-logos/formsprag.png',
+  FYH: '/brand-logos/fyh.png',
+  GARLOCK: '/brand-logos/garlock.png',
+  GATES: '/brand-logos/gates.png',
+  'GENERAL ELECTRIC': '/brand-logos/general-electric.png',
+  GERBING: '/brand-logos/gerbing.png',
+  AETNA: '/brand-logos/aetna.png',
+  'AIR PIPE USA': '/brand-logos/air-pipe-usa.png',
+  ALEMITE: '/brand-logos/alemite.png',
+  MARTIN: '/brand-logos/martin.png',
+  'BREWER TENSIONERS': '/brand-logos/brewer-tensioners.png',
+  HEIM: '/brand-logos/heim.png',
+  HEPA: '/brand-logos/hepa.png',
+  'HEWITT ROBINS': '/brand-logos/hewitt-robins.png',
+  'HITACHI MAXCO': '/brand-logos/hitachi-maxco.png',
+  HKK: '/brand-logos/hkk.png',
+  HORTON: '/brand-logos/horton.png',
+  'HOSE & FITTINGS': '/brand-logos/hose-fittings.png',
+  'HUB CITY': '/brand-logos/hub-city.png',
+  IDC: '/brand-logos/idc.png',
+  IKO: '/brand-logos/iko.png',
+  INA: '/brand-logos/ina.png',
+  IWIS: '/brand-logos/iwis.png',
+  INTEROLL: '/brand-logos/interroll.png',
+  INTERROLL: '/brand-logos/interroll.png',
+  INTRALOX: '/brand-logos/intralox.png',
+  JEFFREY: '/brand-logos/jeffrey.png',
+  KEYSTONE: '/brand-logos/keystone.png',
+  'KOP FLEX': '/brand-logos/kop-flex.png',
+  'LEESON ELECTRIC': '/brand-logos/leeson.png',
+  LINCOLN: '/brand-logos/lincoln.png',
+  'LINK-BELT': '/brand-logos/link-belt.png',
+  KOYO: '/brand-logos/koyo.png',
+  'LINN GEAR': '/brand-logos/linn-gear.png',
+  'LOCKNUTS & WASHERS': '/brand-logos/locknuts-washers.png',
+  LUBRIKO: '/brand-logos/lubriko.png',
+  LUBRIPLATE: '/brand-logos/lubriplate.png',
+  MAGNETEK: '/brand-logos/magnetek.png',
+  MCGILL: '/brand-logos/mcgill.png',
+  MASKA: '/brand-logos/maska.png',
+  MAUREY: '/brand-logos/maurey.png',
+  'MFD PNEUMATIC VALVES': '/brand-logos/mfd.png',
+  MOBIL: '/brand-logos/mobil.png',
+  MOLINE: '/brand-logos/moline.png',
+  MORSE: '/brand-logos/morse.png',
+  NACHI: '/brand-logos/nachi.png',
+  NATIONAL: '/brand-logos/national-seals.png',
+  'NATIONAL ROD ENDS': '/brand-logos/national-rod-ends.png',
+  'NEVER SEEZ': '/brand-logos/never-seez.png',
+  NOK: '/brand-logos/nok.png',
+  NORGREN: '/brand-logos/norgren.png',
+  'O RINGS': '/brand-logos/o-rings.png',
+  'OIL RITE': '/brand-logos/oil-rite.png',
+  OILITE: '/brand-logos/oilite.png',
+  OMEGA: '/brand-logos/omega.png',
+  'OSHKOSH AEROTECH': '/brand-logos/oshkosh-aerotech.png',
+  'OWATONNA TOOL': '/brand-logos/owatonna-tool.png',
+  'PACIFIC BEARING': '/brand-logos/pacific-bearing.png',
+  'PAGE (LEATHER)': '/brand-logos/page-leather.png',
+  'PNEUFORCE / VACUFORCE': '/brand-logos/pneuforce-vacuforce.png',
+  PRECISION: '/brand-logos/precision.png',
+  RAMSEY: '/brand-logos/ramsey.png',
+  RANDALL: '/brand-logos/randall.png',
+  REELCRAFT: '/brand-logos/reelcraft.png',
+  RELIANCE: '/brand-logos/reliance.png',
+  RENOLD: '/brand-logos/renold.png',
+  RINGSPAN: '/brand-logos/ringspann.png',
+  REX: '/brand-logos/rex.png',
+  ROLLWAY: '/brand-logos/rollway.png',
+  ROYERSFORD: '/brand-logos/royersford.png',
+  RTI: '/brand-logos/rti.png',
+  RBC: '/brand-logos/rbc.png',
+  SCHATZ: '/brand-logos/schatz.png',
+  SCHMIDT: '/brand-logos/schmidt.png',
+  'SEW EURODRIVES': '/brand-logos/sew-eurodrive.png',
+  SIEMENS: '/brand-logos/siemens.png',
+  SIERRATH: '/brand-logos/sierrath.png',
+  'STAR LINEAR': '/brand-logos/star-linear.png',
+  'STARCYL CYLINDERS': '/brand-logos/starcyl-cylinders.png',
+  STEARNS: '/brand-logos/stearns.png',
+  'STEPHENS ADAMSON': '/brand-logos/stephens-adamson.png',
+  SUMITOMO: '/brand-logos/sumitomo.png',
+  SUPERIOR: '/brand-logos/superior.png',
+  'TB WOODS': '/brand-logos/tb-woods.png',
+  TCM: '/brand-logos/tcm.png',
+  THOMAS: '/brand-logos/thomas.png',
+  THOMSON: '/brand-logos/thomson.png',
+  ULPA: '/brand-logos/ulpa.png',
+  UNION: '/brand-logos/union.png',
+  'US ELECTRIC': '/brand-logos/us-electric.png',
+  'US SEAL': '/brand-logos/us-seal.png',
+  UST: '/brand-logos/ust.png',
+  'VAN GORP': '/brand-logos/van-gorp.png',
+  WALDRON: '/brand-logos/waldron.png',
+  WARNER: '/brand-logos/warner.png',
+  WD40: '/brand-logos/wd40.png',
+  WHITNEY: '/brand-logos/whitney.png',
+  'WIRE MESH BELTS': '/brand-logos/wire-mesh-belts.png',
+  YAMADA: '/brand-logos/yamada.png',
+  ZURN: '/brand-logos/zurn.png',
+  LOVEJOY: '/brand-logos/lovejoy.png',
+  SKF: 'https://googleusercontent.com/image_collection/image_retrieval/2947497633612133775_0',
+  'SKF MAINTENANCE': '/brand-logos/skf-maintenance.png',
+  'SKF/LINCOLN': '/brand-logos/skf-lincoln.png',
+  DODGE: 'https://googleusercontent.com/image_collection/image_retrieval/5409773030784320301_0',
+  BROWNING: '/brand-logos/browning.png',
+  'TIMKEN TORRINGTON': 'https://googleusercontent.com/image_collection/image_retrieval/3366957255698520401_0',
+  NSK: 'https://googleusercontent.com/image_collection/image_retrieval/4062728077605395253_0',
+};
+
+const BRAND_LOGO_DOMAINS: Record<string, string> = {
+  ALEMITE: 'skf.com',
+  'AIR PIPE USA': 'airpipeusa.com',
+  'ALLEN BRADLEY': 'rockwellautomation.com',
+  'ALLIGATOR LACING': 'flexco.com',
+  'CLIPPER LACING': 'flexco.com',
+  'CHICAGO RAWHIDE': 'skf.com',
+  COILHOSE: 'coilhose.com',
+  'AMERICAN CYLINDER': 'americancylinder.com',
+  'AMERICAN PULLEY': 'americanpulley.com',
+  AMERIDRIVES: 'ameridrives.com',
+  AMI: 'asahiamerica.com',
+  AMETRIC: 'ametric.com',
+  BRECOFLEX: 'brecoflex.com',
+  BRYANT: 'bryantpipe.com',
+  'BIMBA CYLINDERS': 'bimba.com',
+  SKF: 'skf.com',
+  'SKF MAINTENANCE': 'skf.com',
+  'SKF/LINCOLN': 'orderlincoln.com',
+  TIMKEN: 'timken.com',
+  'TIMKEN TORRINGTON': 'timken.com',
+  NSK: 'nsk.com',
+  NTN: 'ntnamericas.com',
+  DODGE: 'dodgeindustrial.com',
+  BROWNING: 'baldor.com',
+  BALDOR: 'baldor.com',
+  GARLOCK: 'garlock.com',
+  GATES: 'gates.com',
+  'GENERAL ELECTRIC': 'ge.com',
+  GERBING: 'gerbing.com',
+  CRAFT: 'craftbearing.com',
+  DAYCO: 'dayco.com',
+  DUNLOP: 'dunlopbelting.com',
+  DYNACORE: 'flexco.com',
+  DYNACORP: 'dyn-intl.com',
+  ELECTROID: 'electroid.com',
+  FENNAR: 'fennerppd.com',
+  'FITTINGS UNLIMITED': 'myfui.com',
+  FORBO: 'forbo.com',
+  FORMSPRAG: 'formsprag.com',
+  FYH: 'fyh.com',
+  REXNORD: 'rexnord.com',
+  REX: 'rexindustrial.com',
+  LOVEJOY: 'timken.com',
+  MARTIN: 'martinsprocket.com',
+  HEIM: 'rbcbearings.com',
+  HEPA: 'hepafiltersales.com',
+  'HEWITT ROBINS': 'hewittrobins.com',
+  'HITACHI MAXCO': 'hitachi.com',
+  HKK: 'hkkchain.com',
+  HORTON: 'hortonsupply.com',
+  'HOSE & FITTINGS': 'ghxinc.com',
+  'HUB CITY': 'regalrexnord.com',
+  IDC: 'idcind.com',
+  IKO: 'ikont.co.jp',
+  INA: 'schaeffler.com',
+  IWIS: 'iwis.com',
+  INTEROLL: 'interroll.com',
+  INTERROLL: 'interroll.com',
+  INTRALOX: 'intralox.com',
+  JEFFREY: 'jeffreymachine.com',
+  KEYSTONE: 'lubricants.totalenergies.com',
+  'KOP FLEX': 'kopflex.com',
+  LINCOLN: 'orderlincoln.com',
+  KOYO: 'koyo.com',
+  'LINN GEAR': 'linngear.com',
+  'LOCKNUTS & WASHERS': 'stdlocknut.com',
+  LUBRIKO: 'pack-logix.com',
+  LUBRIPLATE: 'lubriplate.com',
+  MAGNETEK: 'cmco.com',
+  MCGILL: 'mcgillbearings.com',
+  MASKA: 'abb.com',
+  MAUREY: 'maurey.biz',
+  'MFD PNEUMATIC VALVES': 'bimba.com',
+  MOBIL: 'mobil.com',
+  MOLINE: 'molinebearing.com',
+  MORSE: 'morseindustries.com',
+  NACHI: 'nachi.com',
+  NATIONAL: 'skf.com',
+  'NATIONAL ROD ENDS': 'nationalrodends.com',
+  'NEVER SEEZ': 'bostik.com',
+  NOK: 'nok.com',
+  NORGREN: 'norgren.com',
+  'O RINGS': 'oringslimited.co.uk',
+  'OIL RITE': 'oilrite.com',
+  OILITE: 'oilite.com',
+  OMEGA: 'onlyomega.com',
+  'OSHKOSH AEROTECH': 'oshkoshaerotech.com',
+  'OWATONNA TOOL': 'otctools.com',
+  'PACIFIC BEARING': 'pacificbearing.com',
+  'PAGE (LEATHER)': 'pagebelting.com',
+  'PNEUFORCE / VACUFORCE': 'pneuforce.com',
+  PRECISION: 'precisionindustrialproducts.com',
+  RAMSEY: 'ramsey.com',
+  RANDALL: 'randallbearings.com',
+  REELCRAFT: 'reelcraft.com',
+  RELIANCE: 'ril.com',
+  ROLLWAY: 'rbcbearings.com',
+  ROYERSFORD: 'royersford.com',
+  RTI: 'rti-industries.com',
+  RBC: 'rbcbearings.com',
+  SCHATZ: 'rbcbearings.com',
+  SCHMIDT: 'zero-max.com',
+  'SEW EURODRIVES': 'sew-eurodrive.com',
+  SIEMENS: 'siemens.com',
+  SIERRATH: 'sierradistributors.com',
+  'STAR LINEAR': 'boschrexroth.com',
+  'STARCYL CYLINDERS': 'starcyl.com',
+  STEARNS: 'stearnsbrakes.com',
+  'STEPHENS ADAMSON': 'syntronmh.com',
+  SUMITOMO: 'sumitomo.com',
+  SUPERIOR: 'superiorindsupply.com',
+  ULPA: 'hepafiltersales.com',
+  UNION: 'unionindustrialsupply.com',
+  'US SEAL': 'ussealmfg.com',
+  UST: 'ustpower.com',
+  'VAN GORP': 'ppi-global.com',
+  WALDRON: 'regalrexnord.com',
+  WARNER: 'warrenelectric.com',
+  WHITNEY: 'renoldjeffrey.com',
+  'WIRE MESH BELTS': 'wiremeshproducts.com',
+  YAMADA: 'yamadapump.com',
+  ZURN: 'zurn.com',
+  FALK: 'rexnord.com',
+  'TB WOODS': 'tbwoods.com',
+  TCM: 'nok.com',
+  THOMAS: 'thomasindustrialsupply.com',
+  THOMSON: 'thomsonlinear.com',
+  'LINK-BELT': 'linkbelt.com',
+  BANDO: 'bandousa.com',
+  BOSTON: 'bostongear.com',
+  'BAGEL BELTING': 'belting.co.za',
+  'BISHOP WISECARVER': 'bwc.com',
+  'COTTON BELTING': 'vaughnbelting.com',
+  'FOOD BELTING': 'habasit.com',
+  RENOLD: 'renold.com',
+  RINGSPAN: 'ringspann.com',
+  DIAMOND: 'diamondchain.com',
+};
+
+const BRAND_ALIASES: Record<string, string> = {
+  TIMKEN: 'TIMKEN TORRINGTON',
+  'TB WOODS': 'TB WOODS',
+  RINGSPANN: 'RINGSPAN',
+  'COTTON BELT': 'COTTON BELTING',
+  'BRECO FLEX': 'BRECOFLEX',
+  'FORBO-SIEGLING': 'FORBO',
+  'FORBO SIEGLING': 'FORBO',
+  FENNER: 'FENNAR',
+  'SEW EURODRIVE': 'SEW EURODRIVES',
+  'LINN GEAR CO': 'LINN GEAR',
+  'LINN GEAR CO.': 'LINN GEAR',
+  'WD-40': 'WD40',
+  'WD 40': 'WD40',
+  LEESON: 'LEESON ELECTRIC',
+  'U.S. ELECTRIC': 'US ELECTRIC',
+  'U S ELECTRIC': 'US ELECTRIC',
+  'U.S. SEAL': 'US SEAL',
+  'U S SEAL': 'US SEAL',
+  AB: 'ALLEN BRADLEY',
+  HFI: 'HOSE & FITTINGS',
+  'HOSE AND FITTINGS': 'HOSE & FITTINGS',
+  'LOCK NUTS & WASHERS': 'LOCKNUTS & WASHERS',
+  'LOCK NUTS AND WASHERS': 'LOCKNUTS & WASHERS',
+  'LOCKNUTS AND WASHERS': 'LOCKNUTS & WASHERS',
+  'MARTIN TOOLS': 'MARTIN',
+  'LINK BELT': 'LINK-BELT',
+  'RANDALL INDUSTRIES': 'RANDALL',
+  PNEUFORCE: 'PNEUFORCE / VACUFORCE',
+  VACUFORCE: 'PNEUFORCE / VACUFORCE',
+  'AIRPIPE USA': 'AIR PIPE USA',
+  'AIR-PIPE USA': 'AIR PIPE USA',
+};
+
+function normalizeBrandKey(raw: string) {
+  const upper = raw.trim().toUpperCase();
+  const normalized = upper.replace(/[._-]/g, ' ').replace(/\s+/g, ' ').trim();
+  return BRAND_ALIASES[normalized] ?? normalized;
+}
+
+function getBrandLogoSources(brand: string) {
+  const key = normalizeBrandKey(brand);
+  const primary = BRAND_LOGO_ORIGINALS[key];
+  const domain = BRAND_LOGO_DOMAINS[key] ?? BRAND_LOGO_DOMAINS[brand.toUpperCase()];
+  const fallback = domain
+    ? `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`
+    : null;
+  return [primary, fallback].filter(Boolean) as string[];
+}
+
 const GLANCE_ITEMS = [
   'NYC Certified Minority Business Enterprise (MBE)',
   'Bulk quotes & multi-line custom sourcing',
@@ -166,17 +499,17 @@ export default function Home() {
 
       {/* ── STATS BAR ─────────────────────────────────────────────── */}
       <section className="w-full border-y border-slate-800 bg-slate-900">
-        <div className="mx-auto grid max-w-6xl grid-cols-3 divide-x divide-slate-700/60 px-5 sm:px-8 md:px-10">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 divide-y divide-slate-700/60 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 md:px-10">
           {[
             { Icon: Boxes, value: `${totalProducts}+`, label: 'Quote-Ready SKUs' },
             { Icon: Truck, value: '20+', label: 'Top Brands Sourced' },
             { Icon: Clock, value: '24–48 HR', label: 'Quote Turnaround' },
           ].map(({ Icon, value, label }) => (
-            <div key={label} className="flex flex-col items-center gap-1 py-5 text-center sm:flex-row sm:gap-4 sm:px-6 sm:py-6 sm:text-left md:px-10">
+            <div key={label} className="flex items-center gap-3 py-4 text-left sm:justify-center sm:gap-4 sm:px-6 sm:py-6 md:px-10">
               <Icon className="h-5 w-5 shrink-0 text-industrial-orange sm:h-6 sm:w-6" />
               <div>
-                <p className="text-xl font-black leading-none text-white sm:text-3xl">{value}</p>
-                <p className="mt-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-400 sm:text-[10px]">{label}</p>
+                <p className="text-lg font-black leading-none text-white sm:text-3xl">{value}</p>
+                <p className="mt-0.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 sm:text-[10px]">{label}</p>
               </div>
             </div>
           ))}
@@ -237,7 +570,7 @@ export default function Home() {
               <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
             </Link>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-6 sm:gap-2.5 md:gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-3 md:grid-cols-6 md:gap-3">
             {FEATURED_CATEGORIES.map((cat) => (
               <Link
                 key={cat.id}
@@ -326,9 +659,31 @@ export default function Home() {
                     key={`${brand}-${i}`}
                     type="button"
                     onClick={() => handleBrandClick(brand)}
-                    className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 text-xs font-black uppercase tracking-widest text-slate-700 shadow-sm transition duration-200 hover:border-industrial-orange/50 hover:bg-industrial-orange/8 hover:text-industrial-orange active:scale-95"
+                    className="inline-flex min-w-[14rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-6 text-center shadow-sm transition duration-200 hover:border-industrial-orange/50 hover:bg-industrial-orange/8 hover:text-industrial-orange active:scale-95"
                   >
-                    {brand}
+                    <span className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white text-xl font-black text-slate-500">
+                      <span aria-hidden>{brand.slice(0, 1)}</span>
+                      {getBrandLogoSources(brand)[0] && (
+                        <img
+                          src={getBrandLogoSources(brand)[0]}
+                          alt={`${brand} logo`}
+                          className="absolute inset-0 h-full w-full object-contain p-2"
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            const fallback = getBrandLogoSources(brand)[1];
+                            if (fallback && e.currentTarget.src !== fallback) {
+                              e.currentTarget.src = fallback;
+                              return;
+                            }
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      )}
+                    </span>
+                    <span className="text-xl font-black uppercase leading-tight tracking-wide text-slate-800">
+                      {brand}
+                    </span>
                   </button>
                 ))}
               </div>

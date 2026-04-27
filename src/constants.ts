@@ -64,8 +64,24 @@ const PRODUCT_IMAGE_BY_CATEGORY_ID: Record<string, string> = {
   'variable-speed': '/images/products-real/variable-drive.jpg',
 };
 
+const PRODUCT_IMAGE_BY_PRODUCT_ID: Record<string, string> = {
+  'misc-brewer': '/images/brewer-tensioners-logo.png',
+  'misc-casters': '/images/casters-wheels-logo.png',
+  'misc-hose': '/images/hose-fittings-logo.png',
+  'misc-keystock': '/images/keystock-logo.png',
+  'misc-locknuts': '/images/locknuts-washers-logo.png',
+  'misc-martin-tools': '/images/martin-tools-logo.png',
+  'misc-never-seez': '/images/never-seez-logo.png',
+  'misc-owatonna': '/images/owatonna-tool-logo.png',
+  'misc-post-lock': '/images/post-lock-logo.png',
+  'misc-retaining': '/images/retaining-rings-logo.png',
+  'misc-shafting': '/images/shafting-logo.png',
+  'misc-skf-maint': '/images/skf-maintenance-logo.png',
+};
+
 export function getProductImage(product: Product, category: Category): string {
   return (
+    PRODUCT_IMAGE_BY_PRODUCT_ID[product.id] ||
     PRODUCT_IMAGE_BY_CATEGORY_ID[category.id] ||
     CATEGORY_IMAGE_BY_ID[category.id] ||
     FALLBACK_PRODUCT_IMAGE

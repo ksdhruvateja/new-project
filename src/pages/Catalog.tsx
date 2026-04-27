@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Link, Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Search, ChevronRight, Check, ChevronDown } from 'lucide-react';
+import { Search, ChevronRight, Check, X } from 'lucide-react';
 import {
   PRODUCT_CATEGORIES,
   getProductImage,
@@ -12,13 +12,396 @@ import {
 import { cn } from '../lib/utils';
 import { useBulkQuote } from '../context/BulkQuoteContext';
 
-function productKey(categoryId: string, productId: string) {
-  return `${categoryId}::${productId}`;
+const MANUAL_QUOTE_REQUESTS_KEY = 'forez-manual-quote-requests';
+
+type PendingManualQuoteItem = {
+  name: string;
+  type: string;
+  dimensions: string;
+  qty: number;
+};
+
+const BRAND_LOGO_ORIGINALS: Record<string, string> = {
+  AETNA: '/brand-logos/aetna.png',
+  'AIR PIPE USA': '/brand-logos/air-pipe-usa.png',
+  ALEMITE: '/brand-logos/alemite.png',
+  'ALLEN BRADLEY': '/brand-logos/allen-bradley.png',
+  'ALLIGATOR LACING': '/brand-logos/alligator-lacing.png',
+  'CLIPPER LACING': '/brand-logos/clipper-lacing.png',
+  'AMERICAN CYLINDER': '/brand-logos/american-cylinder.png',
+  'AMERICAN PULLEY': '/brand-logos/american-pulley.png',
+  AMERIDRIVES: '/brand-logos/ameridrives.png',
+  AMI: '/brand-logos/ametric.png',
+  AMETRIC: '/brand-logos/ametric.png',
+  ABC: '/brand-logos/abc.png',
+  BALDOR: '/brand-logos/baldor.png',
+  BROWNING: '/brand-logos/browning.png',
+  BARDEN: 'https://googleusercontent.com/image_collection/image_retrieval/235765848323273327_0',
+  BANDO: '/brand-logos/bando.png',
+  'BAGEL BELTING': '/brand-logos/bagel-belting.png',
+  'BISHOP WISECARVER': '/brand-logos/bishop-wisecarver.png',
+  'BIMBA CYLINDERS': '/brand-logos/bimba-cylinders.png',
+  'COTTON BELTING': '/brand-logos/cotton-belting.png',
+  'FOOD BELTING': '/brand-logos/food-belting.svg',
+  BRECOFLEX: '/brand-logos/brecoflex.png',
+  BRYANT: '/brand-logos/bryant.png',
+  'BREWER TENSIONERS': '/brand-logos/brewer-tensioners.png',
+  MARTIN: '/brand-logos/martin.png',
+  LOVEJOY: '/brand-logos/lovejoy.png',
+  'RBC/BOER': '/brand-logos/rbc-boer.png',
+  BOSTON: '/brand-logos/boston.png',
+  'BOSTON GEAR': '/brand-logos/boston-gear.png',
+  CARTER: 'https://googleusercontent.com/image_collection/image_retrieval/16370269764176563832_0',
+  'CAST BRONZE': 'https://googleusercontent.com/image_collection/image_retrieval/4762083334325161740_0',
+  'CHICAGO RAWHIDE': '/brand-logos/chicago-rawhide.png',
+  COILHOSE: '/brand-logos/coilhose.png',
+  CRAFT: '/brand-logos/craft.png',
+  DAYCO: '/brand-logos/dayco.png',
+  DIAMOND: '/brand-logos/diamond.png',
+  DODGE: 'https://googleusercontent.com/image_collection/image_retrieval/5409773030784320301_0',
+  DUNLOP: '/brand-logos/dunlop.png',
+  DYNACORE: '/brand-logos/dynacore.png',
+  DYNACORP: '/brand-logos/dyncorp.png',
+  ELECTROID: '/brand-logos/electroid.png',
+  FAFNIR: 'https://googleusercontent.com/image_collection/image_retrieval/7136702197155688076_0',
+  FAG: '/brand-logos/fag.png',
+  FALK: '/brand-logos/falk.png',
+  FENNAR: '/brand-logos/fenner.png',
+  'FITTINGS UNLIMITED': '/brand-logos/fittings-unlimited.png',
+  FORBO: '/brand-logos/forbo.png',
+  FRANTZ: 'https://googleusercontent.com/image_collection/image_retrieval/6765249857330761910_0',
+  FORMSPRAG: '/brand-logos/formsprag.png',
+  FYH: '/brand-logos/fyh.png',
+  GARLOCK: '/brand-logos/garlock.png',
+  GATES: '/brand-logos/gates.png',
+  'GENERAL BEARING': 'https://googleusercontent.com/image_collection/image_retrieval/16388918967236194207_0',
+  'GENERAL ELECTRIC': '/brand-logos/general-electric.png',
+  GERBING: '/brand-logos/gerbing.png',
+  HEIM: '/brand-logos/heim.png',
+  HEPA: '/brand-logos/hepa.png',
+  'HEWITT ROBINS': '/brand-logos/hewitt-robins.png',
+  'HITACHI MAXCO': '/brand-logos/hitachi-maxco.png',
+  HKK: '/brand-logos/hkk.png',
+  HORTON: '/brand-logos/horton.png',
+  'HOSE & FITTINGS': '/brand-logos/hose-fittings.png',
+  'HOOVER/NSK': 'https://googleusercontent.com/image_collection/image_retrieval/4062728077605395253_0',
+  'HUB CITY': '/brand-logos/hub-city.png',
+  IDC: '/brand-logos/idc.png',
+  IKO: '/brand-logos/iko.png',
+  INA: '/brand-logos/ina.png',
+  IWIS: '/brand-logos/iwis.png',
+  INTRALOX: '/brand-logos/intralox.png',
+  INTEROLL: '/brand-logos/interroll.png',
+  INTERROLL: '/brand-logos/interroll.png',
+  IGUS: 'https://googleusercontent.com/image_collection/image_retrieval/2480654692382317293_0',
+  IPTCI: 'https://googleusercontent.com/image_collection/image_retrieval/15115735719352158151_0',
+  JEFFREY: '/brand-logos/jeffrey.png',
+  KAYDON: 'https://googleusercontent.com/image_collection/image_retrieval/1322824959038992030_0',
+  KEYSTONE: '/brand-logos/keystone.png',
+  KILIAN: 'https://googleusercontent.com/image_collection/image_retrieval/3694565903079494524_0',
+  'KOP FLEX': '/brand-logos/kop-flex.png',
+  'LEESON ELECTRIC': '/brand-logos/leeson.png',
+  LINCOLN: '/brand-logos/lincoln.png',
+  'LINK-BELT': '/brand-logos/link-belt.png',
+  KOYO: '/brand-logos/koyo.png',
+  'LINN GEAR': '/brand-logos/linn-gear.png',
+  'LOCKNUTS & WASHERS': '/brand-logos/locknuts-washers.png',
+  LUBRIKO: '/brand-logos/lubriko.png',
+  LUBRIPLATE: '/brand-logos/lubriplate.png',
+  MAGNETEK: '/brand-logos/magnetek.png',
+  MCGILL: '/brand-logos/mcgill.png',
+  MASKA: '/brand-logos/maska.png',
+  MAUREY: '/brand-logos/maurey.png',
+  'MFD PNEUMATIC VALVES': '/brand-logos/mfd.png',
+  MOBIL: '/brand-logos/mobil.png',
+  MOLINE: '/brand-logos/moline.png',
+  MORSE: '/brand-logos/morse.png',
+  MRC: 'https://googleusercontent.com/image_collection/image_retrieval/1135088581513331799_0',
+  NACHI: '/brand-logos/nachi.png',
+  NATIONAL: '/brand-logos/national-seals.png',
+  'NATIONAL ROD ENDS': '/brand-logos/national-rod-ends.png',
+  'NEVER SEEZ': '/brand-logos/never-seez.png',
+  NICE: 'https://googleusercontent.com/image_collection/image_retrieval/16203807994414535688_0',
+  NOK: '/brand-logos/nok.png',
+  NORGREN: '/brand-logos/norgren.png',
+  'O RINGS': '/brand-logos/o-rings.png',
+  'OIL RITE': '/brand-logos/oil-rite.png',
+  OILITE: '/brand-logos/oilite.png',
+  OMEGA: '/brand-logos/omega.png',
+  'OSHKOSH AEROTECH': '/brand-logos/oshkosh-aerotech.png',
+  'OWATONNA TOOL': '/brand-logos/owatonna-tool.png',
+  'PACIFIC BEARING': '/brand-logos/pacific-bearing.png',
+  'PAGE (LEATHER)': '/brand-logos/page-leather.png',
+  'PNEUFORCE / VACUFORCE': '/brand-logos/pneuforce-vacuforce.png',
+  PRECISION: '/brand-logos/precision.png',
+  RAMSEY: '/brand-logos/ramsey.png',
+  RANDALL: '/brand-logos/randall.png',
+  REELCRAFT: '/brand-logos/reelcraft.png',
+  RELIANCE: '/brand-logos/reliance.png',
+  RENOLD: '/brand-logos/renold.png',
+  REX: '/brand-logos/rex.png',
+  RINGSPAN: '/brand-logos/ringspann.png',
+  ROLLWAY: '/brand-logos/rollway.png',
+  ROYERSFORD: '/brand-logos/royersford.png',
+  RTI: '/brand-logos/rti.png',
+  RBC: '/brand-logos/rbc.png',
+  SCHATZ: '/brand-logos/schatz.png',
+  SCHMIDT: '/brand-logos/schmidt.png',
+  SEALMASTER: 'https://googleusercontent.com/image_collection/image_retrieval/7996261573241369145_0',
+  'SEW EURODRIVES': '/brand-logos/sew-eurodrive.png',
+  SIEMENS: '/brand-logos/siemens.png',
+  SIERRATH: '/brand-logos/sierrath.png',
+  SKF: 'https://googleusercontent.com/image_collection/image_retrieval/2947497633612133775_0',
+  'SKF MAINTENANCE': '/brand-logos/skf-maintenance.png',
+  'SKF/LINCOLN': '/brand-logos/skf-lincoln.png',
+  SMITH: 'https://googleusercontent.com/image_collection/image_retrieval/18363234409768608943_0',
+  'STAR LINEAR': '/brand-logos/star-linear.png',
+  'STARCYL CYLINDERS': '/brand-logos/starcyl-cylinders.png',
+  STEARNS: '/brand-logos/stearns.png',
+  'STEPHENS ADAMSON': '/brand-logos/stephens-adamson.png',
+  SUMITOMO: '/brand-logos/sumitomo.png',
+  SUPERIOR: '/brand-logos/superior.png',
+  'TB WOODS': '/brand-logos/tb-woods.png',
+  TCM: '/brand-logos/tcm.png',
+  THOMAS: '/brand-logos/thomas.png',
+  THOMSON: '/brand-logos/thomson.png',
+  ULPA: '/brand-logos/ulpa.png',
+  UNION: '/brand-logos/union.png',
+  'US ELECTRIC': '/brand-logos/us-electric.png',
+  'US SEAL': '/brand-logos/us-seal.png',
+  UST: '/brand-logos/ust.png',
+  'VAN GORP': '/brand-logos/van-gorp.png',
+  WALDRON: '/brand-logos/waldron.png',
+  WARNER: '/brand-logos/warner.png',
+  WD40: '/brand-logos/wd40.png',
+  WHITNEY: '/brand-logos/whitney.png',
+  'WIRE MESH BELTS': '/brand-logos/wire-mesh-belts.png',
+  YAMADA: '/brand-logos/yamada.png',
+  'TIMKEN TORRINGTON': 'https://googleusercontent.com/image_collection/image_retrieval/3366957255698520401_0',
+  ZURN: '/brand-logos/zurn.png',
+};
+
+const BRAND_LOGO_DOMAINS: Record<string, string> = {
+  AETNA: 'aetnabearing.com',
+  'AIR PIPE USA': 'airpipeusa.com',
+  ALEMITE: 'skf.com',
+  'ALLEN BRADLEY': 'rockwellautomation.com',
+  'ALLIGATOR LACING': 'flexco.com',
+  'CLIPPER LACING': 'flexco.com',
+  'AMERICAN CYLINDER': 'americancylinder.com',
+  'AMERICAN PULLEY': 'americanpulley.com',
+  AMERIDRIVES: 'ameridrives.com',
+  AMI: 'asahiamerica.com',
+  AMETRIC: 'ametric.com',
+  ABC: 'abcbearings.com',
+  BALDOR: 'baldor.com',
+  BROWNING: 'baldor.com',
+  BARDEN: 'bardenbearings.com',
+  BANDO: 'bandousa.com',
+  'BAGEL BELTING': 'belting.co.za',
+  'BISHOP WISECARVER': 'bwc.com',
+  'BIMBA CYLINDERS': 'bimba.com',
+  'COTTON BELTING': 'vaughnbelting.com',
+  'FOOD BELTING': 'habasit.com',
+  BRECOFLEX: 'brecoflex.com',
+  BRYANT: 'bryantpipe.com',
+  'RBC/BOER': 'rbcbearings.com',
+  BOSTON: 'bostongear.com',
+  'BOSTON GEAR': 'bostongear.com',
+  CARTER: 'carterbearings.com',
+  'CAST BRONZE': 'castbronze.com',
+  'CHICAGO RAWHIDE': 'skf.com',
+  COILHOSE: 'coilhose.com',
+  CRAFT: 'craftbearing.com',
+  DAYCO: 'dayco.com',
+  DIAMOND: 'diamondchain.com',
+  DODGE: 'dodgeindustrial.com',
+  DUNLOP: 'dunlopbelting.com',
+  DYNACORE: 'flexco.com',
+  DYNACORP: 'dyn-intl.com',
+  ELECTROID: 'electroid.com',
+  FAFNIR: 'timken.com',
+  FAG: 'schaeffler.com',
+  FALK: 'rexnord.com',
+  FENNAR: 'fennerppd.com',
+  'FITTINGS UNLIMITED': 'myfui.com',
+  FORBO: 'forbo.com',
+  FRANTZ: 'frantz-mfg.com',
+  FORMSPRAG: 'formsprag.com',
+  FYH: 'fyh.com',
+  GARLOCK: 'garlock.com',
+  GATES: 'gates.com',
+  'GENERAL BEARING': 'generalbearing.com',
+  'GENERAL ELECTRIC': 'ge.com',
+  GERBING: 'gerbing.com',
+  HEIM: 'rbcbearings.com',
+  HEPA: 'hepafiltersales.com',
+  'HEWITT ROBINS': 'hewittrobins.com',
+  'HITACHI MAXCO': 'hitachi.com',
+  HKK: 'hkkchain.com',
+  HORTON: 'hortonsupply.com',
+  'HOSE & FITTINGS': 'ghxinc.com',
+  'HOOVER/NSK': 'nsk.com',
+  'HUB CITY': 'regalrexnord.com',
+  IDC: 'idcind.com',
+  IKO: 'ikont.co.jp',
+  INA: 'schaeffler.com',
+  IWIS: 'iwis.com',
+  INTRALOX: 'intralox.com',
+  INTEROLL: 'interroll.com',
+  INTERROLL: 'interroll.com',
+  IGUS: 'igus.com',
+  IPTCI: 'iptci.com',
+  JEFFREY: 'jeffreymachine.com',
+  KAYDON: 'kaydonbearings.com',
+  KEYSTONE: 'lubricants.totalenergies.com',
+  KILIAN: 'kilianbearings.com',
+  'KOP FLEX': 'kopflex.com',
+  'LEESON ELECTRIC': 'regalrexnord.com',
+  LINCOLN: 'orderlincoln.com',
+  'LINK-BELT': 'linkbelt.com',
+  KOYO: 'koyo.com',
+  'LOCKNUTS & WASHERS': 'stdlocknut.com',
+  LUBRIKO: 'pack-logix.com',
+  LUBRIPLATE: 'lubriplate.com',
+  MAGNETEK: 'cmco.com',
+  MCGILL: 'mcgillbearings.com',
+  MASKA: 'abb.com',
+  MAUREY: 'maurey.biz',
+  'MFD PNEUMATIC VALVES': 'bimba.com',
+  MOBIL: 'mobil.com',
+  MOLINE: 'molinebearing.com',
+  MORSE: 'morseindustries.com',
+  MRC: 'skf.com',
+  NACHI: 'nachi.com',
+  NATIONAL: 'skf.com',
+  'NATIONAL ROD ENDS': 'nationalrodends.com',
+  'NEVER SEEZ': 'bostik.com',
+  NICE: 'skf.com',
+  NOK: 'nok.com',
+  NORGREN: 'norgren.com',
+  'O RINGS': 'oringslimited.co.uk',
+  'OIL RITE': 'oilrite.com',
+  OILITE: 'oilite.com',
+  OMEGA: 'onlyomega.com',
+  'OSHKOSH AEROTECH': 'oshkoshaerotech.com',
+  'OWATONNA TOOL': 'otctools.com',
+  'PACIFIC BEARING': 'pacificbearing.com',
+  'PAGE (LEATHER)': 'pagebelting.com',
+  'PNEUFORCE / VACUFORCE': 'pneuforce.com',
+  PRECISION: 'precisionindustrialproducts.com',
+  RAMSEY: 'ramsey.com',
+  RANDALL: 'randallbearings.com',
+  REELCRAFT: 'reelcraft.com',
+  RELIANCE: 'ril.com',
+  RENOLD: 'renold.com',
+  REX: 'rexindustrial.com',
+  RINGSPAN: 'ringspann.com',
+  ROLLWAY: 'rbcbearings.com',
+  ROYERSFORD: 'royersford.com',
+  RTI: 'rti-industries.com',
+  RBC: 'rbcbearings.com',
+  SCHATZ: 'rbcbearings.com',
+  SCHMIDT: 'zero-max.com',
+  SEALMASTER: 'sealmaster.net',
+  'SEW EURODRIVES': 'sew-eurodrive.com',
+  SIEMENS: 'siemens.com',
+  SIERRATH: 'sierradistributors.com',
+  SKF: 'skf.com',
+  'SKF MAINTENANCE': 'skf.com',
+  'SKF/LINCOLN': 'orderlincoln.com',
+  SMITH: 'smithbearing.com',
+  'STAR LINEAR': 'boschrexroth.com',
+  'STARCYL CYLINDERS': 'starcyl.com',
+  STEARNS: 'stearnsbrakes.com',
+  'STEPHENS ADAMSON': 'syntronmh.com',
+  SUMITOMO: 'sumitomo.com',
+  SUPERIOR: 'superiorindsupply.com',
+  'TB WOODS': 'tbwoods.com',
+  TCM: 'nok.com',
+  THOMAS: 'thomasindustrialsupply.com',
+  THOMSON: 'thomsonlinear.com',
+  ULPA: 'hepafiltersales.com',
+  UNION: 'unionindustrialsupply.com',
+  'US ELECTRIC': 'uselectric.com',
+  'US SEAL': 'ussealmfg.com',
+  UST: 'ustpower.com',
+  'VAN GORP': 'ppi-global.com',
+  WALDRON: 'regalrexnord.com',
+  WARNER: 'warrenelectric.com',
+  WD40: 'wd40.com',
+  WHITNEY: 'renoldjeffrey.com',
+  'WIRE MESH BELTS': 'wiremeshproducts.com',
+  YAMADA: 'yamadapump.com',
+  'TIMKEN TORRINGTON': 'timken.com',
+  ZURN: 'zurn.com',
+};
+
+const BRAND_ALIASES: Record<string, string> = {
+  BOER: 'RBC/BOER',
+  'RBC BOER': 'RBC/BOER',
+  'RBC / BOER': 'RBC/BOER',
+  HOOVER: 'HOOVER/NSK',
+  NSK: 'HOOVER/NSK',
+  'TIMKEN': 'TIMKEN TORRINGTON',
+  'TORRINGTON': 'TIMKEN TORRINGTON',
+  'TIMKEN/TORRINGTON': 'TIMKEN TORRINGTON',
+  'TIMKEN TORRINGTON': 'TIMKEN TORRINGTON',
+  RINGSPANN: 'RINGSPAN',
+  'COTTON BELT': 'COTTON BELTING',
+  'BRECO FLEX': 'BRECOFLEX',
+  'FORBO-SIEGLING': 'FORBO',
+  'FORBO SIEGLING': 'FORBO',
+  FENNER: 'FENNAR',
+  'SEW EURODRIVE': 'SEW EURODRIVES',
+  'LINN GEAR CO': 'LINN GEAR',
+  'LINN GEAR CO.': 'LINN GEAR',
+  'WD-40': 'WD40',
+  'WD 40': 'WD40',
+  LEESON: 'LEESON ELECTRIC',
+  'U.S. ELECTRIC': 'US ELECTRIC',
+  'U S ELECTRIC': 'US ELECTRIC',
+  'U.S. SEAL': 'US SEAL',
+  'U S SEAL': 'US SEAL',
+  AB: 'ALLEN BRADLEY',
+  HFI: 'HOSE & FITTINGS',
+  'HOSE AND FITTINGS': 'HOSE & FITTINGS',
+  'LOCK NUTS & WASHERS': 'LOCKNUTS & WASHERS',
+  'LOCK NUTS AND WASHERS': 'LOCKNUTS & WASHERS',
+  'LOCKNUTS AND WASHERS': 'LOCKNUTS & WASHERS',
+  'MARTIN TOOLS': 'MARTIN',
+  'LINK BELT': 'LINK-BELT',
+  'RANDALL INDUSTRIES': 'RANDALL',
+  PNEUFORCE: 'PNEUFORCE / VACUFORCE',
+  VACUFORCE: 'PNEUFORCE / VACUFORCE',
+  'AIRPIPE USA': 'AIR PIPE USA',
+  'AIR-PIPE USA': 'AIR PIPE USA',
+};
+
+function normalizeBrandKey(rawBrand: string) {
+  const upper = rawBrand.trim().toUpperCase();
+  if (BRAND_ALIASES[upper]) return BRAND_ALIASES[upper];
+  const normalized = upper.replace(/[._-]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (BRAND_ALIASES[normalized]) return BRAND_ALIASES[normalized];
+  return normalized;
 }
 
-function productMatchesBrandFilter(product: Product, selectedBrands: string[]) {
-  if (selectedBrands.length === 0) return true;
-  return product.brands.some((b) => selectedBrands.includes(b));
+function getBrandFallbackLogoUrl(brand: string) {
+  const key = normalizeBrandKey(brand);
+  const domain = BRAND_LOGO_DOMAINS[key];
+  if (!domain) return null;
+  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
+}
+
+function getBrandLogoSources(brand: string) {
+  const key = normalizeBrandKey(brand);
+  const primary = BRAND_LOGO_ORIGINALS[key];
+  const fallback = getBrandFallbackLogoUrl(brand);
+  return [primary, fallback].filter(Boolean) as string[];
+}
+
+function productKey(categoryId: string, productId: string) {
+  return `${categoryId}::${productId}`;
 }
 
 /** Case-insensitive partial match across category, product line, ids, and brands. */
@@ -35,13 +418,11 @@ function entryMatchesCatalogSearch(
 
 /** Flat list preserving category order: one entry per product line (catalog card). */
 function getCatalogEntries(
-  selectedBrands: string[],
   catalogSearch: string
 ): { category: Category; product: Product }[] {
   const out: { category: Category; product: Product }[] = [];
   for (const cat of PRODUCT_CATEGORIES) {
     for (const product of cat.products) {
-      if (!productMatchesBrandFilter(product, selectedBrands)) continue;
       if (!entryMatchesCatalogSearch(cat, product, catalogSearch)) continue;
       out.push({ category: cat, product });
     }
@@ -60,41 +441,104 @@ export default function Catalog() {
     breadcrumbs: [{ name: 'Catalog', path: '/catalog' }],
   });
   const { categoryId } = useParams();
-  const [selectedBrands, setSelectedBrands] = React.useState<string[]>([]);
   const [catalogSearch, setCatalogSearch] = React.useState('');
-  const [brandSearch, setBrandSearch] = React.useState('');
-  const [expandedBrandsByProduct, setExpandedBrandsByProduct] = React.useState<Record<string, boolean>>({});
-  const { isSelected, toggleProduct, itemCount, clearLines } = useBulkQuote();
+  const { isSelected, toggleProduct, setQty, setRequestedBrands, itemCount, clearLines } = useBulkQuote();
+  const navigate = useNavigate();
+  const [activeBrandModal, setActiveBrandModal] = React.useState<{ category: Category; product: Product } | null>(null);
+  const [brandLineSearch, setBrandLineSearch] = React.useState('');
+  const [selectedByBrand, setSelectedByBrand] = React.useState<Record<string, boolean>>({});
+  const [partNumberByBrand, setPartNumberByBrand] = React.useState<Record<string, string>>({});
+  const [qtyByBrand, setQtyByBrand] = React.useState<Record<string, string>>({});
+  const [customQuoteToast, setCustomQuoteToast] = React.useState('');
 
-  const allBrands = useMemo(
-    () =>
-      Array.from(
-        new Set(PRODUCT_CATEGORIES.flatMap((c) => c.products.flatMap((p) => p.brands)))
-      ).sort(),
-    []
-  );
-
-  const filteredBrands = allBrands.filter((brand) =>
-    brand.toLowerCase().includes(brandSearch.trim().toLowerCase())
-  );
+  React.useEffect(() => {
+    if (!customQuoteToast) return;
+    const id = window.setTimeout(() => setCustomQuoteToast(''), 2200);
+    return () => window.clearTimeout(id);
+  }, [customQuoteToast]);
 
   const catalogEntries = useMemo(
-    () => getCatalogEntries(selectedBrands, catalogSearch),
-    [selectedBrands, catalogSearch]
+    () => getCatalogEntries(catalogSearch),
+    [catalogSearch]
   );
 
-  const toggleBrand = (brand: string) => {
-    setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
-    );
+  const openBrandModal = (category: Category, product: Product) => {
+    setActiveBrandModal({ category, product });
+    setBrandLineSearch('');
+    setSelectedByBrand({});
+    setPartNumberByBrand({});
+    setQtyByBrand({});
   };
 
-  const toggleBrandList = (key: string) => {
-    setExpandedBrandsByProduct((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+  const closeBrandModal = () => {
+    setActiveBrandModal(null);
+    setBrandLineSearch('');
+    setSelectedByBrand({});
+    setPartNumberByBrand({});
+    setQtyByBrand({});
   };
+
+  const addBrandsToQuote = (
+    categoryId: string,
+    productId: string,
+    totalQty: number,
+    requestedBrands: { brand: string; qty: number; partNumber?: string }[],
+    redirect = false
+  ) => {
+    const safeQty = Math.max(1, Math.floor(totalQty) || 1);
+    if (!isSelected(categoryId, productId)) {
+      toggleProduct(categoryId, productId);
+    }
+    setQty(categoryId, productId, safeQty);
+    setRequestedBrands(categoryId, productId, requestedBrands);
+    if (redirect) {
+      navigate('/sourcing');
+    }
+  };
+
+  const queueManualCustomQuoteItem = (item: PendingManualQuoteItem) => {
+    try {
+      const raw = sessionStorage.getItem(MANUAL_QUOTE_REQUESTS_KEY);
+      const parsed = raw ? (JSON.parse(raw) as PendingManualQuoteItem[]) : [];
+      const list = Array.isArray(parsed) ? parsed : [];
+      const exists = list.some(
+        (entry) =>
+          entry.name.trim().toLowerCase() === item.name.trim().toLowerCase() &&
+          entry.type.trim().toLowerCase() === item.type.trim().toLowerCase()
+      );
+      if (exists) return;
+      const next = [...list, item];
+      sessionStorage.setItem(MANUAL_QUOTE_REQUESTS_KEY, JSON.stringify(next));
+    } catch {
+      // ignore storage errors
+    }
+  };
+
+  const filteredBrandLines = useMemo(() => {
+    const q = brandLineSearch.trim().toLowerCase();
+    const brands = activeBrandModal?.product.brands ?? [];
+    if (!q) return brands;
+    return brands.filter((brand) => brand.toLowerCase().includes(q));
+  }, [activeBrandModal, brandLineSearch]);
+
+  const selectedBrands = useMemo(
+    () =>
+      (activeBrandModal?.product.brands ?? []).filter((brand) => selectedByBrand[brand]),
+    [activeBrandModal, selectedByBrand]
+  );
+
+  const selectedBrandDetails = useMemo(
+    () =>
+      selectedBrands.map((brand) => ({
+        brand,
+        qty: Math.max(0, Math.floor(Number(qtyByBrand[brand])) || 0),
+        partNumber: partNumberByBrand[brand] ?? '',
+      })),
+    [selectedBrands, qtyByBrand, partNumberByBrand]
+  );
+
+  const canAddSelectedBrands =
+    selectedBrandDetails.length > 0 && selectedBrandDetails.every((item) => item.qty > 0);
 
   if (categoryId) {
     return <Navigate to="/catalog" replace />;
@@ -137,61 +581,6 @@ export default function Catalog() {
 
       <div className="mx-auto flex max-w-[1600px] flex-col gap-10 px-4 py-10 sm:px-6 md:flex-row md:gap-12 md:px-8 lg:px-12">
         <aside className="w-full shrink-0 space-y-8 md:w-72 lg:w-80">
-          <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <h3 className="text-sm font-black uppercase tracking-wide text-zinc-900">Filter brands</h3>
-              {selectedBrands.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setSelectedBrands([])}
-                  className="text-[11px] font-bold uppercase text-zinc-600 hover:underline"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-            <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-              <input
-                type="text"
-                value={brandSearch}
-                onChange={(e) => setBrandSearch(e.target.value)}
-                placeholder="Search brands"
-                className="h-11 w-full rounded-lg border border-zinc-200 bg-zinc-50 pl-10 pr-3 text-sm font-semibold uppercase outline-none transition-colors focus:border-zinc-400"
-              />
-            </div>
-            <div className="max-h-[min(55vh,22rem)] space-y-2 overflow-y-auto pr-1 [scrollbar-gutter:stable]">
-              {filteredBrands.map((brand) => (
-                <button
-                  key={brand}
-                  type="button"
-                  onClick={() => toggleBrand(brand)}
-                  className={cn(
-                    'flex min-h-[2.75rem] w-full items-center justify-between gap-2 rounded-lg border px-3 py-2 text-left transition-colors',
-                    selectedBrands.includes(brand)
-                      ? 'border-zinc-400 bg-zinc-100'
-                      : 'border-zinc-200 bg-white hover:border-zinc-300'
-                  )}
-                >
-                  <span className="text-[10px] font-bold uppercase leading-snug text-zinc-800 sm:text-xs">{brand}</span>
-                  <div
-                    className={cn(
-                      'flex h-5 w-5 shrink-0 items-center justify-center rounded border',
-                      selectedBrands.includes(brand)
-                        ? 'border-zinc-700 bg-zinc-700'
-                        : 'border-zinc-300 bg-white'
-                    )}
-                  >
-                    {selectedBrands.includes(brand) && <Check className="h-3 w-3 text-white" />}
-                  </div>
-                </button>
-              ))}
-              {filteredBrands.length === 0 && (
-                <p className="px-1 py-2 text-xs font-semibold uppercase text-zinc-400">No brands found</p>
-              )}
-            </div>
-          </div>
-
           <div className="rounded-xl border border-zinc-800/10 bg-white p-6 shadow-sm">
             <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-zinc-900">Bulk sourcing</h3>
             <p className="mb-5 text-xs font-medium uppercase leading-relaxed text-zinc-500">
@@ -225,21 +614,387 @@ export default function Catalog() {
           ) : (
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
               {catalogEntries.map(({ category, product }, idx) => (
-                <CatalogProductCard
-                  key={productKey(category.id, product.id)}
-                  category={category}
-                  product={product}
-                  idx={idx}
-                  expanded={!!expandedBrandsByProduct[productKey(category.id, product.id)]}
-                  onToggleBrands={() => toggleBrandList(productKey(category.id, product.id))}
-                  isSelected={isSelected(category.id, product.id)}
-                  onToggleQuote={() => toggleProduct(category.id, product.id)}
-                />
+                <React.Fragment key={productKey(category.id, product.id)}>
+                  <CatalogProductCard
+                    category={category}
+                    product={product}
+                    idx={idx}
+                    onOpenBrands={() => openBrandModal(category, product)}
+                    isSelected={isSelected(category.id, product.id)}
+                  />
+                </React.Fragment>
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {activeBrandModal && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-zinc-900/65 p-4" onClick={closeBrandModal}>
+          <div
+            className="w-full max-w-xl rounded-xl border border-zinc-200 bg-white p-4 shadow-2xl sm:p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative mb-3">
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400" />
+              <input
+                type="text"
+                value={brandLineSearch}
+                onChange={(e) => setBrandLineSearch(e.target.value)}
+                placeholder="Search brand name"
+                className="h-10 w-full rounded-md border border-zinc-200 bg-zinc-50 pl-8 pr-2 text-[10px] font-bold uppercase tracking-wide text-zinc-800 outline-none focus:border-zinc-400"
+              />
+            </div>
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div>
+                <h4 className="text-sm font-black uppercase tracking-wide text-zinc-900">{activeBrandModal.product.name}</h4>
+                <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  Select brands + optional part number and qty
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={closeBrandModal}
+                className="rounded-md border border-zinc-200 p-1.5 text-zinc-600 hover:bg-zinc-100"
+                aria-label="Close brand selector"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="max-h-[min(48vh,18rem)] space-y-2 overflow-y-auto pr-1">
+              {filteredBrandLines.map((brand) => (
+                <div key={brand} className="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex items-center gap-2">
+                    <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-white text-xs font-black uppercase text-zinc-500 overflow-hidden">
+                      {brand.trim().toLowerCase() === 'cleveland' || brand.trim().toLowerCase() === 'clevland' ? (
+                        <img
+                          src="/images/cleveland-logo.png"
+                          alt="Cleveland Supply logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase() === 'cone drive' ? (
+                        <img
+                          src="/images/cone-drive-logo.png"
+                          alt="Cone Drive logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('eurodrive') ? (
+                        <img
+                          src="/images/eurodrive-logo.png"
+                          alt="EURODRIVE logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('foote') && brand.trim().toLowerCase().includes('jones') ? (
+                        <img
+                          src="/images/foote-jones-logo.png"
+                          alt="Foote-Jones logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('perfection') ? (
+                        <img
+                          src="/images/perfection-logo.png"
+                          alt="Perfection logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('zero-max') || brand.trim().toLowerCase().includes('zero max') ? (
+                        <img
+                          src="/images/zero-max-logo.png"
+                          alt="ZERO-MAX logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('stober') ? (
+                        <img
+                          src="/images/stober-logo.png"
+                          alt="STOBER logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('hi-lo') || brand.trim().toLowerCase().includes('hi lo') ? (
+                        <img
+                          src="/images/hi-lo-logo.png"
+                          alt="HI-LO logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('kb electronics') ? (
+                        <img
+                          src="/images/kb-electronics-logo.png"
+                          alt="KB Electronics logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('speed selector') ? (
+                        <img
+                          src="/images/speed-selector-logo.png"
+                          alt="Speed Selector logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('brewer tensioners') ? (
+                        <img
+                          src="/images/brewer-tensioners-logo.png"
+                          alt="Brewer Tensioners logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('casters') && brand.trim().toLowerCase().includes('wheels') ? (
+                        <img
+                          src="/images/casters-wheels-logo.png"
+                          alt="Casters and Wheels logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('hose') && brand.trim().toLowerCase().includes('fittings') ? (
+                        <img
+                          src="/images/hose-fittings-logo.png"
+                          alt="Hose and Fittings logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('keystock') ? (
+                        <img
+                          src="/images/keystock-logo.png"
+                          alt="Keystock logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('locknuts') && brand.trim().toLowerCase().includes('washers') ? (
+                        <img
+                          src="/images/locknuts-washers-logo.png"
+                          alt="Locknuts and Washers logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('martin tools') ? (
+                        <img
+                          src="/images/martin-tools-logo.png"
+                          alt="Martin Tools logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('never-seez') || brand.trim().toLowerCase().includes('never seez') ? (
+                        <img
+                          src="/images/never-seez-logo.png"
+                          alt="Never-Seez logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('owatonna tool') ? (
+                        <img
+                          src="/images/owatonna-tool-logo.png"
+                          alt="Owatonna Tool logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('post-lock') || brand.trim().toLowerCase().includes('post lock') ? (
+                        <img
+                          src="/images/post-lock-logo.png"
+                          alt="Post-Lock logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('retaining rings') ? (
+                        <img
+                          src="/images/retaining-rings-logo.png"
+                          alt="Retaining Rings logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('shafting') ? (
+                        <img
+                          src="/images/shafting-logo.png"
+                          alt="Shafting logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('skf maintenance') ? (
+                        <img
+                          src="/images/skf-maintenance-logo.png"
+                          alt="SKF Maintenance logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('oil') && brand.trim().toLowerCase().includes('mechanical seals') ? (
+                        <img
+                          src="/images/oil-mechanical-seals-logo.png"
+                          alt="Oil and Mechanical Seals logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('bimba cylinders') ? (
+                        <img
+                          src="/images/bimba-cylinders-logo.png"
+                          alt="BIMBA Cylinders logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : brand.trim().toLowerCase().includes('coilhose') ? (
+                        <img
+                          src="/images/coilhose-logo.png"
+                          alt="COILHOSE logo"
+                          className="h-full w-full bg-white object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <>
+                          <span aria-hidden>{brand.slice(0, 1)}</span>
+                          {getBrandLogoSources(brand)[0] && (
+                            <img
+                              src={getBrandLogoSources(brand)[0] ?? ''}
+                              alt={`${brand} logo`}
+                              className="absolute inset-0 m-auto h-full w-full bg-white object-contain p-1"
+                              loading="lazy"
+                              referrerPolicy="no-referrer"
+                              onError={(e) => {
+                                const fallback = getBrandLogoSources(brand)[1];
+                                if (fallback && e.currentTarget.src !== fallback) {
+                                  e.currentTarget.src = fallback;
+                                  return;
+                                }
+                                e.currentTarget.style.display = 'none';
+                              }}
+                            />
+                          )}
+                        </>
+                      )}
+                    </span>
+                    <span className="min-w-0 truncate text-[10px] font-bold uppercase text-zinc-800">{brand}</span>
+                    </div>
+                    <label className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-zinc-300 bg-white">
+                      <input
+                        type="checkbox"
+                        checked={!!selectedByBrand[brand]}
+                        onChange={(e) =>
+                          setSelectedByBrand((prev) => ({ ...prev, [brand]: e.target.checked }))
+                        }
+                        className="h-4 w-4 accent-zinc-900"
+                        aria-label={`Select ${brand}`}
+                      />
+                    </label>
+                  </div>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={partNumberByBrand[brand] ?? ''}
+                      onChange={(e) =>
+                        setPartNumberByBrand((prev) => ({ ...prev, [brand]: e.target.value }))
+                      }
+                      placeholder="Part Number (optional)"
+                      className="h-8 rounded border border-zinc-300 bg-white px-2 text-[10px] font-bold uppercase text-zinc-800 outline-none focus:border-zinc-500"
+                    />
+                    <input
+                      type="number"
+                      min={1}
+                      value={qtyByBrand[brand] ?? ''}
+                      onChange={(e) =>
+                        setQtyByBrand((prev) => ({ ...prev, [brand]: e.target.value }))
+                      }
+                      placeholder="Qty"
+                      className="h-8 rounded border border-zinc-300 bg-white px-2 text-[10px] font-black text-zinc-800 outline-none focus:border-zinc-500"
+                    />
+                  </div>
+                </div>
+              ))}
+              {filteredBrandLines.length === 0 && (
+                <div className="rounded-md border border-dashed border-zinc-300 bg-zinc-50 px-3 py-3 text-center">
+                  <p className="text-[10px] font-bold uppercase text-zinc-600">Brand not found</p>
+                  <p className="mt-1 text-[10px] font-semibold text-zinc-500">
+                    Do you want to add this brand under custom quote? Our team can check if we can arrange this product for you.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const requestedBrand = brandLineSearch.trim();
+                      if (!requestedBrand) return;
+                      queueManualCustomQuoteItem({
+                        name: activeBrandModal.product.name,
+                        type: requestedBrand,
+                        dimensions: '',
+                        qty: 1,
+                      });
+                      closeBrandModal();
+                      setCustomQuoteToast('1 custom quote added to your request.');
+                    }}
+                    className="mt-2 rounded-md border-2 border-zinc-900 bg-white px-3 py-1.5 text-[10px] font-black uppercase text-zinc-900 transition-colors hover:bg-zinc-100"
+                  >
+                    Add this brand in custom quote
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="mt-3 flex flex-col gap-2 border-t border-zinc-200 pt-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-[10px] font-black uppercase tracking-wide text-zinc-700">
+                Selected brands: {selectedBrands.length}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    addBrandsToQuote(
+                      activeBrandModal.category.id,
+                      activeBrandModal.product.id,
+                      selectedBrandDetails.reduce((sum, entry) => sum + entry.qty, 0),
+                      selectedBrandDetails,
+                      false
+                    );
+                    closeBrandModal();
+                  }}
+                  disabled={!canAddSelectedBrands}
+                  className={cn(
+                    'rounded-md border-2 px-3 py-1.5 text-[10px] font-black uppercase transition-colors',
+                    canAddSelectedBrands
+                      ? 'border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-800'
+                      : 'cursor-not-allowed border-zinc-300 bg-zinc-200 text-zinc-500'
+                  )}
+                >
+                  Add to quote
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    (() => {
+                      const requested = selectedBrandDetails.filter((entry) => entry.qty > 0);
+                      if (requested.length === 0) return;
+                      addBrandsToQuote(
+                        activeBrandModal.category.id,
+                        activeBrandModal.product.id,
+                        requested.reduce((sum, entry) => sum + entry.qty, 0),
+                        requested,
+                        false
+                      );
+                      requested.forEach((entry) => {
+                        queueManualCustomQuoteItem({
+                          name: activeBrandModal.product.name,
+                          type: entry.brand,
+                          dimensions: entry.partNumber ? `Part Number: ${entry.partNumber}` : '',
+                          qty: entry.qty,
+                        });
+                      });
+                      navigate('/sourcing?customAdded=1');
+                    })()
+                  }
+                  disabled={!canAddSelectedBrands}
+                  className={cn(
+                    'rounded-md border-2 px-3 py-1.5 text-[10px] font-black uppercase transition-colors',
+                    canAddSelectedBrands
+                      ? 'border-zinc-900 bg-white text-zinc-900 hover:bg-zinc-100'
+                      : 'cursor-not-allowed border-zinc-300 bg-zinc-100 text-zinc-400'
+                  )}
+                >
+                  Add to quote & request
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {itemCount > 0 && (
         <motion.div
@@ -277,6 +1032,12 @@ export default function Catalog() {
           </div>
         </motion.div>
       )}
+
+      {customQuoteToast && (
+        <div className="fixed bottom-6 left-1/2 z-[130] -translate-x-1/2 rounded-lg border-2 border-emerald-700 bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-wide text-emerald-900 shadow-lg">
+          {customQuoteToast}
+        </div>
+      )}
     </div>
   );
 }
@@ -285,18 +1046,14 @@ function CatalogProductCard({
   category,
   product,
   idx,
-  expanded,
-  onToggleBrands,
+  onOpenBrands,
   isSelected,
-  onToggleQuote,
 }: {
   category: Category;
   product: Product;
   idx: number;
-  expanded: boolean;
-  onToggleBrands: () => void;
+  onOpenBrands: () => void;
   isSelected: boolean;
-  onToggleQuote: () => void;
 }) {
   return (
     <motion.article
@@ -311,8 +1068,7 @@ function CatalogProductCard({
     >
       <button
         type="button"
-        aria-pressed={isSelected}
-        onClick={onToggleQuote}
+        onClick={onOpenBrands}
         className="relative aspect-square w-full shrink-0 overflow-hidden bg-zinc-100 text-left outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 sm:aspect-[4/3]"
       >
         <div
@@ -326,7 +1082,7 @@ function CatalogProductCard({
         <img
           src={getProductImage(product, category)}
           alt={`${product.name} industrial part in ${category.name} category`}
-          className="h-full w-full object-cover grayscale transition-[filter,transform] duration-500 ease-out group-hover:scale-[1.04] group-hover:grayscale-[0.35]"
+          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
           loading={idx < 16 ? 'eager' : 'lazy'}
           decoding="async"
           onError={(e) => {
@@ -334,53 +1090,21 @@ function CatalogProductCard({
             e.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
           }}
         />
-        <span className="sr-only">
-          {isSelected ? 'Remove' : 'Add'} {category.name} — {product.name} from bulk quote
-        </span>
+        <span className="sr-only">Open brands for {category.name} — {product.name}</span>
       </button>
 
       <div className="flex flex-1 flex-col p-2 sm:p-5">
         <p className="hidden text-[11px] font-black uppercase tracking-[0.12em] text-zinc-900 sm:block">{category.name}</p>
-        <h3 className="line-clamp-2 text-[10px] font-bold uppercase leading-tight text-zinc-700 sm:mt-1.5 sm:text-sm sm:leading-snug sm:text-zinc-600">{product.name}</h3>
+        <button
+          type="button"
+          onClick={onOpenBrands}
+          className="mt-0 text-left line-clamp-2 text-[10px] font-bold uppercase leading-tight text-zinc-700 hover:text-zinc-900 sm:mt-1.5 sm:text-sm sm:leading-snug sm:text-zinc-600"
+        >
+          {product.name}
+        </button>
         <p className="mt-2 hidden text-[10px] font-semibold uppercase tracking-wider text-zinc-400 sm:block sm:mt-3">
           {product.brands.length} brands available
         </p>
-
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleBrands();
-          }}
-          className={cn(
-            'mt-4 hidden min-h-[2.75rem] w-full items-center justify-center gap-2 rounded-lg border-2 text-xs font-black uppercase tracking-wide transition-colors sm:flex',
-            expanded
-              ? 'border-zinc-900 bg-zinc-900 text-white'
-              : 'border-zinc-800/20 bg-zinc-50 text-zinc-800 hover:border-zinc-400 hover:bg-white'
-          )}
-        >
-          Brands we carry
-          <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform duration-200', expanded && 'rotate-180')} />
-        </button>
-
-        {expanded && (
-          <div
-            className="mt-4 hidden border-t border-zinc-200 pt-4 sm:block"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Brands in this line</p>
-            <ul className="flex flex-wrap gap-2">
-              {product.brands.map((brand) => (
-                <li
-                  key={brand}
-                  className="rounded-md border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-[10px] font-bold uppercase leading-snug text-zinc-800"
-                >
-                  {brand}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </motion.article>
   );
