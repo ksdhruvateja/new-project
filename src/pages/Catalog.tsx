@@ -958,14 +958,14 @@ export default function Catalog() {
                     </span>
                     <span className="min-w-0 truncate text-[10px] font-bold uppercase text-zinc-800">{brand}</span>
                     </div>
-                    <label className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-zinc-300 bg-white">
+                    <label className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-zinc-300 bg-white sm:h-7 sm:w-7">
                       <input
                         type="checkbox"
                         checked={!!selectedByBrand[brand]}
                         onChange={(e) =>
                           setSelectedByBrand((prev) => ({ ...prev, [brand]: e.target.checked }))
                         }
-                        className="h-4 w-4 accent-zinc-900"
+                        className="h-3.5 w-3.5 accent-zinc-900 sm:h-4 sm:w-4"
                         aria-label={`Select ${brand}`}
                       />
                     </label>
@@ -1129,14 +1129,14 @@ export default function Catalog() {
                     <span className="min-w-0 truncate text-[10px] font-bold uppercase text-zinc-800">
                       {sub.name}
                     </span>
-                    <label className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-zinc-300 bg-white">
+                    <label className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-zinc-300 bg-white sm:h-7 sm:w-7">
                       <input
                         type="checkbox"
                         checked={!!miscSelectedById[sub.id]}
                         onChange={(e) =>
                           setMiscSelectedById((prev) => ({ ...prev, [sub.id]: e.target.checked }))
                         }
-                        className="h-4 w-4 accent-zinc-900"
+                        className="h-3.5 w-3.5 accent-zinc-900 sm:h-4 sm:w-4"
                         aria-label={`Select ${sub.name}`}
                       />
                     </label>

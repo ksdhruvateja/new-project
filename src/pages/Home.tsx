@@ -504,13 +504,13 @@ export default function Home() {
 
       {/* ── STATS BAR ─────────────────────────────────────────────── */}
       <section className="w-full border-y border-slate-800 bg-slate-900">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 divide-y divide-slate-700/60 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 md:px-10">
+        <div className="mx-auto grid max-w-6xl grid-cols-3 divide-x divide-slate-700/60 px-2 sm:px-8 md:px-10">
           {[
             { Icon: Boxes, value: '100k+', label: 'Quote-Ready SKUs' },
             { Icon: Truck, value: '500+', label: 'Top Brands Supported' },
             { Icon: Clock, value: '24–48 HR', label: 'Quote Turnaround' },
           ].map(({ Icon, value, label }) => (
-            <div key={label} className="flex items-center gap-3 py-4 text-left sm:justify-center sm:gap-4 sm:px-6 sm:py-6 md:px-10">
+            <div key={label} className="flex items-center justify-center gap-2 px-1 py-4 text-left sm:gap-4 sm:px-6 sm:py-6 md:px-10">
               <Icon className="h-5 w-5 shrink-0 text-industrial-orange sm:h-6 sm:w-6" />
               <div>
                 <p className="text-lg font-black leading-none text-white sm:text-3xl">{value}</p>
@@ -525,7 +525,7 @@ export default function Home() {
       <section className="w-full bg-white px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-16" data-reveal>
         <div className="mx-auto max-w-6xl">
           <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">What We Do</p>
-          <h2 className="mb-8 font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="mb-8 font-display text-2xl font-black uppercase tracking-tight text-slate-900 sm:text-3xl">
             Three Ways We Deliver
           </h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -658,9 +658,9 @@ export default function Home() {
                     key={`${brand}-${i}`}
                     type="button"
                     onClick={() => handleBrandClick(brand)}
-                    className="inline-flex min-w-[14rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-6 text-center shadow-sm transition duration-200 hover:border-industrial-orange/50 hover:bg-industrial-orange/8 hover:text-industrial-orange active:scale-95"
+                    className="inline-flex min-w-[12rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-5 text-center shadow-sm transition duration-200 hover:border-industrial-orange/50 hover:bg-industrial-orange/8 hover:text-industrial-orange active:scale-95 sm:min-w-[14rem] sm:gap-4 sm:px-6 sm:py-6"
                   >
-                    <span className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white text-xl font-black text-slate-500">
+                    <span className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white text-lg font-black text-slate-500 sm:h-20 sm:w-20 sm:text-xl">
                       <span aria-hidden>{brand.slice(0, 1)}</span>
                       {getBrandLogoSources(brand)[0] && (
                         <img
@@ -680,7 +680,7 @@ export default function Home() {
                         />
                       )}
                     </span>
-                    <span className="text-xl font-black uppercase leading-tight tracking-wide text-slate-800">
+                    <span className="text-lg font-black uppercase leading-tight tracking-wide text-slate-800 sm:text-xl">
                       {brand}
                     </span>
                   </button>

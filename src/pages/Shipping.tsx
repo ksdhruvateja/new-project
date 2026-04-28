@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
 import { useSEO } from '../lib/useSEO';
+
+const POLICY_INTRO =
+  'This Shipping Policy governs the terms under which Forez Corp processes, ships, and delivers orders. By placing an order, the customer acknowledges and agrees to the terms outlined below.';
 
 const SECTIONS: { title: string; body: string[] }[] = [
   {
@@ -36,7 +38,7 @@ const SECTIONS: { title: string; body: string[] }[] = [
   {
     title: 'Tracking and Delivery Issues',
     body: [
-      'Tracking information is provided for convenience and may be subject to delays in updates by the carrier. Forez Corp does not guarantee real-time tracking accuracy. Customers are advised to allow reasonable time for tracking updates to reflect shipment progress before initiating support inquiries.',
+      'Tracking information is provided for convenience and may be subject to delays in updates by the carrier. Forez Corp does not guarantee real-time tracking accuracy. Customers are advised to allow reasonable time for tracking updates to reflect shipment progress before initiating support inquiries',
     ],
   },
 ];
@@ -67,6 +69,8 @@ export default function Shipping() {
 
       <section className="px-5 py-10 sm:px-8 md:px-10 md:py-14">
         <div className="mx-auto max-w-3xl space-y-10">
+          <p className="text-sm leading-relaxed text-slate-700 sm:text-base">{POLICY_INTRO}</p>
+
           {SECTIONS.map(({ title, body }) => (
             <div key={title}>
               <h2 className="border-b-2 border-slate-900 pb-2 font-display text-lg font-black uppercase tracking-tight text-slate-900 sm:text-xl">
@@ -85,11 +89,8 @@ export default function Shipping() {
               Returns, Refunds &amp; Warranty Policy
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-slate-700 sm:text-base">
-              Return, refund, and warranty terms are set out in our{' '}
-              <Link to="/terms-of-use" className="font-bold text-industrial-orange underline underline-offset-2 hover:text-engineering-blue">
-                Terms of Use
-              </Link>
-              . For questions about a specific order, contact Forez Corp directly.
+              Return, Refund, and Warranty terms are set out in our Terms of Use. For questions about a specific order,
+              contact Forez Corp directly.
             </p>
           </div>
         </div>
