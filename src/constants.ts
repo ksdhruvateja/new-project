@@ -16,6 +16,9 @@ export interface Category {
 export const FALLBACK_PRODUCT_IMAGE =
   'https://placehold.co/600x400?text=Product+Image+Coming+Soon';
 
+/** Inbox for mailto-based contact and quote submissions (Sourcing + Contact). */
+export const SUBMISSION_EMAIL = 'sales@forezcorp.com';
+
 const CATEGORY_IMAGE_BY_ID: Record<string, string> = {
   bearings: '/images/products-real/bearings.jpg',
   'belts-accessories': '/images/products-real/belts.jpg',
@@ -65,6 +68,7 @@ const PRODUCT_IMAGE_BY_CATEGORY_ID: Record<string, string> = {
 };
 
 const PRODUCT_IMAGE_BY_PRODUCT_ID: Record<string, string> = {
+  'miscellaneous-line': '/images/products-real/misc.jpg',
   'misc-brewer': '/images/brewer-tensioners-logo.png',
   'misc-casters': '/images/casters-wheels-logo.png',
   'misc-hose': '/images/hose-fittings-logo.png',
@@ -101,6 +105,26 @@ export function getCategoryUniqueBrands(category: Category): string[] {
 }
 
 const industrialImg = 'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&w=800&q=70';
+
+/** Product lines under Miscellaneous — chosen from the single catalog hub card modal. */
+export const MISCELLANEOUS_SUB_PRODUCTS: Product[] = [
+  { id: 'misc-brewer', name: 'Brewer Tensioners', brands: ['BREWER TENSIONERS'] },
+  { id: 'misc-casters', name: 'Casters & Wheels', brands: ['CASTERS & WHEELS'] },
+  { id: 'misc-hose', name: 'Hose & Fittings', brands: ['HOSE & FITTINGS'] },
+  { id: 'misc-keystock', name: 'Keystock', brands: ['KEYSTOCK'] },
+  { id: 'misc-locknuts', name: 'Locknuts & Washers', brands: ['LOCKNUTS & WASHERS'] },
+  { id: 'misc-martin-tools', name: 'Martin Tools', brands: ['MARTIN TOOLS'] },
+  { id: 'misc-never-seez', name: 'Never-Seez', brands: ['NEVER-SEEZ'] },
+  { id: 'misc-owatonna', name: 'Owatonna Tool', brands: ['OWATONNA TOOL'] },
+  { id: 'misc-post-lock', name: 'Post-Lock', brands: ['POST-LOCK'] },
+  { id: 'misc-retaining', name: 'Retaining Rings', brands: ['RETAINING RINGS'] },
+  { id: 'misc-shafting', name: 'Shafting', brands: ['SHAFTING'] },
+  { id: 'misc-skf-maint', name: 'SKF Maintenance', brands: ['SKF MAINTENANCE'] },
+];
+
+const MISCELLANEOUS_CATALOG_HUB_BRANDS = Array.from(
+  new Set(MISCELLANEOUS_SUB_PRODUCTS.flatMap((p) => p.brands))
+);
 
 /** FOREZ product line — sections 1–21 (order must match business structure). */
 export const PRODUCT_CATEGORIES: Category[] = [
@@ -440,24 +464,17 @@ export const PRODUCT_CATEGORIES: Category[] = [
       },
     ],
   },
-  // 14. MISCELLANEOUS
+  // 14. MISCELLANEOUS (single catalog card; lines chosen in modal — see MISCELLANEOUS_SUB_PRODUCTS)
   {
     id: 'miscellaneous',
     name: 'Miscellaneous',
     image: industrialImg,
     products: [
-      { id: 'misc-brewer', name: 'Brewer Tensioners', brands: ['BREWER TENSIONERS'] },
-      { id: 'misc-casters', name: 'Casters & Wheels', brands: ['CASTERS & WHEELS'] },
-      { id: 'misc-hose', name: 'Hose & Fittings', brands: ['HOSE & FITTINGS'] },
-      { id: 'misc-keystock', name: 'Keystock', brands: ['KEYSTOCK'] },
-      { id: 'misc-locknuts', name: 'Locknuts & Washers', brands: ['LOCKNUTS & WASHERS'] },
-      { id: 'misc-martin-tools', name: 'Martin Tools', brands: ['MARTIN TOOLS'] },
-      { id: 'misc-never-seez', name: 'Never-Seez', brands: ['NEVER-SEEZ'] },
-      { id: 'misc-owatonna', name: 'Owatonna Tool', brands: ['OWATONNA TOOL'] },
-      { id: 'misc-post-lock', name: 'Post-Lock', brands: ['POST-LOCK'] },
-      { id: 'misc-retaining', name: 'Retaining Rings', brands: ['RETAINING RINGS'] },
-      { id: 'misc-shafting', name: 'Shafting', brands: ['SHAFTING'] },
-      { id: 'misc-skf-maint', name: 'SKF Maintenance', brands: ['SKF MAINTENANCE'] },
+      {
+        id: 'miscellaneous-line',
+        name: 'Miscellaneous',
+        brands: MISCELLANEOUS_CATALOG_HUB_BRANDS,
+      },
     ],
   },
   // 15. OIL & MECHANICAL SEALS

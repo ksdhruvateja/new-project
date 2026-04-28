@@ -103,7 +103,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: 'How do I contact your team directly?',
-        a: 'You can reach us by phone at +1 (516) 860-2513, by email at info@forezcorp.com, or through our Contact page. We are available during standard business hours and aim to respond to all inquiries within one business day.',
+        a: 'You can reach us by phone at +1 (516) 860-2513, by email at sales@forezcorp.com, or through our Contact page. We are available during standard business hours and aim to respond to all inquiries within one business day.',
       },
       {
         q: 'What if I have a problem with my order?',

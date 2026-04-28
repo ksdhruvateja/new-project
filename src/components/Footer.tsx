@@ -34,7 +34,7 @@ export default function Footer() {
                 <Linkedin className="h-4 w-4 text-industrial-orange sm:h-5 sm:w-5" aria-hidden />
               </a>
               <a
-                href="mailto:info@forezcorp.com"
+                href="mailto:sales@forezcorp.com"
                 className="rounded-md border border-white/15 bg-white/10 p-1.5 transition hover:bg-white/15"
                 aria-label="Email"
               >
@@ -81,7 +81,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <img src={`${FE}/Envelope/3D/envelope_3d.png`} alt="" className="h-4 w-4 shrink-0" aria-hidden />
-                <span className="break-all uppercase">info@forezcorp.com</span>
+                <span className="break-all uppercase">sales@forezcorp.com</span>
               </div>
             </div>
           </div>
@@ -100,7 +100,7 @@ export default function Footer() {
               Terms of Use
             </Link>
             <Link to="/privacy-policy" className="text-xs font-semibold uppercase text-slate-300 transition-colors hover:text-white sm:text-sm">
-              Privacy Policy
+              Policy
             </Link>
           </nav>
         </div>
@@ -109,11 +109,11 @@ export default function Footer() {
       <div className="border-t border-white/10 bg-black/35">
         <div className="mx-auto flex w-full min-w-0 max-w-6xl flex-col items-center justify-between gap-3 px-4 py-3 sm:flex-row sm:px-5 md:px-6 lg:px-8">
           <div className="text-center text-[9px] font-black uppercase tracking-widest text-slate-400 sm:text-left sm:text-[10px]">
-            © 2026 Forez. NYS/NYC certified MBE.
+            © 2026 Forez. NYC certified MBE.
           </div>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[9px] font-black uppercase tracking-widest text-slate-400 sm:justify-end sm:text-[10px]">
             <Link to="/privacy-policy" className="hover:text-white">
-              Privacy
+              Policy
             </Link>
             <Link to="/shipping" className="hover:text-white">
               Shipping

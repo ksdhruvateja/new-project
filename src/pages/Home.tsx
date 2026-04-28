@@ -11,24 +11,29 @@ import {
   ShieldCheck,
   CheckCircle2,
 } from 'lucide-react';
-import { FALLBACK_PRODUCT_IMAGE, PRODUCT_CATEGORIES, getCategoryPreviewImage } from '../constants';
+import {
+  FALLBACK_PRODUCT_IMAGE,
+  PRODUCT_CATEGORIES,
+  MISCELLANEOUS_SUB_PRODUCTS,
+  getCategoryPreviewImage,
+} from '../constants';
 import { useBulkQuote } from '../context/BulkQuoteContext';
 
 const SERVICES = [
   {
     Icon: ClipboardPlus,
     title: 'Procurement',
-    desc: 'Submit a single quote request across multiple product lines. We source, consolidate, and fulfill — reducing vendor overhead and saving procurement time.',
-    cta: 'Request a Quote',
-    href: '/sourcing',
+    desc: 'Submit a single quote request across multiple product lines. We procure, consolidate, and fulfill — optimizing efficiency and minimizing overhead. Custom Solutions Rapid Fulfillment',
+    cta: 'View our categories',
+    href: '/catalog',
     iconBg: 'bg-industrial-orange',
     border: 'hover:border-industrial-orange/40',
   },
   {
     Icon: Search,
-    title: 'Custom Sourcing',
+    title: 'Custom Procurement',
     desc: "Can't find it in the catalog? Our team tracks down hard-to-find and specialty parts through our certified manufacturer network — no matter the spec.",
-    cta: 'Start Sourcing',
+    cta: 'Start Procurement',
     href: '/sourcing',
     iconBg: 'bg-engineering-blue',
     border: 'hover:border-engineering-blue/40',
@@ -395,7 +400,7 @@ function getBrandLogoSources(brand: string) {
 
 const GLANCE_ITEMS = [
   'NYC Certified Minority Business Enterprise (MBE)',
-  'Bulk quotes & multi-line custom sourcing',
+  'Quotes & Multi - line custom procurement',
   'NYS / NYC & national procurement programs',
   '24–48 hour quote turnaround standard',
   'Compliant documentation for public-sector orders',
@@ -413,7 +418,9 @@ export default function Home() {
   const handleBrandClick = (brandLabel: string) => {
     const normalized = brandLabel.toUpperCase();
     for (const cat of PRODUCT_CATEGORIES) {
-      for (const product of cat.products) {
+      const productsToSearch =
+        cat.id === 'miscellaneous' ? MISCELLANEOUS_SUB_PRODUCTS : cat.products;
+      for (const product of productsToSearch) {
         const match = product.brands.some(
           (b) => b.toUpperCase().includes(normalized) || normalized.includes(b.toUpperCase())
         );
@@ -440,16 +447,14 @@ export default function Home() {
     keywords: 'industrial distributor Long Island, bearing supplier New York, MRO procurement NY, bulk industrial supply, certified MBE supplier',
     breadcrumbs: [],
   });
-  const totalProducts = PRODUCT_CATEGORIES.reduce((count, cat) => count + cat.products.length, 0);
-
   return (
     <div className="w-full bg-white font-sans">
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section className="relative flex min-h-[52vh] w-full items-center overflow-hidden bg-slate-950 md:min-h-[58vh]">
+      <section className="relative flex min-h-[26vh] w-full items-center overflow-hidden bg-slate-950 md:min-h-[29vh]">
         {/* bg image */}
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-[center_35%] sm:bg-center"
           style={{ backgroundImage: "url('https://t3.ftcdn.net/jpg/02/25/14/68/360_F_225146875_pHG2NHqEtgRUNcvTOAWKmIn8DrW2wHVb.jpg')" }}
           aria-hidden
         />
@@ -458,20 +463,20 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/40 to-transparent" aria-hidden />
 
         {/* bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-slate-950 to-transparent" aria-hidden />
+        <div className="absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-slate-950 to-transparent" aria-hidden />
 
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-14">
-          <div className="flex max-w-2xl flex-col gap-6 lg:max-w-3xl">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-7 sm:px-8 sm:py-9 md:px-10 md:py-10">
+          <div className="flex max-w-2xl flex-col gap-4 sm:gap-5 lg:max-w-3xl">
 
             {/* headline */}
             <div>
-              <h1 className="font-display text-[2.6rem] font-black uppercase leading-[1.0] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1 className="font-display text-3xl font-black uppercase leading-[1.0] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
                 Quality.{' '}
                 <span className="text-industrial-orange">Speed.</span>
                 <br />
                 Reliability.
               </h1>
-              <p className="mt-5 max-w-lg text-base font-medium leading-relaxed text-slate-300 sm:text-lg">
+              <p className="mt-4 max-w-lg text-sm font-medium leading-relaxed text-slate-300 sm:text-base">
                 Forez is a certified MBE industrial distributor specializing in procurement, custom sourcing, and rapid fulfillment of power transmission and MRO products.
               </p>
             </div>
@@ -480,16 +485,16 @@ export default function Home() {
             <div className="flex flex-wrap gap-3 pt-1">
               <Link
                 to="/sourcing"
-                className="group inline-flex items-center gap-2.5 rounded-xl bg-industrial-orange px-6 py-3.5 text-sm font-black uppercase tracking-wide text-white shadow-[0_8px_28px_-6px_rgba(59,130,246,0.55)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_36px_-8px_rgba(59,130,246,0.65)]"
+                className="group inline-flex items-center gap-2 rounded-xl bg-industrial-orange px-5 py-3 text-xs font-black uppercase tracking-wide text-white shadow-[0_8px_28px_-6px_rgba(59,130,246,0.55)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_36px_-8px_rgba(59,130,246,0.65)]"
               >
-                Request a Bulk Quote
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+                Request a Quote
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden />
               </Link>
               <Link
                 to="/catalog"
-                className="group inline-flex items-center gap-2.5 rounded-xl border-2 border-white/25 px-6 py-3.5 text-sm font-black uppercase tracking-wide text-white backdrop-blur-sm transition hover:border-white/45 hover:bg-white/8"
+                className="group inline-flex items-center gap-2 rounded-xl border-2 border-white/25 px-5 py-3 text-xs font-black uppercase tracking-wide text-white backdrop-blur-sm transition hover:border-white/45 hover:bg-white/8"
               >
-                <LayoutGrid className="h-4 w-4" />
+                <LayoutGrid className="h-3.5 w-3.5" />
                 Browse Catalog
               </Link>
             </div>
@@ -501,8 +506,8 @@ export default function Home() {
       <section className="w-full border-y border-slate-800 bg-slate-900">
         <div className="mx-auto grid max-w-6xl grid-cols-1 divide-y divide-slate-700/60 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 md:px-10">
           {[
-            { Icon: Boxes, value: `${totalProducts}+`, label: 'Quote-Ready SKUs' },
-            { Icon: Truck, value: '20+', label: 'Top Brands Sourced' },
+            { Icon: Boxes, value: '100k+', label: 'Quote-Ready SKUs' },
+            { Icon: Truck, value: '500+', label: 'Top Brands Supported' },
             { Icon: Clock, value: '24–48 HR', label: 'Quote Turnaround' },
           ].map(({ Icon, value, label }) => (
             <div key={label} className="flex items-center gap-3 py-4 text-left sm:justify-center sm:gap-4 sm:px-6 sm:py-6 md:px-10">
@@ -557,9 +562,6 @@ export default function Home() {
               <h2 className="font-display text-xl font-black uppercase tracking-tight text-slate-900 sm:text-2xl">
                 Featured Categories
               </h2>
-              <p className="mt-1 max-w-xl text-[11px] font-medium leading-relaxed text-slate-500 sm:text-xs">
-                Browse our most-requested product lines — all available for bulk quote.
-              </p>
             </div>
             <Link
               to="/catalog"
@@ -612,12 +614,9 @@ export default function Home() {
       <section className="w-full bg-slate-950 px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-12" data-reveal>
         <div className="mx-auto max-w-6xl">
           <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Markets</p>
-          <h2 className="mb-2 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-3xl">
+          <h2 className="mb-6 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-3xl">
             Industries We Serve
           </h2>
-          <p className="mb-6 max-w-2xl text-xs font-medium leading-relaxed text-slate-400 sm:text-sm">
-            From NYC infrastructure to national operations — our product lines and sourcing capabilities are built for the industries that can't afford downtime.
-          </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-6">
             {INDUSTRIES.map(({ icon, label }) => (
               <div
@@ -638,15 +637,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── BRANDS WE SOURCE ──────────────────────────────────────── */}
+      {/* ── BRANDS WE PROCURE ──────────────────────────────────────── */}
       <section className="w-full overflow-hidden border-y border-slate-100 bg-white px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-14" data-reveal>
         <div className="mx-auto max-w-6xl">
           <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-industrial-orange sm:text-xs">Our Network</p>
           <h2 className="mb-3 font-display text-3xl font-black uppercase tracking-tight text-slate-900 sm:text-4xl">
-            Brands We Source
+            Brands We Procure
           </h2>
           <p className="mb-10 max-w-2xl text-sm font-medium leading-relaxed text-slate-500">
-            We represent and source from the world-class manufacturers that define industrial reliability — ensuring product authenticity, availability, and compliance.
+            We represent and support procurement from the world-class manufacturers that define industrial reliability — ensuring product authenticity, availability, and compliance.
           </p>
           {/* scrolling ticker */}
           <div className="relative">
@@ -704,11 +703,18 @@ export default function Home() {
                   Why Forez
                 </h2>
                 <div className="space-y-4 text-sm font-medium leading-relaxed text-slate-700 sm:text-base">
+                  <p>Skip the part number chase. Tell us what you need—we&apos;ll take it from there.</p>
                   <p>
-                    We do the legwork so you don't have to. You don't need the exact part number — just tell us what you need. We'll identify the right fit, source it, and get it to you fast. We know bearings and power transmission at the application level, not just the catalog level. Right part, first time, no back and forth.
+                    Forez Corp identifies the correct bearing and power transmission solution at the application
+                    level, procures it quickly, and delivers it right the first time. No catalog searching, no
+                    back-and-forth.
                   </p>
                   <p>
-                    As a certified MBE, we simplify diverse spend compliance without adding procurement friction.
+                    As a certified MBE, Forez Corp also supports diverse supplier spend requirements while keeping
+                    procurement simple, compliant, and frictionless.
+                  </p>
+                  <p className="pt-1 text-base font-black leading-snug text-slate-900 sm:text-lg">
+                    When it&apos;s urgent, we treat it that way
                   </p>
                 </div>
                 <Link
@@ -760,10 +766,12 @@ export default function Home() {
                 <span className="text-[10px] font-black uppercase tracking-[0.18em] text-industrial-orange">Certified MBE · Nationwide Fulfillment</span>
               </div>
               <h2 className="font-display text-3xl font-black uppercase tracking-tight text-white sm:text-4xl md:text-5xl">
-                Ready to Get<br className="hidden sm:block" /> Supplied?
+                Ready to Get
+                <br />
+                Supplied?
               </h2>
               <p className="mt-4 text-sm font-medium leading-relaxed text-slate-400 sm:text-base">
-                Submit a bulk quote request or browse the catalog — our team responds within 24 hours.
+                Submit a quote request or browse the catalog — our team responds within 24 hours.
               </p>
             </div>
             <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row">

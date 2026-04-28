@@ -6,21 +6,44 @@ import {
   Mail,
   Phone,
   FileText,
+  Paperclip,
   ArrowRight,
   CheckCircle2,
   ArrowLeft,
-  Verified,
-  Truck,
   Trash2,
   Package,
   Plus,
 } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useBulkQuote } from '../context/BulkQuoteContext';
+import { SUBMISSION_EMAIL } from '../constants';
+import { hasHostedFormDelivery, submitViaWeb3Forms } from '../lib/submitLead';
 
-const QUOTE_EMAIL = 'INFO@FOREZCORP.COM';
+const ATTACHMENT_MAX_FILES = 5;
+const ATTACHMENT_MAX_BYTES = 20 * 1024 * 1024;
+
+function isAllowedQuoteAttachment(file: File): boolean {
+  const name = file.name.toLowerCase();
+  if (name.endsWith('.pdf') || file.type === 'application/pdf') return true;
+  if (name.endsWith('.jpg') || name.endsWith('.jpeg') || file.type === 'image/jpeg') return true;
+  return false;
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${bytes} B`;
+}
 const makeManualId = () => `manual-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const MANUAL_QUOTE_REQUESTS_KEY = 'forez-manual-quote-requests';
+
+function makeCaptchaChallenge() {
+  const n1 = Math.floor(Math.random() * 11) + 2;
+  const n2 = Math.floor(Math.random() * 11) + 2;
+  return { n1, n2, answer: n1 + n2 };
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 import { useSEO } from '../lib/useSEO';
 
@@ -42,10 +65,53 @@ export default function Sourcing() {
   const [notes, setNotes] = React.useState('');
   const [formError, setFormError] = React.useState('');
   const [lastMailto, setLastMailto] = React.useState('');
+  const [submitDelivery, setSubmitDelivery] = React.useState<'hosted' | 'mailto' | null>(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [customQuoteNotice, setCustomQuoteNotice] = React.useState('');
   const [manualItems, setManualItems] = React.useState([
     { id: makeManualId(), name: '', type: '', dimensions: '', qty: 1 },
   ]);
+  const [captcha, setCaptcha] = React.useState(makeCaptchaChallenge);
+  const [captchaInput, setCaptchaInput] = React.useState('');
+  const [attachments, setAttachments] = React.useState<File[]>([]);
+  const attachmentInputRef = React.useRef<HTMLInputElement>(null);
+
+  const refreshCaptcha = React.useCallback(() => {
+    setCaptcha(makeCaptchaChallenge());
+    setCaptchaInput('');
+  }, []);
+
+  const onAttachmentPick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormError('');
+    const picked = e.target.files;
+    if (!picked?.length) return;
+    const incoming = Array.from(picked);
+    for (const f of incoming) {
+      if (!isAllowedQuoteAttachment(f)) {
+        setFormError('Only PDF or JPG (JPEG) files are allowed.');
+        e.target.value = '';
+        return;
+      }
+      if (f.size > ATTACHMENT_MAX_BYTES) {
+        setFormError(`Each file must be ${ATTACHMENT_MAX_BYTES / (1024 * 1024)} MB or smaller.`);
+        e.target.value = '';
+        return;
+      }
+    }
+    setAttachments((prev) => {
+      const merged = [...prev, ...incoming];
+      if (merged.length > ATTACHMENT_MAX_FILES) {
+        setFormError(`You can add up to ${ATTACHMENT_MAX_FILES} files. Extra files were not added.`);
+        return merged.slice(0, ATTACHMENT_MAX_FILES);
+      }
+      return merged;
+    });
+    e.target.value = '';
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
 
   React.useEffect(() => {
     const manualBrand = searchParams.get('manualBrand')?.trim();
@@ -141,20 +207,37 @@ export default function Sourcing() {
     setManualItems([{ id: makeManualId(), name: '', type: '', dimensions: '', qty: 1 }]);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError('');
 
-    const nameOk = fullName.trim().length > 0;
-    const emailOk = email.trim().length > 0;
-    const phoneOk = phone.trim().length > 0;
-
-    if (!nameOk) {
+    if (!fullName.trim()) {
       setFormError('Full name is required.');
       return;
     }
-    if (!emailOk && !phoneOk) {
-      window.alert('Please enter either your contact or your email address.');
+    const emailTrim = email.trim();
+    if (!emailTrim) {
+      setFormError('Email is required.');
+      return;
+    }
+    if (!EMAIL_RE.test(emailTrim)) {
+      setFormError('Please enter a valid email address.');
+      return;
+    }
+    const phoneTrim = phone.trim();
+    if (!phoneTrim) {
+      setFormError('Phone / contact is required.');
+      return;
+    }
+    const phoneDigits = phoneTrim.replace(/\D/g, '');
+    if (phoneDigits.length < 7) {
+      setFormError('Please enter a valid phone number (at least 7 digits).');
+      return;
+    }
+    const captchaVal = captchaInput.trim();
+    if (captchaVal === '' || Number(captchaVal) !== captcha.answer) {
+      setFormError('Security check failed. Solve the math problem below and try again.');
+      refreshCaptcha();
       return;
     }
 
@@ -183,18 +266,29 @@ export default function Sourcing() {
       ? validManualItems
           .map(
             (item) =>
-              `- ${item.name.trim()} | Brand/Company: ${item.type.trim() || '—'} | Dimensions: ${item.dimensions.trim() || '—'} | Qty: ${item.qty}`
+              `- ${item.name.trim()} | Part number: ${item.dimensions.trim() || '—'} | Brand: ${item.type.trim() || '—'} | Qty: ${item.qty}`
           )
           .join('\n')
       : '(No manual items)';
 
-    const body = [
+    const attachmentBlock =
+      attachments.length > 0
+        ? [
+            '',
+            'Attachments selected (names & sizes — add these files in your email app; the link below cannot send file data):',
+            ...attachments.map((f) => `- ${f.name} (${formatFileSize(f.size)})`),
+            '',
+            'Important: After your mail program opens, use Attach / Insert and choose the same PDF or JPG files you picked on the form.',
+          ].join('\n')
+        : '';
+
+    const bodyParts = [
       'BULK QUOTE REQUEST',
       '',
       `Name: ${fullName.trim()}`,
       `Company: ${company.trim() || '—'}`,
-      `Email: ${email.trim() || '—'}`,
-      `Phone: ${phone.trim() || '—'}`,
+      `Email: ${emailTrim}`,
+      `Phone: ${phoneTrim}`,
       '',
       'Selected catalog items:',
       catalogItemsBlock,
@@ -204,14 +298,43 @@ export default function Sourcing() {
       '',
       'Additional notes:',
       notes.trim() || '—',
-    ].join('\n');
+    ];
+    if (attachmentBlock) bodyParts.push(attachmentBlock);
+    const body = bodyParts.join('\n');
 
-    const mailto = `mailto:${QUOTE_EMAIL}?subject=${encodeURIComponent(
+    const mailto = `mailto:${SUBMISSION_EMAIL}?subject=${encodeURIComponent(
       'Bulk Quote Request — Forez'
     )}&body=${encodeURIComponent(body)}`;
 
+    if (hasHostedFormDelivery()) {
+      setIsSubmitting(true);
+      const hosted = await submitViaWeb3Forms({
+        subject: 'Bulk Quote Request — Forez',
+        name: fullName.trim(),
+        replyEmail: emailTrim,
+        message: body,
+      });
+      setIsSubmitting(false);
+      if (hosted.success) {
+        setFormError('');
+        setSubmitDelivery('hosted');
+        setLastMailto('');
+        clearLines();
+        setAttachments([]);
+        setSubmitted(true);
+        return;
+      }
+      setFormError(
+        hosted.errorMessage
+          ? `Automatic send failed (${hosted.errorMessage}). Your email app will open with a draft instead.`
+          : 'Automatic send failed. Your email app will open with a draft instead.'
+      );
+    }
+
+    setSubmitDelivery('mailto');
     setLastMailto(mailto);
     clearLines();
+    setAttachments([]);
     setSubmitted(true);
     window.open(mailto, '_blank', 'noopener,noreferrer');
   };
@@ -229,7 +352,9 @@ export default function Sourcing() {
           </div>
           <h2 className="text-4xl font-black uppercase font-display mb-4">REQUEST SENT</h2>
           <p className="text-xl font-bold text-gray-600 uppercase mb-6">
-            If your email app opened, review and send the message. Our team will follow up shortly.
+            {submitDelivery === 'hosted'
+              ? 'Your quote request was received. Our team will follow up shortly.'
+              : 'If your email app opened, review and send the message. Our team will follow up shortly.'}
           </p>
           {lastMailto && (
             <a
@@ -252,9 +377,9 @@ export default function Sourcing() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
-      <section className="lg:w-1/2 bg-engineering-blue text-white p-5 sm:p-7 md:p-12 lg:px-24 lg:pt-14 lg:pb-24 flex flex-col justify-start border-b-4 lg:border-b-0 lg:border-r-4 border-black relative overflow-hidden">
+      <section className="lg:w-1/4 shrink-0 bg-engineering-blue text-white p-5 sm:p-7 md:p-12 lg:px-6 lg:pt-14 lg:pb-24 flex flex-col justify-start border-b-4 lg:border-b-0 lg:border-r-4 border-black relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 pointer-events-none industrial-hatch"></div>
-        <div className="relative z-10 max-w-xl pt-2 sm:pt-3 md:pt-4">
+        <div className="relative z-10 w-full max-w-xl pt-2 sm:pt-3 md:pt-4">
           <Link
             to="/catalog"
             className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 sm:mb-6 md:mb-8 font-bold uppercase tracking-widest transition-colors text-xs sm:text-sm"
@@ -265,39 +390,25 @@ export default function Sourcing() {
           <motion.h1
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.98] sm:leading-[0.92] mb-3 sm:mb-5"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight leading-tight mb-3 sm:mb-5"
           >
-            REQUEST BULK QUOTE
+            REQUEST QUOTE
           </motion.h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-blue-100 leading-relaxed max-w-md border-l-4 sm:border-l-6 md:border-l-8 border-industrial-orange pl-4 sm:pl-5 md:pl-6 mb-3 sm:mb-5">
-            Add products from any category, set quantities, then send your list with your contact details.
-          </p>
           {lines.length > 0 && (
-            <div className="flex items-center gap-2 sm:gap-3 text-cyan-300 font-black uppercase text-xs sm:text-sm tracking-wide sm:tracking-widest mb-3 sm:mb-5">
+            <div className="mt-3 flex items-center gap-2 sm:gap-3 text-cyan-300 font-black uppercase text-xs sm:text-sm tracking-wide sm:tracking-widest sm:mt-5">
               <Package className="w-5 h-5 sm:w-6 sm:h-6" />
               {lines.length} line item{lines.length === 1 ? '' : 's'} from catalog
             </div>
           )}
-          <div className="flex flex-wrap gap-4 sm:gap-6 md:gap-8 opacity-80">
-            <div className="flex items-center gap-3">
-              <Verified className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-emerald-300" fill="currentColor" />
-              <span className="text-[11px] sm:text-xs md:text-sm font-black tracking-wide md:tracking-widest uppercase text-emerald-300">Certified Network</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Truck className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-amber-300" />
-              <span className="text-[11px] sm:text-xs md:text-sm font-black tracking-wide md:tracking-widest uppercase text-amber-300">Rapid Fulfillment</span>
-            </div>
-          </div>
         </div>
       </section>
 
-      <section className="lg:w-1/2 bg-white p-8 md:p-12 lg:p-20 flex flex-col justify-center">
+      <section className="min-w-0 flex-1 bg-white p-8 md:p-12 lg:p-20 flex flex-col justify-center">
         <div className="w-full max-w-2xl mx-auto">
           <div className="mb-8">
-            <h2 className="text-2xl sm:text-3xl font-black uppercase font-display mb-2">Bulk quote</h2>
-            <p className="text-gray-500 font-bold text-sm uppercase tracking-widest">
-              Name required — include item name/type/dimensions/qty
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-black uppercase font-display mb-2">
+              Here&apos;s your quote details
+            </h2>
           </div>
           {customQuoteNotice && (
             <div className="mb-6 rounded-md border-2 border-emerald-700 bg-emerald-50 px-4 py-3 text-xs font-black uppercase tracking-wide text-emerald-900">
@@ -397,43 +508,50 @@ export default function Sourcing() {
                 Add Item
               </button>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {manualItems.map((item) => (
-                <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
-                  <input
-                    type="text"
-                    value={item.name}
-                    onChange={(e) => updateManualItem(item.id, 'name', e.target.value)}
-                    placeholder="ITEM NAME"
-                    className="md:col-span-4 h-10 px-3 border-2 border-black font-bold uppercase bg-concrete text-xs"
-                  />
-                  <input
-                    type="text"
-                    value={item.type}
-                    onChange={(e) => updateManualItem(item.id, 'type', e.target.value)}
-                    placeholder="BRAND / COMPANY NAME"
-                    className="md:col-span-3 h-10 px-3 border-2 border-black font-bold uppercase bg-concrete text-xs"
-                  />
-                  <input
-                    type="text"
-                    value={item.dimensions}
-                    onChange={(e) => updateManualItem(item.id, 'dimensions', e.target.value)}
-                    placeholder="DIMENSIONS (OPTIONAL)"
-                    className="md:col-span-3 h-10 px-3 border-2 border-black font-bold uppercase bg-concrete text-xs"
-                  />
-                  <div className="md:col-span-2 flex items-center gap-2">
+                <div
+                  key={item.id}
+                  className="overflow-x-auto rounded-md border-2 border-black/15 bg-concrete/50 p-2"
+                >
+                  <div className="flex min-w-[36rem] max-w-full flex-nowrap items-center gap-2 sm:min-w-0 sm:max-w-none">
+                    <input
+                      type="text"
+                      value={item.name}
+                      onChange={(e) => updateManualItem(item.id, 'name', e.target.value)}
+                      placeholder="ITEM NAME"
+                      aria-label="Item name"
+                      className="h-9 min-w-0 flex-1 px-2 border-2 border-black bg-white text-xs font-bold uppercase"
+                    />
+                    <input
+                      type="text"
+                      value={item.dimensions}
+                      onChange={(e) => updateManualItem(item.id, 'dimensions', e.target.value)}
+                      placeholder="PART NUMBER"
+                      aria-label="Part number"
+                      className="h-9 min-w-0 flex-1 px-2 border-2 border-black bg-white text-xs font-bold uppercase"
+                    />
+                    <input
+                      type="text"
+                      value={item.type}
+                      onChange={(e) => updateManualItem(item.id, 'type', e.target.value)}
+                      placeholder="BRAND"
+                      aria-label="Brand"
+                      className="h-9 min-w-0 flex-1 px-2 border-2 border-black bg-white text-xs font-bold uppercase"
+                    />
                     <input
                       type="number"
                       min={1}
                       value={item.qty}
                       onChange={(e) => updateManualItem(item.id, 'qty', Number(e.target.value))}
                       placeholder="QTY"
-                      className="w-full h-10 px-2 border-2 border-black font-bold text-center bg-concrete text-xs"
+                      aria-label="Quantity"
+                      className="h-9 w-14 shrink-0 border-2 border-black bg-white px-1 text-center text-xs font-bold"
                     />
                     <button
                       type="button"
                       onClick={() => removeManualItem(item.id)}
-                      className="p-2 border-2 border-black hover:bg-black hover:text-white transition-colors"
+                      className="shrink-0 p-2 border-2 border-black hover:bg-black hover:text-white transition-colors"
                       aria-label="Remove manual item"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -443,17 +561,17 @@ export default function Sourcing() {
               ))}
             </div>
             {lines.length === 0 && (
-              <p className="mt-4 text-sm font-bold text-gray-600 uppercase">
-                We do have many items in our catalog - please check it out. Some products may not always appear on the website.{' '}
+              <p className="mt-4 text-xs font-black uppercase tracking-wider text-gray-500 line-clamp-2">
+                New to quote?{' '}
                 <Link to="/catalog" className="text-industrial-orange underline">
-                  Browse catalog
+                  Open the catalog
                 </Link>{' '}
-                and tap products to auto-add them above.
+                to add products.
               </p>
             )}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form noValidate onSubmit={handleSubmit} className="space-y-8">
             {formError && (
               <div className="border-2 border-black bg-industrial-orange/10 px-4 py-3 text-sm font-black uppercase text-black">
                 {formError}
@@ -496,12 +614,15 @@ export default function Sourcing() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label className="block text-xs font-black uppercase tracking-widest text-gray-500">
-                  Email
+                  Email <span className="text-industrial-orange">*</span>
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
                     type="email"
+                    name="email"
+                    autoComplete="email"
+                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="PROCUREMENT@CORP.COM"
@@ -511,12 +632,15 @@ export default function Sourcing() {
               </div>
               <div className="space-y-2">
                 <label className="block text-xs font-black uppercase tracking-widest text-gray-500">
-                  Phone / Contact
+                  Phone / contact <span className="text-industrial-orange">*</span>
                 </label>
                 <div className="relative">
                   <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
                     type="tel"
+                    name="phone"
+                    autoComplete="tel"
+                    required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="(555) 123-4567"
@@ -542,9 +666,94 @@ export default function Sourcing() {
               </div>
             </div>
 
+            <div className="space-y-3 border-2 border-black bg-white p-4 md:p-5">
+              <label className="block text-xs font-black uppercase tracking-widest text-gray-500">
+                Attachments <span className="font-bold normal-case text-gray-400">(optional — PDF or JPG)</span>
+              </label>
+              <p className="text-xs font-semibold leading-relaxed text-gray-600">
+                Select files to include with your request. Your email app will open next — you must{' '}
+                <span className="font-black text-gray-800">attach the same files there</span>, because the browser cannot
+                send file contents through an email link. When you have a final inbox or upload URL, this flow can be
+                wired to it.
+              </p>
+              <input
+                ref={attachmentInputRef}
+                type="file"
+                className="sr-only"
+                accept=".pdf,.jpg,.jpeg,application/pdf,image/jpeg"
+                multiple
+                onChange={onAttachmentPick}
+              />
+              <button
+                type="button"
+                onClick={() => attachmentInputRef.current?.click()}
+                className="inline-flex items-center gap-2 border-2 border-black bg-concrete px-4 py-2.5 text-xs font-black uppercase tracking-wide transition-colors hover:bg-black hover:text-white"
+              >
+                <Paperclip className="h-4 w-4" aria-hidden />
+                Choose files
+              </button>
+              {attachments.length > 0 && (
+                <ul className="space-y-2 border-t border-black/10 pt-3">
+                  {attachments.map((file, index) => (
+                    <li
+                      key={`${file.name}-${file.size}-${index}`}
+                      className="flex items-center justify-between gap-2 text-xs font-bold uppercase text-gray-800"
+                    >
+                      <span className="min-w-0 truncate">
+                        {file.name}{' '}
+                        <span className="font-semibold text-gray-500">({formatFileSize(file.size)})</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeAttachment(index)}
+                        className="shrink-0 border-2 border-black p-1.5 hover:bg-black hover:text-white"
+                        aria-label={`Remove ${file.name}`}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <p className="text-[10px] font-bold uppercase tracking-wide text-gray-400">
+                Up to {ATTACHMENT_MAX_FILES} files · max {ATTACHMENT_MAX_BYTES / (1024 * 1024)} MB each
+              </p>
+            </div>
+
+            <div className="space-y-3 border-2 border-black bg-zinc-50 p-4 md:p-5">
+              <label className="block text-xs font-black uppercase tracking-widest text-gray-600">
+                Security check <span className="text-industrial-orange">*</span>
+              </label>
+              <p className="text-sm font-bold text-zinc-800">
+                What is{' '}
+                <span className="font-black tabular-nums">{captcha.n1}</span> +{' '}
+                <span className="font-black tabular-nums">{captcha.n2}</span>?
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={captchaInput}
+                  onChange={(e) => setCaptchaInput(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                  placeholder="ANSWER"
+                  autoComplete="off"
+                  aria-label="Enter captcha answer"
+                  className="h-12 w-28 border-2 border-black bg-white px-3 text-center text-sm font-black tracking-wide outline-none focus:ring-2 focus:ring-industrial-orange/30"
+                />
+                <button
+                  type="button"
+                  onClick={refreshCaptcha}
+                  className="text-xs font-black uppercase tracking-wide text-industrial-orange underline decoration-2 underline-offset-2 hover:text-engineering-blue"
+                >
+                  New question
+                </button>
+              </div>
+            </div>
+
             <button
               type="submit"
-              className="w-full h-16 bg-industrial-orange text-white text-xl font-black uppercase tracking-widest brutalist-border brutalist-shadow hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none transition-all flex items-center justify-center gap-3 group"
+              disabled={isSubmitting}
+              className="w-full h-16 bg-industrial-orange text-white text-xl font-black uppercase tracking-widest brutalist-border brutalist-shadow transition-all flex items-center justify-center gap-3 group hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none disabled:pointer-events-none disabled:opacity-60"
             >
               Send bulk quote request
               <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />

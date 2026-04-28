@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { Search, ChevronRight, Check, X } from 'lucide-react';
 import {
   PRODUCT_CATEGORIES,
+  MISCELLANEOUS_SUB_PRODUCTS,
   getProductImage,
   FALLBACK_PRODUCT_IMAGE,
   type Product,
@@ -413,6 +414,11 @@ function entryMatchesCatalogSearch(
   const q = query.trim().toLowerCase();
   if (!q) return true;
   const fields = [category.name, category.id, product.name, product.id, ...product.brands];
+  if (category.id === 'miscellaneous' && product.id === 'miscellaneous-line') {
+    for (const sub of MISCELLANEOUS_SUB_PRODUCTS) {
+      fields.push(sub.name, sub.id, ...sub.brands);
+    }
+  }
   return fields.some((f) => f.toLowerCase().includes(q));
 }
 
@@ -449,6 +455,11 @@ export default function Catalog() {
   const [selectedByBrand, setSelectedByBrand] = React.useState<Record<string, boolean>>({});
   const [partNumberByBrand, setPartNumberByBrand] = React.useState<Record<string, string>>({});
   const [qtyByBrand, setQtyByBrand] = React.useState<Record<string, string>>({});
+  const [miscModalOpen, setMiscModalOpen] = React.useState(false);
+  const [miscLineSearch, setMiscLineSearch] = React.useState('');
+  const [miscSelectedById, setMiscSelectedById] = React.useState<Record<string, boolean>>({});
+  const [miscQtyById, setMiscQtyById] = React.useState<Record<string, string>>({});
+  const [miscPartById, setMiscPartById] = React.useState<Record<string, string>>({});
   const [customQuoteToast, setCustomQuoteToast] = React.useState('');
 
   React.useEffect(() => {
@@ -462,7 +473,25 @@ export default function Catalog() {
     [catalogSearch]
   );
 
+  const closeMiscModal = () => {
+    setMiscModalOpen(false);
+    setMiscLineSearch('');
+    setMiscSelectedById({});
+    setMiscQtyById({});
+    setMiscPartById({});
+  };
+
+  const openMiscModal = () => {
+    closeBrandModal();
+    setMiscLineSearch('');
+    setMiscSelectedById({});
+    setMiscQtyById({});
+    setMiscPartById({});
+    setMiscModalOpen(true);
+  };
+
   const openBrandModal = (category: Category, product: Product) => {
+    closeMiscModal();
     setActiveBrandModal({ category, product });
     setBrandLineSearch('');
     setSelectedByBrand({});
@@ -540,6 +569,64 @@ export default function Catalog() {
   const canAddSelectedBrands =
     selectedBrandDetails.length > 0 && selectedBrandDetails.every((item) => item.qty > 0);
 
+  const filteredMiscLines = useMemo(() => {
+    const q = miscLineSearch.trim().toLowerCase();
+    if (!q) return MISCELLANEOUS_SUB_PRODUCTS;
+    return MISCELLANEOUS_SUB_PRODUCTS.filter(
+      (sub) =>
+        sub.name.toLowerCase().includes(q) ||
+        sub.id.toLowerCase().includes(q) ||
+        sub.brands.some((b) => b.toLowerCase().includes(q))
+    );
+  }, [miscLineSearch]);
+
+  const selectedMiscSubs = useMemo(
+    () => MISCELLANEOUS_SUB_PRODUCTS.filter((sub) => miscSelectedById[sub.id]),
+    [miscSelectedById]
+  );
+
+  const miscSelectionDetails = useMemo(
+    () =>
+      selectedMiscSubs.map((sub) => ({
+        sub,
+        qty: Math.max(0, Math.floor(Number(miscQtyById[sub.id])) || 0),
+        partNumber: miscPartById[sub.id] ?? '',
+        brand: sub.brands[0] ?? '',
+      })),
+    [selectedMiscSubs, miscQtyById, miscPartById]
+  );
+
+  const canAddMiscSelections =
+    miscSelectionDetails.length > 0 &&
+    miscSelectionDetails.every((d) => d.brand && d.qty > 0);
+
+  const addMiscSelectionsToQuote = (queueManualAndNavigate: boolean) => {
+    if (!canAddMiscSelections) return;
+    for (const d of miscSelectionDetails) {
+      if (!d.brand || d.qty < 1) continue;
+      const part = d.partNumber.trim();
+      addBrandsToQuote(
+        'miscellaneous',
+        d.sub.id,
+        d.qty,
+        [{ brand: d.brand, qty: d.qty, partNumber: part }],
+        false
+      );
+      if (queueManualAndNavigate) {
+        queueManualCustomQuoteItem({
+          name: d.sub.name,
+          type: d.brand,
+          dimensions: part ? `Part Number: ${part}` : '',
+          qty: d.qty,
+        });
+      }
+    }
+    closeMiscModal();
+    if (queueManualAndNavigate) {
+      navigate('/sourcing?customAdded=1');
+    }
+  };
+
   if (categoryId) {
     return <Navigate to="/catalog" replace />;
   }
@@ -582,15 +669,15 @@ export default function Catalog() {
       <div className="mx-auto flex max-w-[1600px] flex-col gap-10 px-4 py-10 sm:px-6 md:flex-row md:gap-12 md:px-8 lg:px-12">
         <aside className="w-full shrink-0 space-y-8 md:w-72 lg:w-80">
           <div className="rounded-xl border border-zinc-800/10 bg-white p-6 shadow-sm">
-            <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-zinc-900">Bulk sourcing</h3>
-            <p className="mb-5 text-xs font-medium uppercase leading-relaxed text-zinc-500">
-              Need something not listed? We can source it.
+            <h3 className="mb-2 text-sm font-black uppercase tracking-wide text-zinc-900">Custom Procurement</h3>
+            <p className="mb-5 text-xs font-medium leading-relaxed text-zinc-500">
+              Need something not listed? We can help.
             </p>
             <Link
               to="/sourcing"
-              className="block w-full rounded-lg border-2 border-zinc-900 bg-zinc-900 py-3 text-center text-xs font-black uppercase text-white transition-colors hover:bg-zinc-800"
+              className="block w-full rounded-lg border-2 border-zinc-900 bg-zinc-900 py-3 text-center text-xs font-black text-white transition-colors hover:bg-zinc-800"
             >
-              Custom request
+              Request Here
             </Link>
           </div>
         </aside>
@@ -600,10 +687,6 @@ export default function Catalog() {
             <h1 className="text-3xl font-black uppercase tracking-tight text-zinc-900 sm:text-4xl md:text-5xl">
               Product catalog
             </h1>
-            <p className="mt-3 max-w-2xl text-sm font-medium uppercase leading-relaxed text-zinc-500">
-              Each card is one product line. Category appears on every card; multiple lines in a category each get their
-              own card. Select photos for your bulk quote — expand brands without leaving the grid.
-            </p>
           </header>
 
           {catalogEntries.length === 0 ? (
@@ -619,8 +702,16 @@ export default function Catalog() {
                     category={category}
                     product={product}
                     idx={idx}
-                    onOpenBrands={() => openBrandModal(category, product)}
-                    isSelected={isSelected(category.id, product.id)}
+                    onOpenBrands={() =>
+                      category.id === 'miscellaneous' && product.id === 'miscellaneous-line'
+                        ? openMiscModal()
+                        : openBrandModal(category, product)
+                    }
+                    isSelected={
+                      category.id === 'miscellaneous' && product.id === 'miscellaneous-line'
+                        ? MISCELLANEOUS_SUB_PRODUCTS.some((s) => isSelected(category.id, s.id))
+                        : isSelected(category.id, product.id)
+                    }
                   />
                 </React.Fragment>
               ))}
@@ -996,6 +1087,124 @@ export default function Catalog() {
         </div>
       )}
 
+      {miscModalOpen && (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-zinc-900/65 p-4"
+          onClick={closeMiscModal}
+        >
+          <div
+            className="w-full max-w-xl rounded-xl border border-zinc-200 bg-white p-4 shadow-2xl sm:p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative mb-3">
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400" />
+              <input
+                type="text"
+                value={miscLineSearch}
+                onChange={(e) => setMiscLineSearch(e.target.value)}
+                placeholder="Search product type"
+                className="h-10 w-full rounded-md border border-zinc-200 bg-zinc-50 pl-8 pr-2 text-[10px] font-bold uppercase tracking-wide text-zinc-800 outline-none focus:border-zinc-400"
+              />
+            </div>
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div>
+                <h4 className="text-sm font-black uppercase tracking-wide text-zinc-900">Miscellaneous</h4>
+                <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  Select types, optional part number, and qty
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={closeMiscModal}
+                className="rounded-md border border-zinc-200 p-1.5 text-zinc-600 hover:bg-zinc-100"
+                aria-label="Close miscellaneous picker"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="max-h-[min(48vh,18rem)] space-y-2 overflow-y-auto pr-1">
+              {filteredMiscLines.map((sub) => (
+                <div key={sub.id} className="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="min-w-0 truncate text-[10px] font-bold uppercase text-zinc-800">
+                      {sub.name}
+                    </span>
+                    <label className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-zinc-300 bg-white">
+                      <input
+                        type="checkbox"
+                        checked={!!miscSelectedById[sub.id]}
+                        onChange={(e) =>
+                          setMiscSelectedById((prev) => ({ ...prev, [sub.id]: e.target.checked }))
+                        }
+                        className="h-4 w-4 accent-zinc-900"
+                        aria-label={`Select ${sub.name}`}
+                      />
+                    </label>
+                  </div>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={miscPartById[sub.id] ?? ''}
+                      onChange={(e) =>
+                        setMiscPartById((prev) => ({ ...prev, [sub.id]: e.target.value }))
+                      }
+                      placeholder="Part Number (optional)"
+                      className="h-8 rounded border border-zinc-300 bg-white px-2 text-[10px] font-bold uppercase text-zinc-800 outline-none focus:border-zinc-500"
+                    />
+                    <input
+                      type="number"
+                      min={1}
+                      value={miscQtyById[sub.id] ?? ''}
+                      onChange={(e) =>
+                        setMiscQtyById((prev) => ({ ...prev, [sub.id]: e.target.value }))
+                      }
+                      placeholder="Qty"
+                      className="h-8 rounded border border-zinc-300 bg-white px-2 text-[10px] font-black text-zinc-800 outline-none focus:border-zinc-500"
+                    />
+                  </div>
+                </div>
+              ))}
+              {filteredMiscLines.length === 0 && (
+                <p className="py-4 text-center text-[10px] font-bold uppercase text-zinc-500">No types match</p>
+              )}
+            </div>
+            <div className="mt-3 flex flex-col gap-2 border-t border-zinc-200 pt-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-[10px] font-black uppercase tracking-wide text-zinc-700">
+                Selected types: {selectedMiscSubs.length}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => addMiscSelectionsToQuote(false)}
+                  disabled={!canAddMiscSelections}
+                  className={cn(
+                    'rounded-md border-2 px-3 py-1.5 text-[10px] font-black uppercase transition-colors',
+                    canAddMiscSelections
+                      ? 'border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-800'
+                      : 'cursor-not-allowed border-zinc-300 bg-zinc-200 text-zinc-500'
+                  )}
+                >
+                  Add to quote
+                </button>
+                <button
+                  type="button"
+                  onClick={() => addMiscSelectionsToQuote(true)}
+                  disabled={!canAddMiscSelections}
+                  className={cn(
+                    'rounded-md border-2 px-3 py-1.5 text-[10px] font-black uppercase transition-colors',
+                    canAddMiscSelections
+                      ? 'border-zinc-900 bg-white text-zinc-900 hover:bg-zinc-100'
+                      : 'cursor-not-allowed border-zinc-300 bg-zinc-100 text-zinc-400'
+                  )}
+                >
+                  Add to quote & request
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {itemCount > 0 && (
         <motion.div
           initial={{ y: 100 }}
@@ -1008,10 +1217,9 @@ export default function Catalog() {
                 {itemCount}
               </div>
               <div className="min-w-0">
-                <h2 className="text-lg font-black uppercase leading-tight text-zinc-900 sm:text-xl">Bulk quote</h2>
-                <p className="text-xs font-bold uppercase tracking-wider text-zinc-800/80">
-                  Continue to request quote for contact details
-                </p>
+                <h2 className="text-lg font-black uppercase leading-tight text-zinc-900 sm:text-xl">
+                  Catalogue added
+                </h2>
               </div>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
@@ -1093,12 +1301,11 @@ function CatalogProductCard({
         <span className="sr-only">Open brands for {category.name} — {product.name}</span>
       </button>
 
-      <div className="flex flex-1 flex-col p-2 sm:p-5">
-        <p className="hidden text-[11px] font-black uppercase tracking-[0.12em] text-zinc-900 sm:block">{category.name}</p>
+      <div className="flex min-w-0 flex-1 flex-col px-1.5 py-2 sm:p-5">
         <button
           type="button"
           onClick={onOpenBrands}
-          className="mt-0 text-left line-clamp-2 text-[10px] font-bold uppercase leading-tight text-zinc-700 hover:text-zinc-900 sm:mt-1.5 sm:text-sm sm:leading-snug sm:text-zinc-600"
+          className="mt-0 w-full min-w-0 break-words text-left text-[10px] font-bold uppercase leading-tight text-zinc-700 line-clamp-3 hover:text-zinc-900 sm:text-sm sm:leading-snug sm:line-clamp-2 sm:text-zinc-600"
         >
           {product.name}
         </button>

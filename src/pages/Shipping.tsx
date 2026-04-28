@@ -1,124 +1,97 @@
-import { useState } from 'react';
-import { Truck, RefreshCw } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useSEO } from '../lib/useSEO';
+
+const SECTIONS: { title: string; body: string[] }[] = [
+  {
+    title: 'Shipping Carriers and Methods',
+    body: [
+      'Forez Corp primarily utilizes UPS for domestic shipments. Depending on order requirements, shipment size, weight, and destination, additional shipping methods may be used, including LTL (Less Than Truckload) freight carriers or other parcel services. For international shipments, alternative carriers may be used when specified by the customer or deemed necessary for delivery execution.',
+    ],
+  },
+  {
+    title: 'Delivery Services and Estimates',
+    body: [
+      'Where applicable, UPS service levels (including Ground, 3-Day Select, 2nd Day Air, and Next Day Air) may be used. Delivery timelines provided by carriers are estimates only and are not guaranteed. All transit times are subject to change based on carrier operations, weather conditions, customs processing, and other factors outside Forez Corp’s control. Shipments to Alaska and Hawaii may require additional transit time.',
+    ],
+  },
+  {
+    title: 'Order Processing and Dispatch',
+    body: [
+      'Order processing begins upon confirmation of payment and inventory availability. While Forez Corp may, at its discretion, ship orders the same day they are placed, standard processing may require up to three (3) business days. Orders submitted prior to approximately 11:00 AM PST (Monday–Friday) have a higher likelihood of same-day dispatch. Orders placed after approximately 2:00 PM PST are generally processed on the following business day. Carrier pickups typically occur around 4:00 PM PST, which may impact same-day shipping eligibility.',
+    ],
+  },
+  {
+    title: 'International Shipping',
+    body: [
+      'International shipping is available on a case-by-case basis. Certain international shipments may require the customer to provide preferred carrier information or additional documentation. Forez Corp reserves the right to review, approve, or decline international shipments at its sole discretion. All customs duties, taxes, and import fees are the responsibility of the customer unless otherwise agreed in writing.',
+    ],
+  },
+  {
+    title: 'Risk of Loss and Liability',
+    body: [
+      'All shipments are made under FOB origin terms unless otherwise stated in writing. Title and risk of loss transfer to the customer upon handoff of the shipment to the carrier. Forez Corp is not responsible for any loss, theft, damage, or misdelivery occurring during transit or after carrier confirmation of delivery. Customers are responsible for filing all claims directly with the shipping carrier.',
+      'While responsibility for transit issues lies with the carrier once the shipment has been transferred, Forez Corp will make reasonable efforts to assist customers in resolving shipping-related issues, including providing documentation and supporting claim submissions where applicable.',
+    ],
+  },
+  {
+    title: 'Tracking and Delivery Issues',
+    body: [
+      'Tracking information is provided for convenience and may be subject to delays in updates by the carrier. Forez Corp does not guarantee real-time tracking accuracy. Customers are advised to allow reasonable time for tracking updates to reflect shipment progress before initiating support inquiries.',
+    ],
+  },
+];
 
 export default function Shipping() {
   useSEO({
-    title: 'Shipping & Returns — Forez Fulfillment Policies',
-    description: 'Learn about Forez shipping timelines, carrier options, and returns policy for industrial product orders.',
+    title: 'Shipping Policy — Carriers, Delivery & International | Forez',
+    description:
+      'Forez Corp shipping policy: UPS and other carriers, delivery estimates, order processing, international shipping, risk of loss, tracking, and related terms.',
     path: '/shipping',
-    keywords: 'industrial supply shipping, order fulfillment policy, returns policy industrial parts',
-    breadcrumbs: [{ name: 'Shipping & Returns', path: '/shipping' }],
+    keywords:
+      'Forez shipping, UPS industrial orders, LTL freight, international shipping policy, FOB origin, order processing',
+    breadcrumbs: [{ name: 'Shipping', path: '/shipping' }],
   });
-  const [policyTab, setPolicyTab] = useState<'shipping' | 'returns'>('shipping');
 
   return (
-    <div className="bg-white min-h-screen">
-      <section className="bg-steel text-white py-20 px-6 border-b-8 border-black">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-5">
-            ForezCorp Shipping Information
+    <div className="min-h-screen bg-white">
+      <section className="border-b-4 border-black bg-steel py-12 px-5 text-white sm:px-8 md:py-16 md:px-10">
+        <div className="mx-auto max-w-3xl">
+          <h1 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
+            Shipping
           </h1>
-          <p className="text-lg md:text-xl font-bold text-gray-400 uppercase max-w-3xl">
-            Shipping, returns, and delivery policy details for domestic and international orders.
+          <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-blue-100/90 sm:text-base">
+            Carriers, delivery, processing, and liability
           </p>
         </div>
       </section>
 
-      <section className="px-6 py-12 md:py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="inline-flex border-2 border-black bg-black/5 mb-8">
-            <button
-              type="button"
-              onClick={() => setPolicyTab('shipping')}
-              className={`px-5 py-2 font-black uppercase tracking-wide transition-colors ${
-                policyTab === 'shipping' ? 'bg-industrial-orange text-black' : 'text-black hover:bg-black/10'
-              }`}
-            >
-              <span className="inline-flex items-center gap-2"><Truck className="w-4 h-4" />Shipping</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPolicyTab('returns')}
-              className={`px-5 py-2 font-black uppercase tracking-wide transition-colors ${
-                policyTab === 'returns' ? 'bg-industrial-orange text-black' : 'text-black hover:bg-black/10'
-              }`}
-            >
-              <span className="inline-flex items-center gap-2"><RefreshCw className="w-4 h-4" />Returns</span>
-            </button>
+      <section className="px-5 py-10 sm:px-8 md:px-10 md:py-14">
+        <div className="mx-auto max-w-3xl space-y-10">
+          {SECTIONS.map(({ title, body }) => (
+            <div key={title}>
+              <h2 className="border-b-2 border-slate-900 pb-2 font-display text-lg font-black uppercase tracking-tight text-slate-900 sm:text-xl">
+                {title}
+              </h2>
+              <div className="mt-4 space-y-4 text-sm leading-relaxed text-slate-700 sm:text-base">
+                {body.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <div>
+            <h2 className="border-b-2 border-slate-900 pb-2 font-display text-lg font-black uppercase tracking-tight text-slate-900 sm:text-xl">
+              Returns, Refunds &amp; Warranty Policy
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-slate-700 sm:text-base">
+              Return, refund, and warranty terms are set out in our{' '}
+              <Link to="/terms-of-use" className="font-bold text-industrial-orange underline underline-offset-2 hover:text-engineering-blue">
+                Terms of Use
+              </Link>
+              . For questions about a specific order, contact Forez Corp directly.
+            </p>
           </div>
-
-          {policyTab === 'shipping' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-800">
-              <div className="space-y-4 text-sm md:text-base font-semibold border-2 border-black p-6">
-                <p className="text-black font-black uppercase">Shipping Carriers</p>
-                <p>Primarily ships via UPS.</p>
-                <p>International orders may use other carriers when provided by the customer.</p>
-
-                <p className="text-black font-black uppercase pt-2">Delivery Options & Timeframes</p>
-                <p>UPS Ground: about 5 business days.</p>
-                <p>UPS 3-Day Select: about 3 business days.</p>
-                <p>UPS 2nd Day Air: about 2 business days.</p>
-                <p>UPS Next Day Air: about 1 business day.</p>
-                <p>Orders should typically be placed before 10 AM PST (Mon-Fri) for these timelines.</p>
-                <p className="text-industrial-orange">Alaska & Hawaii: add 1 extra day.</p>
-              </div>
-
-              <div className="space-y-4 text-sm md:text-base font-semibold border-2 border-black p-6">
-                <p className="text-black font-black uppercase">Order Processing & Dispatch</p>
-                <p>Orders may ship same day if placed early enough.</p>
-                <p>Otherwise, processing can take up to 3 business days.</p>
-                <p>Orders before about 11 AM PST have a higher chance of same-day shipping.</p>
-                <p>Orders after about 2 PM PST may ship next day.</p>
-                <p>UPS pickup cutoff is about 4 PM PST.</p>
-
-                <p className="text-black font-black uppercase pt-2">International Shipping</p>
-                <p>International shipping is available.</p>
-                <p>You may need to provide your own carrier details.</p>
-                <p>ForezCorp will confirm feasibility before shipment.</p>
-
-                <p className="text-black font-black uppercase pt-2">Important Policies</p>
-                <p>ForezCorp is not responsible for lost, damaged, or delivered-but-not-received shipments.</p>
-                <p>Customers must contact the shipping carrier directly for shipping issues.</p>
-                <p>Tracking updates can be delayed; wait a few days before escalating.</p>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-800">
-              <div className="space-y-4 text-sm md:text-base font-semibold border-2 border-black p-6">
-                <p className="text-black font-black uppercase">General Policy</p>
-                <p>Most products are non-cancellable / non-returnable (NCNR).</p>
-                <p>Customers are expected to review carefully before purchasing.</p>
-
-                <p className="text-black font-black uppercase pt-2">International / Export Orders</p>
-                <p>No returns or exchanges are allowed.</p>
-                <p>Exception: only if item is defective or damaged on arrival.</p>
-                <p>Claims must be reported within 3 days of delivery with photos and a description.</p>
-
-                <p className="text-black font-black uppercase pt-2">Domestic Orders</p>
-                <p>Returns are allowed within 3 days of delivery, when applicable.</p>
-                <p>Items must be unused and in original packaging with proof of purchase.</p>
-                <p>Return authorization is required before sending anything back.</p>
-              </div>
-
-              <div className="space-y-4 text-sm md:text-base font-semibold border-2 border-black p-6">
-                <p className="text-black font-black uppercase">Non-Returnable Items</p>
-                <p>Customized and made-to-order products are strictly non-returnable.</p>
-
-                <p className="text-black font-black uppercase pt-2">Return Shipping</p>
-                <p>Customer pays return shipping unless the item is confirmed defective.</p>
-
-                <p className="text-black font-black uppercase pt-2">Refund Process</p>
-                <p>Refunds are issued only after inspection and approval.</p>
-                <p>Approved refunds go to the original payment method.</p>
-                <p>Refund processing may take up to 15 business days plus bank processing time.</p>
-
-                <p className="text-black font-black uppercase pt-2">Warranty</p>
-                <p>1-year limited warranty covers manufacturing defects and normal-use failures.</p>
-                <p>Warranty does not cover misuse, physical damage, unauthorized modifications, or improper installation/conditions.</p>
-              </div>
-            </div>
-          )}
         </div>
       </section>
     </div>

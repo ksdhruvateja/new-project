@@ -32,7 +32,7 @@ const STEPS = [
     step: '04',
     title: 'Submit & Receive Your Quote',
     description:
-      'Click "Send Quote Request" to submit directly to our procurement team at info@forezcorp.com. We typically respond within 24–48 business hours with a formal quote, availability confirmation, and lead time estimate.',
+      'Click "Send Quote Request" to submit directly to our procurement team at sales@forezcorp.com. We typically respond within 24–48 business hours with a formal quote, availability confirmation, and lead time estimate.',
     cta: null,
   },
   {

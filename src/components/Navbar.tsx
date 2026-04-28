@@ -62,7 +62,7 @@ export default function Navbar() {
           <img src="/images/logo.png" alt="Forez" className="mr-2 h-7 w-7 shrink-0 rounded-md sm:mr-2.5 sm:h-8 sm:w-8 md:h-9 md:w-9" />
           <span className="min-w-0 truncate">Forez</span>
         </Link>
-        <div className="hidden md:flex gap-5 font-display uppercase tracking-wide font-bold text-xs lg:text-sm">
+        <div className="hidden md:flex md:pt-1.5 lg:pt-2 gap-5 font-display uppercase tracking-wide font-bold text-xs lg:text-sm">
           {navLinks.map((link) => (
             <Link
               key={link.name}

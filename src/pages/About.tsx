@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Verified, Ship, Landmark, ArrowRight, ShieldCheck, Globe, Zap, Award } from 'lucide-react';
+import { Verified, Ship, Landmark, ArrowRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSEO } from '../lib/useSEO';
 
@@ -26,10 +26,18 @@ export default function About() {
           <div className="mt-3 w-full max-w-4xl rounded-2xl border border-blue-300/35 bg-blue-600/90 p-5 sm:p-6 shadow-[0_16px_34px_-20px_rgba(30,64,175,0.9)]">
             <h2 className="text-sm sm:text-base font-black uppercase tracking-[0.18em] text-blue-100">Why Forez</h2>
             <p className="mt-3 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
-              We do the legwork so you don't have to. You don't need the exact part number — just tell us what you need. We'll identify the right fit, source it, and get it to you fast. We know bearings and power transmission at the application level, not just the catalog level. Right part, first time, no back and forth.
+              Skip the part number chase. Tell us what you need—we&apos;ll take it from there.
             </p>
             <p className="mt-2 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
-              As a certified MBE, we simplify diverse spend compliance without adding procurement friction.
+              Forez Corp identifies the correct bearing and power transmission solution at the application level,
+              procures it quickly, and delivers it right the first time. No catalog searching, no back-and-forth.
+            </p>
+            <p className="mt-2 text-xs sm:text-sm md:text-base font-semibold leading-relaxed text-blue-50/95">
+              As a certified MBE, Forez Corp also supports diverse supplier spend requirements while keeping
+              procurement simple, compliant, and frictionless.
+            </p>
+            <p className="mt-3 text-xs sm:text-sm md:text-base font-black leading-relaxed text-white">
+              When it&apos;s urgent, we treat it that way
             </p>
           </div>
         </div>
@@ -86,12 +94,13 @@ export default function About() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
             {[
               {
-                title: "Minority-Owned Business",
-                desc: "Certified Minority-Owned Business Enterprise (MBE) demonstrating commitment to diverse supply chains.",
+                title: 'NYS Certified Business',
+                desc: 'NYS certified minority-owned business enterprise (MBE). Tap the card to open the certification PDF.',
                 icon: <Award className="w-16 h-16 text-gray-400" />,
-                color: "bg-gray-50",
-                image: "https://static1.squarespace.com/static/62fe71b24783ac627463dbeb/638791279a1cf272f8885d1d/6388cb3ea0392739e9fde45a/1671768750513/website_MWBE.jpg?format=1500w",
-                pdf: "/NYS Certification.pdf"
+                color: 'bg-gray-50',
+                image:
+                  'https://static1.squarespace.com/static/62fe71b24783ac627463dbeb/638791279a1cf272f8885d1d/6388cb3ea0392739e9fde45a/1671768750513/website_MWBE.jpg?format=1500w',
+                pdf: '/NYS Certification.pdf',
               },
               {
                 title: "Port Authority Certified",
@@ -101,8 +110,8 @@ export default function About() {
                 image: "https://images.squarespace-cdn.com/content/v1/54f63721e4b028af4a737125/1565026201471-RZG8HP1E54WWLDC0AF2N/PANYNJ.jpeg"
               },
               {
-                title: "NYS/NYC Certified",
-                desc: "Approved vendor for New York State and New York City municipal and enterprise sourcing.",
+                title: 'NYC CERTIFIED',
+                desc: 'Approved vendor for New York City municipal and enterprise sourcing.',
                 icon: <Landmark className="w-16 h-16 text-industrial-orange" />,
                 color: "bg-blue-50",
                 image: "https://stratcomllc.com/wp-content/uploads/2018/09/NYS-WBE-Certified-Business.gif",
@@ -152,10 +161,10 @@ export default function About() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8 text-center">
             {[
-              { val: "24hr", label: "Quote Turnaround", icon: <Zap /> },
-              { val: "10k+", label: "Parts Available", icon: <Globe /> },
-              { val: "100%", label: "Sourcing Guarantee", icon: <ShieldCheck /> },
-              { val: "Tier 1", label: "Supplier Status", icon: <Verified /> }
+              { val: '24-48hrs', label: 'Quote turn over' },
+              { val: '100k+', label: 'Quote-Ready SKUs' },
+              { val: '500+', label: 'Top Brands Sourced' },
+              { val: 'Tier 1', label: 'Supplier Status' },
             ].map((stat) => (
               <div key={stat.label} className="flex flex-col items-center">
                 <span className="text-2xl sm:text-3xl md:text-4xl font-black text-black tracking-tight">{stat.val}</span>
@@ -170,8 +179,8 @@ export default function About() {
       <section className="bg-industrial-orange py-4 md:py-5 px-3 sm:px-4">
         <div className="mx-auto w-full max-w-2xl rounded-lg border border-white/20 bg-white/10 px-3 py-3 text-center backdrop-blur-sm sm:px-4 sm:py-4">
           <h2 className="text-base sm:text-lg md:text-xl font-black uppercase text-white tracking-tight leading-none">Ready to Procure?</h2>
-          <p className="mt-2 text-[10px] sm:text-xs md:text-sm font-semibold uppercase max-w-xl mx-auto text-white/95 leading-relaxed">
-            Partner with a certified, high-performing supplier for your next bulk order or complex sourcing requirement.
+          <p className="mt-2 max-w-xl mx-auto text-[10px] font-medium normal-case leading-relaxed text-white/95 sm:text-xs md:text-sm">
+            Partner with a certified, high-performing supplier for your next order or complex sourcing requirement.
           </p>
           <Link 
             to="/contact"

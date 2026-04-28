@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo, useSyncExternalStore } from 'react';
-import { PRODUCT_CATEGORIES } from '../constants';
+import { PRODUCT_CATEGORIES, MISCELLANEOUS_SUB_PRODUCTS } from '../constants';
 
 export type BulkQuoteLine = {
   categoryId: string;
@@ -102,7 +102,13 @@ export function BulkQuoteProvider({ children }: { children: React.ReactNode }) {
 
     const resolveProduct = (categoryId: string, productId: string) => {
       const cat = resolveCategory(categoryId);
-      return cat?.products.find((p) => p.id === productId);
+      if (!cat) return undefined;
+      const fromCategory = cat.products.find((p) => p.id === productId);
+      if (fromCategory) return fromCategory;
+      if (categoryId === 'miscellaneous') {
+        return MISCELLANEOUS_SUB_PRODUCTS.find((p) => p.id === productId);
+      }
+      return undefined;
     };
 
     return {
