@@ -98,8 +98,7 @@ export default function About() {
                 desc: 'NYS certified minority-owned business enterprise (MBE). Tap the card to open the certification PDF.',
                 icon: <Award className="w-16 h-16 text-gray-400" />,
                 color: 'bg-gray-50',
-                image:
-                  'https://static1.squarespace.com/static/62fe71b24783ac627463dbeb/638791279a1cf272f8885d1d/6388cb3ea0392739e9fde45a/1671768750513/website_MWBE.jpg?format=1500w',
+                image: '/NYS Certified Business.png',
                 pdf: '/NYS Certification.pdf',
               },
               {
@@ -107,7 +106,8 @@ export default function About() {
                 desc: "Official certification for NY/NJ Port Authority contracts and heavy industrial procurement.",
                 icon: <Ship className="w-16 h-16 text-engineering-blue" />,
                 color: "bg-blue-50",
-                image: "https://images.squarespace-cdn.com/content/v1/54f63721e4b028af4a737125/1565026201471-RZG8HP1E54WWLDC0AF2N/PANYNJ.jpeg"
+                image: "https://images.squarespace-cdn.com/content/v1/54f63721e4b028af4a737125/1565026201471-RZG8HP1E54WWLDC0AF2N/PANYNJ.jpeg",
+                pdf: "/Port Authority MBE Certificate.pdf",
               },
               {
                 title: 'NYC CERTIFIED',
